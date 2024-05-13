@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Azil.Common\Azil.Common.csproj" />
+    <ProjectReference Include="..\Azil.DAL\Azil.DAL.csproj" />
+    <ProjectReference Include="..\Azil.Model\Azil.Model.csproj" />
+    <ProjectReference Include="..\Azil.Repository.Common\Azil.Repository.Common.csproj" />
+    <ProjectReference Include="..\Azil.Repository\Azil.Repository.csproj" />
+  </ItemGroup>
+
+</Project>

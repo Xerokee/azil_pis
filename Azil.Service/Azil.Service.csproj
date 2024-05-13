@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Azil.Common\Azil.Common.csproj" />
+    <ProjectReference Include="..\Azil.Service.Common\Azil.Service.Common.csproj" />
+  </ItemGroup>
+
+</Project>
