@@ -17,6 +17,7 @@ using Azil.DAL.DataModel;
 using Microsoft.EntityFrameworkCore;
 using Azil.Repository.Automapper;
 using Azil.WebAPI.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Azil.WebAPI
 {
@@ -32,16 +33,25 @@ namespace Azil.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<Azil_DbContext>(options =>
+            options.EnableSensitiveDataLogging().UseSqlServer(Configuration.GetConnectionString("Azil_DBConnection"),
+            b => b.MigrationsAssembly("Azil.WebAPI")), ServiceLifetime.Singleton);
+
             services.AddRazorPages();
-            services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
-            services.AddScoped<IService, Azil.Service.Service>();
-            services.AddScoped<IRepository, Azil.Repository.Repository>();
-            services.AddDbContext<Azil_DbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Azil_DBConnection")));
-            services.AddScoped<IRepositoryMappingService, RepositoryMappingService>();
+
+            services.AddScoped<IService, Service.Service>();
+
+            services.AddSingleton<IRepository, Repository.Repository>();
+
+            services.AddSingleton<IRepositoryMappingService, RepositoryMappingService>();
+
+            services.AddCors();
+
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,6 +71,7 @@ namespace Azil.WebAPI
             }
 
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -69,12 +80,12 @@ namespace Azil.WebAPI
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorPages();
+                endpoints.MapControllers();
             });
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapRazorPages();
             });
         }
     }

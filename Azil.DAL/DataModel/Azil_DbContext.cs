@@ -54,8 +54,8 @@ namespace Azil.DAL.DataModel
                 entity.Property(e => e.id_korisnika).HasColumnName("id_korisnika");
 
                 entity.Property(e => e.ime)
-                .HasColumnName("ime")
-                .IsUnicode(false);
+                    .HasColumnName("ime")
+                    .IsUnicode(false);
 
                 entity.Property(e => e.email)
                     .HasColumnName("email")
@@ -94,7 +94,7 @@ namespace Azil.DAL.DataModel
                 entity.ToTable("kucni_ljubimci");
 
                 entity.Property(e => e.id_udomitelja)
-                .HasColumnName("id_udomitelja");
+                    .HasColumnName("id_udomitelja");
 
                 entity.Property(e => e.ime_ljubimca)
                     .HasColumnName("ime_ljubimca")
@@ -129,8 +129,8 @@ namespace Azil.DAL.DataModel
                 entity.ToTable("uloge");
 
                 entity.Property(e => e.naziv_uloge)
-                .HasColumnName("naziv_uloge")
-                .IsUnicode(false);
+                    .HasColumnName("naziv_uloge")
+                    .IsUnicode(false);
             });
             OnModelCreatingPartial(modelBuilder);
         }
