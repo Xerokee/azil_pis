@@ -45,6 +45,36 @@ namespace Azil.Service
             return userDb;
         }
 
+        public IEnumerable<DnevnikUdomljavanja> GetAllUsersDb2()
+        {
+            IEnumerable<DnevnikUdomljavanja> userDb2 = _repository.GetAllUsersDb2();
+            return userDb2;
+        }
+
+        public IEnumerable<KorisnikUloga> GetAllUsersDb3()
+        {
+            IEnumerable<KorisnikUloga> userDb3 = _repository.GetAllUsersDb3();
+            return userDb3;
+        }
+
+        public IEnumerable<KucniLjubimci> GetAllUsersDb4()
+        {
+            IEnumerable<KucniLjubimci> userDb4 = _repository.GetAllUsersDb4();
+            return userDb4;
+        }
+
+        public IEnumerable<KucniLjubimciUdomitelj> GetAllUsersDb5()
+        {
+            IEnumerable<KucniLjubimciUdomitelj> userDb5 = _repository.GetAllUsersDb5();
+            return userDb5;
+        }
+
+        public IEnumerable<Uloge> GetAllUsersDb6()
+        {
+            IEnumerable<Uloge> userDb6 = _repository.GetAllUsersDb6();
+            return userDb6;
+        }
+
         public async Task<Tuple<UsersDomain, List<ErrorMessage>>> GetUserDomainByUserId(int userId)
         {
             //return _repository.GetUserDomainByUserId(userId);

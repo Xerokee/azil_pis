@@ -38,6 +38,32 @@ namespace Azil.Repository
             IEnumerable<Korisnici> userDb = appDbContext.Korisnici.ToList();
             return userDb;
         }
+
+        public IEnumerable<DnevnikUdomljavanja> GetAllUsersDb2()
+        {
+            IEnumerable<DnevnikUdomljavanja> userDb2 = appDbContext.DnevnikUdomljavanja.ToList();
+            return userDb2;
+        }
+        public IEnumerable<KorisnikUloga> GetAllUsersDb3()
+        {
+            IEnumerable<KorisnikUloga> userDb3 = appDbContext.KorisnikUloga.ToList();
+            return userDb3;
+        }
+        public IEnumerable<KucniLjubimci> GetAllUsersDb4()
+        {
+            IEnumerable<KucniLjubimci> userDb4 = appDbContext.KucniLjubimci.ToList();
+            return userDb4;
+        }
+        public IEnumerable<KucniLjubimciUdomitelj> GetAllUsersDb5()
+        {
+            IEnumerable<KucniLjubimciUdomitelj> userDb5 = appDbContext.KucniLjubimciUdomitelj.ToList();
+            return userDb5;
+        }
+        public IEnumerable<Uloge> GetAllUsersDb6()
+        {
+            IEnumerable<Uloge> userDb6 = appDbContext.Uloge.ToList();
+            return userDb6;
+        }
         public UsersDomain GetUserDomainByUserId(int userId)
         {
             Korisnici userDb = appDbContext.Korisnici.Find(userId);

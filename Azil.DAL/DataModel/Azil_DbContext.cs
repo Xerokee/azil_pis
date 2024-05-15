@@ -117,7 +117,7 @@ namespace Azil.DAL.DataModel
             {
                 entity.HasKey(e => e.id_ljubimca);
 
-                entity.ToTable("kucni_jubimci_udomitelj");
+                entity.ToTable("kucni_ljubimci_udomitelj");
 
                 entity.HasAlternateKey(e => e.id_udomitelja);
             });

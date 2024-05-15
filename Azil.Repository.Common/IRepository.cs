@@ -12,6 +12,11 @@ namespace Azil.Repository.Common
     {
         IEnumerable<UsersDomain> GetAllUsers();
         IEnumerable<Korisnici> GetAllUsersDb();
+        IEnumerable<DnevnikUdomljavanja> GetAllUsersDb2();
+        IEnumerable<KorisnikUloga> GetAllUsersDb3();
+        IEnumerable<KucniLjubimci> GetAllUsersDb4();
+        IEnumerable<KucniLjubimciUdomitelj> GetAllUsersDb5();
+        IEnumerable<Uloge> GetAllUsersDb6();
         UsersDomain GetUserDomainByUserId(int userId);
         Task<bool> AddUserAsync(UsersDomain userDomain);
         Task<UsersDomain> IsValidUser(int id);
