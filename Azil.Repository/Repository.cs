@@ -64,9 +64,9 @@ namespace Azil.Repository
             IEnumerable<Uloge> userDb6 = appDbContext.Uloge.ToList();
             return userDb6;
         }
-        public UsersDomain GetUserDomainByUserId(int userId)
+        public UsersDomain GetUserDomainByUserId(int id_korisnika)
         {
-            Korisnici userDb = appDbContext.Korisnici.Find(userId);
+            Korisnici userDb = appDbContext.Korisnici.Find(id_korisnika);
 
             UsersDomain user = _mapper.Map<UsersDomain>(userDb);
 

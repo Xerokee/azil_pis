@@ -17,7 +17,7 @@ namespace Azil.Repository.Common
         IEnumerable<KucniLjubimci> GetAllUsersDb4();
         IEnumerable<KucniLjubimciUdomitelj> GetAllUsersDb5();
         IEnumerable<Uloge> GetAllUsersDb6();
-        UsersDomain GetUserDomainByUserId(int userId);
+        UsersDomain GetUserDomainByUserId(int id_korisnika);
         Task<bool> AddUserAsync(UsersDomain userDomain);
         Task<UsersDomain> IsValidUser(int id);
         string Test();

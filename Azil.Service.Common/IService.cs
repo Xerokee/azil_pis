@@ -18,7 +18,7 @@ namespace Azil.Service.Common
         IEnumerable<KucniLjubimci> GetAllUsersDb4();
         IEnumerable<KucniLjubimciUdomitelj> GetAllUsersDb5();
         IEnumerable<Uloge> GetAllUsersDb6();
-        Task<Tuple<UsersDomain, List<ErrorMessage>>> GetUserDomainByUserId(int userId);
+        Task<Tuple<UsersDomain, List<ErrorMessage>>> GetUserDomainByUserId(int id_korisnika);
         Task<bool> AddUserAsync(UsersDomain userDomain);
         Task<bool> IsValidUser(int id);
     }

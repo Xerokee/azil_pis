@@ -75,11 +75,11 @@ namespace Azil.Service
             return userDb6;
         }
 
-        public async Task<Tuple<UsersDomain, List<ErrorMessage>>> GetUserDomainByUserId(int userId)
+        public async Task<Tuple<UsersDomain, List<ErrorMessage>>> GetUserDomainByUserId(int id_korisnika)
         {
             //return _repository.GetUserDomainByUserId(userId);
             List<ErrorMessage> erorMessages = new List<ErrorMessage>();
-            UsersDomain usersDomain = _repository.GetUserDomainByUserId(userId);
+            UsersDomain usersDomain = _repository.GetUserDomainByUserId(id_korisnika);
 
 
             if (usersDomain != null)

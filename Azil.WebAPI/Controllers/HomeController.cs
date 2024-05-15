@@ -101,12 +101,12 @@ namespace Azil.WebAPI.Controllers
             }
         }
         [HttpGet]
-        [Route("Users/user_id/{userid}")]
-        public async Task<IActionResult> GetUserDomainByUserId(int userId)
+        [Route("Users/user_id/{id_korisnika}")]
+        public async Task<IActionResult> GetUserDomainByUserId(int id_korisnika)
         {
             HttpRequestResponse<UsersDomain> response = new HttpRequestResponse<UsersDomain>();
 
-            Tuple<UsersDomain, List<ErrorMessage>> result = await _service.GetUserDomainByUserId(userId);
+            Tuple<UsersDomain, List<ErrorMessage>> result = await _service.GetUserDomainByUserId(id_korisnika);
 
             if (result != null)
             {
