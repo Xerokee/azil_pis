@@ -74,3 +74,4 @@ D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\bin\Debug\netcore
 D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerUI.dll
 D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\obj\Debug\netcoreapp3.1\Azil.WebAPI.MvcApplicationPartsAssemblyInfo.cs
+D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll

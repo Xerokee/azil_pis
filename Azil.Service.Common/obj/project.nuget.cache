@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "x7cvlrPtPi5jBK7UI/fi9ukdoGZxefAvHwjjEGrNQEsFmw112rRQJW4zp5OrZQKcfzhnUh0of7ZDNJYy0QrjRw==",
+  "dgSpecHash": "QgNPXzL24Dw7afVbvp78JTgXp+NbQyJvzLlZ+XEt3PP6qMMMdhmBq8oSw+90ZYkDU5m78m+LAfJsOusggBshRQ==",
   "success": true,
   "projectFilePath": "D:\\Vuv 3\\Projektiranje informacijskih sustava\\Azil\\Azil.Service.Common\\Azil.Service.Common.csproj",
   "expectedPackageFiles": [
@@ -29,6 +29,7 @@
     "C:\\Users\\Matija\\.nuget\\packages\\microsoft.netcore.platforms\\2.0.0\\microsoft.netcore.platforms.2.0.0.nupkg.sha512",
     "C:\\Users\\Matija\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Users\\Matija\\.nuget\\packages\\microsoft.win32.registry\\4.5.0\\microsoft.win32.registry.4.5.0.nupkg.sha512",
+    "C:\\Users\\Matija\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\Matija\\.nuget\\packages\\runtime.native.system\\4.3.0\\runtime.native.system.4.3.0.nupkg.sha512",
     "C:\\Users\\Matija\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
     "C:\\Users\\Matija\\.nuget\\packages\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
