@@ -18,7 +18,6 @@ namespace Azil.Repository.Automapper
                 {
                     cfg.CreateMap<Korisnici, UsersDomain>(); //ruta baza - GUI
                     cfg.CreateMap<UsersDomain, Korisnici>(); //ruta GUI - baza
-
                 });
             mapper = new Mapper(config);
         }
