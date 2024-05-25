@@ -101,24 +101,7 @@ namespace Azil.Service
 
         public async Task<bool> AddUserAsync(UsersDomain userDomain)
         {
-            try
-            {
-                // Ensure the UsersDomain is properly mapped to Korisnici entity
-                var userEntity = _mapper.Map<Korisnici>(userDomain);
-                if (userEntity == null)
-                {
-                    Console.WriteLine("Mapping resulted in a null entity.");
-                    return false;
-                }
-                bool result = await _repository.AddUserAsync(userDomain);
-                Console.WriteLine(result ? "Korisnik je dodan u repozitorij." : "Greška u dodavanju korisnika u repozitorij.");
-                return result;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Iznimka u servisu AddUserAsync: {ex}");
-                return false;
-            }
+            return await _repository.AddUserAsync(userDomain);
         }
 
         public async Task<bool> UpdateUserAsync(UsersDomain userDomain)

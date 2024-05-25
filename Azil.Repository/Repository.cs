@@ -76,32 +76,13 @@ namespace Azil.Repository
         {
             try
             {
-                // Map the UsersDomain to Korisnici
-                Korisnici userEntity = _mapper.Map<Korisnici>(userDomain);
-
-                if (userEntity == null)
-                {
-                    Console.WriteLine("Mapiranje je rezultiralo u nultom entitetu.");
-                    return false;
-                }
-
-                // Check if a user with the same ID already exists
-                Korisnici existingUser = await appDbContext.Korisnici.FindAsync(userDomain.IdKorisnika);
-                if (existingUser != null)
-                {
-                    Console.WriteLine("Korisnik sa istim ID-om već postoji.");
-                    return false;
-                }
-
-                await appDbContext.Korisnici.AddAsync(userEntity);
+                EntityEntry<Korisnici> user_created = await appDbContext.Korisnici.AddAsync(
+                        _mapper.Map<Korisnici>(userDomain));
                 await appDbContext.SaveChangesAsync();
-                Console.WriteLine("Korisnik uspješno dodan u bazi podataka.");
                 return true;
             }
             catch (Exception ex)
             {
-                // Log the exception
-                Console.WriteLine($"Iznimka u repozitoriju AddUserAsync: {ex}");
                 return false;
             }
         }

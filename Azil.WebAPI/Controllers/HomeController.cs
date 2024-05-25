@@ -134,7 +134,7 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("Korisnici/add")]
+        [Route("Korisnik/add")]
         public async Task<IActionResult> AddUserAsync([FromBody] UsersDomain userRest)
         {
             bool lastrequestId = await GetLastUserRequestId();
@@ -142,30 +142,41 @@ namespace Azil.WebAPI.Controllers
             if (!lastrequestId)
             {
                 return BadRequest("Nije unesen RequestUserId korisnika koji poziva.");
-            }
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
             }
+            else
+            {
+                try
+                {
+                    if (!ModelState.IsValid)
+                    {
+                        return BadRequest(ModelState);
+                    }
+                    else
+                    {
+                        UsersDomain userDomain = new UsersDomain();
+                        userDomain.IdKorisnika = userRest.IdKorisnika;
+                        userDomain.Ime = userRest.Ime;
+                        userDomain.Email = userRest.Email;
+                        userDomain.Lozinka = userRest.Lozinka;
+                        userDomain.Admin = userRest.Admin;
 
-            try
-            {
-                bool add_user = await _service.AddUserAsync(userRest);
-                if (add_user)
-                {
-                    Console.WriteLine("Korisnik uspješno dodan.");
-                    return Ok("Korisnik dodan!");
+                        bool add_user = await _service.AddUserAsync(userDomain);
+
+                        if (add_user)
+                        {
+                            return Ok("Korisnik dodan!");
+                        }
+                        else
+                        {
+                            return Ok("Korisnik nije dodan!");
+                        }
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    Console.WriteLine("Korisnik nije dodan. Provjeri metodu repozitorija.");
-                    return BadRequest("Korisnik nije dodan!");
+                    return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
                 }
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
             }
         }
 
