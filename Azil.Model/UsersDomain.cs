@@ -22,10 +22,17 @@ namespace Azil.Model
         }
 
         public int IdKorisnika { get; set; }
-        public string Ime { get; set; }
+
         [Required(ErrorMessage = "Unesite ime korisnika.")]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Ime korisnika mora biti između 3 i 50 slova")]
+        public string Ime { get; set; }
+
+        [Required(ErrorMessage = "Unesite email korisnika.")]
+        [EmailAddress(ErrorMessage = "Neispravan format email adrese.")]
         public string Email { get; set; }
+
+        [Required(ErrorMessage = "Unesite lozinku korisnika.")]
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "Lozinka mora biti između 6 i 100 znakova.")]
         public string Lozinka { get; set; }
         public bool Admin { get; set; }
     }

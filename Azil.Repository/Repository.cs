@@ -76,13 +76,73 @@ namespace Azil.Repository
         {
             try
             {
-                EntityEntry<Korisnici> user_created = await appDbContext.Korisnici.AddAsync(
-                        _mapper.Map<Korisnici>(userDomain));
+                Korisnici userEntity = await appDbContext.Korisnici.FindAsync(userDomain.IdKorisnika);
+                if (userEntity == null)
+                {
+                    Console.WriteLine("Mapiranje je rezultiralo u nultom entitetu.");
+                    return false;
+                }
+
+                Korisnici existingUser = await appDbContext.Korisnici.FindAsync(userDomain.IdKorisnika);
+                if (existingUser != null)
+                {
+                    Console.WriteLine("Korisnik sa istim ID-om već postoji.");
+                    return false;
+                }
+
+                await appDbContext.Korisnici.AddAsync(userEntity);
+                await appDbContext.SaveChangesAsync();
+                Console.WriteLine("Korisnik uspješno dodan u bazi podataka.");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Iznimka u repozitoriju AddUserAsync: {ex}");
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateUserAsync(UsersDomain userDomain)
+        {
+            try
+            {
+                Korisnici userEntity = await appDbContext.Korisnici.FindAsync(userDomain.IdKorisnika);
+                if (userEntity == null) return false;
+
+                userEntity.ime = userDomain.Ime;
+                userEntity.email = userDomain.Email;
+                userEntity.lozinka = userDomain.Lozinka;
+                userEntity.admin = userDomain.Admin;
+
+                appDbContext.Korisnici.Update(userEntity);
                 await appDbContext.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
             {
+                // Log the exception
+                return false;
+            }
+        }
+
+
+        public async Task<bool> DeleteUserAsync(int id)
+        {
+            try
+            {
+                Korisnici userDb = await appDbContext.Korisnici.FindAsync(id);
+                if (userDb != null)
+                {
+                    appDbContext.Korisnici.Remove(userDb);
+                    await appDbContext.SaveChangesAsync();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
                 return false;
             }
         }

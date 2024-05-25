@@ -20,6 +20,8 @@ namespace Azil.Service.Common
         IEnumerable<Uloge> GetAllUsersDb6();
         Task<Tuple<UsersDomain, List<ErrorMessage>>> GetUserDomainByUserId(int id_korisnika);
         Task<bool> AddUserAsync(UsersDomain userDomain);
+        Task<bool> UpdateUserAsync(UsersDomain userDomain);
+        Task<bool> DeleteUserAsync(int id);
         Task<bool> IsValidUser(int id);
     }
 }

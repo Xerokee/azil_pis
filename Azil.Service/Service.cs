@@ -1,6 +1,8 @@
-﻿using Azil.Common;
+﻿using AutoMapper;
+using Azil.Common;
 using Azil.DAL.DataModel;
 using Azil.Model;
+using Azil.Repository.Automapper;
 using Azil.Repository.Common;
 using Azil.Service.Common;
 using System;
@@ -14,10 +16,12 @@ namespace Azil.Service
     public class Service : IService
     {
         IRepository _repository;
+        IRepositoryMappingService _mapper;
 
-        public Service(IRepository repository)
+        public Service(IRepository repository, IRepositoryMappingService mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
         public string Test()
         {
@@ -97,7 +101,34 @@ namespace Azil.Service
 
         public async Task<bool> AddUserAsync(UsersDomain userDomain)
         {
-            return await _repository.AddUserAsync(userDomain);
+            try
+            {
+                var userEntity = _mapper.Map<Korisnici>(userDomain);
+                if (userEntity == null)
+                {
+                    Console.WriteLine("Mapping resulted in a null entity.");
+                    return false;
+                }
+                bool result = await _repository.AddUserAsync(userDomain);
+                Console.WriteLine(result ? "Korisnik je dodan u repozitorij." : "Greška u dodavanju korisnika u repozitorij.");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Iznimka u servisu AddUserAsync: {ex}");
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateUserAsync(UsersDomain userDomain)
+        {
+            var userEntity = _mapper.Map<Korisnici>(userDomain);
+            return await _repository.UpdateUserAsync(userDomain);
+        }
+
+        public async Task<bool> DeleteUserAsync(int id)
+        {
+            return await _repository.DeleteUserAsync(id);
         }
         #region AdditionalCustomFunctions
 

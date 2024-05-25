@@ -19,6 +19,8 @@ namespace Azil.Repository.Common
         IEnumerable<Uloge> GetAllUsersDb6();
         UsersDomain GetUserDomainByUserId(int id_korisnika);
         Task<bool> AddUserAsync(UsersDomain userDomain);
+        Task<bool> UpdateUserAsync(UsersDomain userDomain);
+        Task<bool> DeleteUserAsync(int id);
         Task<UsersDomain> IsValidUser(int id);
         string Test();
     }

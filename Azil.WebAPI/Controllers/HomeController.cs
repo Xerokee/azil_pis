@@ -25,12 +25,14 @@ namespace Azil.WebAPI.Controllers
             _service = service;
             _requestUserId = -1;
         }
+
         [HttpGet]
         [Route("test")]
         public string Test()
         {
             return _service.Test();
         }
+
         [HttpGet]
         [Route("Users_db")]
         public IEnumerable<Korisnici> GetAllUsersDb()
@@ -39,6 +41,7 @@ namespace Azil.WebAPI.Controllers
 
             return userDb;
         }
+
         [HttpGet]
         [Route("Users_db2")]
         public IEnumerable<DnevnikUdomljavanja> GetAllUsersDb2()
@@ -47,6 +50,7 @@ namespace Azil.WebAPI.Controllers
 
             return userDb2;
         }
+
         [HttpGet]
         [Route("Users_db3")]
         public IEnumerable<KorisnikUloga> GetAllUsersDb3()
@@ -55,6 +59,7 @@ namespace Azil.WebAPI.Controllers
 
             return userDb3;
         }
+
         [HttpGet]
         [Route("Users_db4")]
         public IEnumerable<KucniLjubimci> GetAllUsersDb4()
@@ -63,6 +68,7 @@ namespace Azil.WebAPI.Controllers
 
             return userDb4;
         }
+
         [HttpGet]
         [Route("Users_db5")]
         public IEnumerable<KucniLjubimciUdomitelj> GetAllUsersDb5()
@@ -71,6 +77,7 @@ namespace Azil.WebAPI.Controllers
 
             return userDb5;
         }
+
         [HttpGet]
         [Route("Users_db6")]
         public IEnumerable<Uloge> GetAllUsersDb6()
@@ -79,6 +86,7 @@ namespace Azil.WebAPI.Controllers
 
             return userDb6;
         }
+
         [HttpGet]
         [Route("Users")]
         public async Task<IActionResult> GetAllUsers()
@@ -100,6 +108,7 @@ namespace Azil.WebAPI.Controllers
                 return Ok(response);
             }
         }
+
         [HttpGet]
         [Route("Users/user_id/{id_korisnika}")]
         public async Task<IActionResult> GetUserDomainByUserId(int id_korisnika)
@@ -123,53 +132,105 @@ namespace Azil.WebAPI.Controllers
             //UsersDomain userDomain = _service.GetUserDomainByUserId(userId);
             //return userDomain;
         }
+
         [HttpPost]
-        [Route("add")]
-        public async Task<IActionResult> AddUserAsync([FromBody] UsersDomain userRest)
+        [Route("Users/add/{id}")]
+        public async Task<IActionResult> AddUserAsync(int id, [FromBody] UsersDomain userRest)
         {
             bool lastrequestId = await GetLastUserRequestId();
 
             if (!lastrequestId)
             {
                 return BadRequest("Nije unesen RequestUserId korisnika koji poziva.");
+            }
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                userRest.IdKorisnika = id;  // Assign the ID from the route to the userRest object
+                bool add_user = await _service.AddUserAsync(userRest);
+                if (add_user)
+                {
+                    Console.WriteLine("Korisnik uspješno dodan.");
+                    return Ok("Korisnik dodan!");
+                }
+                else
+                {
+                    Console.WriteLine("Korisnik nije dodan. Provjeri metodu repozitorija.");
+                    return Ok("Korisnik nije dodan!");
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
+            }
+        }
+
+        [HttpPut]
+        [Route("Users/update/{id}")]
+        public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UsersDomain userRest)
+        {
+            bool lastrequestId = await GetLastUserRequestId();
+
+            if (!lastrequestId)
+            {
+                return BadRequest("Nije unesen RequestUserId korisnika koji poziva.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                userRest.IdKorisnika = id;  // Assign the ID from the route to the userRest object
+                bool update_user = await _service.UpdateUserAsync(userRest);
+                return update_user ? Ok("Korisnik ažuriran!") : Ok("Korisnik nije ažuriran!");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
+            }
+        }
+
+
+        [HttpDelete]
+        [Route("Users/delete/{id}")]
+        public async Task<IActionResult> DeleteUserAsync(int id)
+        {
+            bool lastrequestId = await GetLastUserRequestId();
+
+            if (!lastrequestId)
+            {
+                return BadRequest("Nije unesen RequestUserId korisnika koji poziva.");
             }
             else
             {
-
                 try
                 {
-                    if (!ModelState.IsValid)
+                    bool delete_user = await _service.DeleteUserAsync(id);
+
+                    if (delete_user)
                     {
-                        return BadRequest(ModelState);
+                        return Ok("Korisnik obrisan!");
                     }
                     else
                     {
-                        UsersDomain userDomain = new UsersDomain();
-                        userDomain.Ime = userRest.Ime;
-                        userDomain.Email = userRest.Email;
-
-                        bool add_user = await _service.AddUserAsync(userDomain);
-
-                        if (add_user)
-                        {
-
-                            return Ok("User dodan!");
-                        }
-                        else
-                        {
-                            return Ok("User nije dodan!");
-                        }
+                        return Ok("Korisnik nije obrisan!");
                     }
-
                 }
                 catch (Exception e)
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
                 }
             }
-
         }
+
         #region AdditionalCustomFunctions
         public async Task<bool> GetLastUserRequestId()
         {
