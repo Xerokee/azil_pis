@@ -34,7 +34,7 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Users_db")]
+        [Route("Korisnici_db")]
         public IEnumerable<Korisnici> GetAllUsersDb()
         {
             IEnumerable<Korisnici> userDb = _service.GetAllUsersDb();
@@ -43,7 +43,7 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Users_db2")]
+        [Route("Korisnici_db2")]
         public IEnumerable<DnevnikUdomljavanja> GetAllUsersDb2()
         {
             IEnumerable<DnevnikUdomljavanja> userDb2 = _service.GetAllUsersDb2();
@@ -52,7 +52,7 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Users_db3")]
+        [Route("Korisnici_db3")]
         public IEnumerable<KorisnikUloga> GetAllUsersDb3()
         {
             IEnumerable<KorisnikUloga> userDb3 = _service.GetAllUsersDb3();
@@ -61,7 +61,7 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Users_db4")]
+        [Route("Korisnici_db4")]
         public IEnumerable<KucniLjubimci> GetAllUsersDb4()
         {
             IEnumerable<KucniLjubimci> userDb4 = _service.GetAllUsersDb4();
@@ -70,7 +70,7 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Users_db5")]
+        [Route("Korisnici_db5")]
         public IEnumerable<KucniLjubimciUdomitelj> GetAllUsersDb5()
         {
             IEnumerable<KucniLjubimciUdomitelj> userDb5 = _service.GetAllUsersDb5();
@@ -79,7 +79,7 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Users_db6")]
+        [Route("Korisnici_db6")]
         public IEnumerable<Uloge> GetAllUsersDb6()
         {
             IEnumerable<Uloge> userDb6 = _service.GetAllUsersDb6();
@@ -88,7 +88,7 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Users")]
+        [Route("Korisnici")]
         public async Task<IActionResult> GetAllUsers()
         {
             HttpRequestResponse<IEnumerable<UsersDomain>> response = new HttpRequestResponse<IEnumerable<UsersDomain>>();
@@ -110,7 +110,7 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Users/user_id/{id_korisnika}")]
+        [Route("Korisnici/user_id/{id_korisnika}")]
         public async Task<IActionResult> GetUserDomainByUserId(int id_korisnika)
         {
             HttpRequestResponse<UsersDomain> response = new HttpRequestResponse<UsersDomain>();
@@ -134,8 +134,8 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("Users/add/{id}")]
-        public async Task<IActionResult> AddUserAsync(int id, [FromBody] UsersDomain userRest)
+        [Route("Korisnici/add")]
+        public async Task<IActionResult> AddUserAsync([FromBody] UsersDomain userRest)
         {
             bool lastrequestId = await GetLastUserRequestId();
 
@@ -151,7 +151,6 @@ namespace Azil.WebAPI.Controllers
 
             try
             {
-                userRest.IdKorisnika = id;  // Assign the ID from the route to the userRest object
                 bool add_user = await _service.AddUserAsync(userRest);
                 if (add_user)
                 {
@@ -161,7 +160,7 @@ namespace Azil.WebAPI.Controllers
                 else
                 {
                     Console.WriteLine("Korisnik nije dodan. Provjeri metodu repozitorija.");
-                    return Ok("Korisnik nije dodan!");
+                    return BadRequest("Korisnik nije dodan!");
                 }
             }
             catch (Exception e)
@@ -170,8 +169,9 @@ namespace Azil.WebAPI.Controllers
             }
         }
 
+
         [HttpPut]
-        [Route("Users/update/{id}")]
+        [Route("Korisnici/update/{id}")]
         public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UsersDomain userRest)
         {
             bool lastrequestId = await GetLastUserRequestId();
@@ -200,7 +200,7 @@ namespace Azil.WebAPI.Controllers
 
 
         [HttpDelete]
-        [Route("Users/delete/{id}")]
+        [Route("Korisnici/delete/{id}")]
         public async Task<IActionResult> DeleteUserAsync(int id)
         {
             bool lastrequestId = await GetLastUserRequestId();

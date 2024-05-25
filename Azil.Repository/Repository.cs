@@ -76,13 +76,16 @@ namespace Azil.Repository
         {
             try
             {
-                Korisnici userEntity = await appDbContext.Korisnici.FindAsync(userDomain.IdKorisnika);
+                // Map the UsersDomain to Korisnici
+                Korisnici userEntity = _mapper.Map<Korisnici>(userDomain);
+
                 if (userEntity == null)
                 {
                     Console.WriteLine("Mapiranje je rezultiralo u nultom entitetu.");
                     return false;
                 }
 
+                // Check if a user with the same ID already exists
                 Korisnici existingUser = await appDbContext.Korisnici.FindAsync(userDomain.IdKorisnika);
                 if (existingUser != null)
                 {
@@ -102,6 +105,7 @@ namespace Azil.Repository
                 return false;
             }
         }
+
 
         public async Task<bool> UpdateUserAsync(UsersDomain userDomain)
         {

@@ -103,6 +103,7 @@ namespace Azil.Service
         {
             try
             {
+                // Ensure the UsersDomain is properly mapped to Korisnici entity
                 var userEntity = _mapper.Map<Korisnici>(userDomain);
                 if (userEntity == null)
                 {
