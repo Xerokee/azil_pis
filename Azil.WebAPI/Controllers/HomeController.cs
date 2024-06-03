@@ -34,7 +34,7 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Korisnici_db")]
+        [Route("korisnici")]
         public IEnumerable<Korisnici> GetAllUsersDb()
         {
             IEnumerable<Korisnici> userDb = _service.GetAllUsersDb();
@@ -43,7 +43,7 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Korisnici_db2")]
+        [Route("dnevnik_udomljavanja")]
         public IEnumerable<DnevnikUdomljavanja> GetAllUsersDb2()
         {
             IEnumerable<DnevnikUdomljavanja> userDb2 = _service.GetAllUsersDb2();
@@ -52,7 +52,7 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Korisnici_db3")]
+        [Route("korisnik_uloga")]
         public IEnumerable<KorisnikUloga> GetAllUsersDb3()
         {
             IEnumerable<KorisnikUloga> userDb3 = _service.GetAllUsersDb3();
@@ -61,7 +61,7 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Korisnici_db4")]
+        [Route("kucni_ljubimci")]
         public IEnumerable<KucniLjubimci> GetAllUsersDb4()
         {
             IEnumerable<KucniLjubimci> userDb4 = _service.GetAllUsersDb4();
@@ -70,7 +70,7 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Korisnici_db5")]
+        [Route("kucni_ljubimci_udomitelj")]
         public IEnumerable<KucniLjubimciUdomitelj> GetAllUsersDb5()
         {
             IEnumerable<KucniLjubimciUdomitelj> userDb5 = _service.GetAllUsersDb5();
@@ -79,7 +79,7 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Korisnici_db6")]
+        [Route("uloge")]
         public IEnumerable<Uloge> GetAllUsersDb6()
         {
             IEnumerable<Uloge> userDb6 = _service.GetAllUsersDb6();
@@ -88,7 +88,7 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Korisnici")]
+        [Route("Users")]
         public async Task<IActionResult> GetAllUsers()
         {
             HttpRequestResponse<IEnumerable<UsersDomain>> response = new HttpRequestResponse<IEnumerable<UsersDomain>>();

@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "azil/Korisnici",
+      "launchUrl": "azil/Users",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -20,7 +20,7 @@
     "Azil.WebAPI": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "azil/Korisnici",
+      "launchUrl": "azil/Users",
       "applicationUrl": "http://192.168.75.1:12620;https://192.168.75.1:44310",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
