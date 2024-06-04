@@ -16,6 +16,7 @@ namespace Azil.WebAPI.Models
         public string TipLjubimca { get; set; }
         public string OpisLjubimca { get; set; }
         public bool? Udomljen { get; set; }
+        public string ImgUrl { get; set; }
 
         public virtual DnevnikUdomljavanja IdLjubimcaNavigation { get; set; }
         public virtual ICollection<KucniLjubimciUdomitelj> KucniLjubimciUdomitelj { get; set; }

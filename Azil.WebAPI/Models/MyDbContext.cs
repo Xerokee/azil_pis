@@ -135,6 +135,10 @@ namespace Azil.WebAPI.Models
 
                 entity.Property(e => e.Udomljen).HasColumnName("udomljen");
 
+                entity.Property(e => e.ImgUrl)
+                    .HasColumnName("imgUrl")
+                    .HasColumnType("text");
+
                 entity.HasOne(d => d.IdLjubimcaNavigation)
                     .WithOne(p => p.KucniLjubimci)
                     .HasForeignKey<KucniLjubimci>(d => d.IdLjubimca)

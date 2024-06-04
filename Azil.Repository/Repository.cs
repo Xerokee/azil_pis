@@ -72,21 +72,20 @@ namespace Azil.Repository
 
             return user;
         }
-        public async Task<bool> AddUserAsync(UsersDomain userDomain)
+        public async Task<bool> AddUserAsync(Korisnici userEntity)
         {
             try
             {
-                EntityEntry<Korisnici> user_created = await appDbContext.Korisnici.AddAsync(
-                        _mapper.Map<Korisnici>(userDomain));
+                await appDbContext.Korisnici.AddAsync(userEntity);
                 await appDbContext.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
             {
+                // Log the exception
                 return false;
             }
         }
-
 
         public async Task<bool> UpdateUserAsync(UsersDomain userDomain)
         {

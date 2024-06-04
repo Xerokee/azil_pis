@@ -7,10 +7,9 @@ using Azil.DAL.DataModel;
 using Azil.Service;
 using Azil.WebAPI.RESTModel;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Azil.WebAPI.Controllers
 {
@@ -19,11 +18,13 @@ namespace Azil.WebAPI.Controllers
     {
         protected IService _service { get; private set; }
         private int _requestUserId;
+        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(IService service)
+        public HomeController(IService service, ILogger<HomeController> logger)
         {
             _service = service;
             _requestUserId = -1;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -38,7 +39,6 @@ namespace Azil.WebAPI.Controllers
         public IEnumerable<Korisnici> GetAllUsersDb()
         {
             IEnumerable<Korisnici> userDb = _service.GetAllUsersDb();
-
             return userDb;
         }
 
@@ -47,7 +47,6 @@ namespace Azil.WebAPI.Controllers
         public IEnumerable<DnevnikUdomljavanja> GetAllUsersDb2()
         {
             IEnumerable<DnevnikUdomljavanja> userDb2 = _service.GetAllUsersDb2();
-
             return userDb2;
         }
 
@@ -56,7 +55,6 @@ namespace Azil.WebAPI.Controllers
         public IEnumerable<KorisnikUloga> GetAllUsersDb3()
         {
             IEnumerable<KorisnikUloga> userDb3 = _service.GetAllUsersDb3();
-
             return userDb3;
         }
 
@@ -65,7 +63,6 @@ namespace Azil.WebAPI.Controllers
         public IEnumerable<KucniLjubimci> GetAllUsersDb4()
         {
             IEnumerable<KucniLjubimci> userDb4 = _service.GetAllUsersDb4();
-
             return userDb4;
         }
 
@@ -74,7 +71,6 @@ namespace Azil.WebAPI.Controllers
         public IEnumerable<KucniLjubimciUdomitelj> GetAllUsersDb5()
         {
             IEnumerable<KucniLjubimciUdomitelj> userDb5 = _service.GetAllUsersDb5();
-
             return userDb5;
         }
 
@@ -83,7 +79,6 @@ namespace Azil.WebAPI.Controllers
         public IEnumerable<Uloge> GetAllUsersDb6()
         {
             IEnumerable<Uloge> userDb6 = _service.GetAllUsersDb6();
-
             return userDb6;
         }
 
@@ -129,65 +124,43 @@ namespace Azil.WebAPI.Controllers
                 response.ErrorMessages = result.Item2;
                 return Ok(response);
             }
-            //UsersDomain userDomain = _service.GetUserDomainByUserId(userId);
-            //return userDomain;
         }
 
         [HttpPost]
-        [Route("Korisnik/add")]
+        [Route("Korisnici/add")]
         public async Task<IActionResult> AddUserAsync([FromBody] UsersDomain userRest)
         {
-            bool lastrequestId = await GetLastUserRequestId();
+            bool lastRequestId = await GetLastUserRequestId();
 
-            if (!lastrequestId)
+            if (!lastRequestId)
             {
                 return BadRequest("Nije unesen RequestUserId korisnika koji poziva.");
-
             }
-            else
+
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    if (!ModelState.IsValid)
-                    {
-                        return BadRequest(ModelState);
-                    }
-                    else
-                    {
-                        UsersDomain userDomain = new UsersDomain();
-                        userDomain.IdKorisnika = userRest.IdKorisnika;
-                        userDomain.Ime = userRest.Ime;
-                        userDomain.Email = userRest.Email;
-                        userDomain.Lozinka = userRest.Lozinka;
-                        userDomain.Admin = userRest.Admin;
+                return BadRequest(ModelState);
+            }
 
-                        bool add_user = await _service.AddUserAsync(userDomain);
-
-                        if (add_user)
-                        {
-                            return Ok("Korisnik dodan!");
-                        }
-                        else
-                        {
-                            return Ok("Korisnik nije dodan!");
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
-                }
+            try
+            {
+                userRest.IdKorisnika = 0; // Ensure the ID is set to 0 or null for a new record
+                bool addUser = await _service.AddUserAsync(userRest);
+                return addUser ? Ok("Korisnik dodan!") : Ok("Korisnik nije dodan!");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
             }
         }
-
 
         [HttpPut]
         [Route("Korisnici/update/{id}")]
         public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UsersDomain userRest)
         {
-            bool lastrequestId = await GetLastUserRequestId();
+            bool lastRequestId = await GetLastUserRequestId();
 
-            if (!lastrequestId)
+            if (!lastRequestId)
             {
                 return BadRequest("Nije unesen RequestUserId korisnika koji poziva.");
             }
@@ -200,8 +173,8 @@ namespace Azil.WebAPI.Controllers
             try
             {
                 userRest.IdKorisnika = id;  // Assign the ID from the route to the userRest object
-                bool update_user = await _service.UpdateUserAsync(userRest);
-                return update_user ? Ok("Korisnik ažuriran!") : Ok("Korisnik nije ažuriran!");
+                bool updateUser = await _service.UpdateUserAsync(userRest);
+                return updateUser ? Ok("Korisnik ažuriran!") : Ok("Korisnik nije ažuriran!");
             }
             catch (Exception e)
             {
@@ -209,40 +182,30 @@ namespace Azil.WebAPI.Controllers
             }
         }
 
-
         [HttpDelete]
         [Route("Korisnici/delete/{id}")]
         public async Task<IActionResult> DeleteUserAsync(int id)
         {
-            bool lastrequestId = await GetLastUserRequestId();
+            bool lastRequestId = await GetLastUserRequestId();
 
-            if (!lastrequestId)
+            if (!lastRequestId)
             {
                 return BadRequest("Nije unesen RequestUserId korisnika koji poziva.");
             }
-            else
-            {
-                try
-                {
-                    bool delete_user = await _service.DeleteUserAsync(id);
 
-                    if (delete_user)
-                    {
-                        return Ok("Korisnik obrisan!");
-                    }
-                    else
-                    {
-                        return Ok("Korisnik nije obrisan!");
-                    }
-                }
-                catch (Exception e)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
-                }
+            try
+            {
+                bool deleteUser = await _service.DeleteUserAsync(id);
+                return deleteUser ? Ok("Korisnik obrisan!") : Ok("Korisnik nije obrisan!");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
             }
         }
 
         #region AdditionalCustomFunctions
+        [HttpGet]
         public async Task<bool> GetLastUserRequestId()
         {
             IHeaderDictionary headers = this.Request.Headers;
@@ -251,12 +214,10 @@ namespace Azil.WebAPI.Controllers
                 if (int.TryParse(headers["RequestUserId"].ToString(), out _requestUserId))
                 {
                     return await _service.IsValidUser(_requestUserId);
-                    //return true;
                 }
-                else return false;
+                return false;
             }
             return false;
-
         }
         #endregion AdditionalCustomFunctions
     }

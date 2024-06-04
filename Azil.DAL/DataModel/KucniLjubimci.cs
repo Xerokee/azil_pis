@@ -12,5 +12,6 @@ namespace Azil.DAL.DataModel
         public string tip_ljubimca { get; set; }
         public string opis_ljubimca { get; set; }
         public bool udomljen { get; set; }
+        public string imgUrl { get; set; }
     }
 }

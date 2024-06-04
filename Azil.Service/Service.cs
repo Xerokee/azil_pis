@@ -5,6 +5,7 @@ using Azil.Model;
 using Azil.Repository.Automapper;
 using Azil.Repository.Common;
 using Azil.Service.Common;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +18,13 @@ namespace Azil.Service
     {
         IRepository _repository;
         IRepositoryMappingService _mapper;
+        private readonly ILogger<Service> _logger;
 
-        public Service(IRepository repository, IRepositoryMappingService mapper)
+        public Service(IRepository repository, IRepositoryMappingService mapper, ILogger<Service> logger)
         {
             _repository = repository;
             _mapper = mapper;
+            _logger = logger;
         }
         public string Test()
         {
@@ -101,7 +104,16 @@ namespace Azil.Service
 
         public async Task<bool> AddUserAsync(UsersDomain userDomain)
         {
-            return await _repository.AddUserAsync(userDomain);
+            try
+            {
+                var userEntity = _mapper.Map<Korisnici>(userDomain);
+                return await _repository.AddUserAsync(userEntity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding user");
+                return false;
+            }
         }
 
         public async Task<bool> UpdateUserAsync(UsersDomain userDomain)
