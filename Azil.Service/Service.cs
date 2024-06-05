@@ -5,6 +5,7 @@ using Azil.Model;
 using Azil.Repository.Automapper;
 using Azil.Repository.Common;
 using Azil.Service.Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -104,10 +105,14 @@ namespace Azil.Service
 
         public async Task<bool> AddUserAsync(UsersDomain userDomain)
         {
+            _logger.LogInformation("Mapping UsersDomain to Korisnici");
             try
             {
                 var userEntity = _mapper.Map<Korisnici>(userDomain);
-                return await _repository.AddUserAsync(userEntity);
+                _logger.LogInformation("Mapped UsersDomain to Korisnici: {@userEntity}", userEntity);
+                bool result = await _repository.AddUserAsync(userEntity);
+                _logger.LogInformation("AddUserAsync result: {result}", result);
+                return result;
             }
             catch (Exception ex)
             {

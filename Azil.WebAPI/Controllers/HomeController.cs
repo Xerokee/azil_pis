@@ -134,25 +134,39 @@ namespace Azil.WebAPI.Controllers
 
             if (!lastRequestId)
             {
+                _logger.LogWarning("RequestUserId not provided.");
                 return BadRequest("Nije unesen RequestUserId korisnika koji poziva.");
             }
 
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Model state is invalid: {ModelState}", ModelState);
                 return BadRequest(ModelState);
             }
 
             try
             {
+                _logger.LogInformation("Received user: {User}", userRest);
                 userRest.IdKorisnika = 0; // Ensure the ID is set to 0 or null for a new record
                 bool addUser = await _service.AddUserAsync(userRest);
-                return addUser ? Ok("Korisnik dodan!") : Ok("Korisnik nije dodan!");
+                if (addUser)
+                {
+                    _logger.LogInformation("User successfully added: {User}", userRest);
+                    return Ok("Korisnik dodan!");
+                }
+                else
+                {
+                    _logger.LogWarning("Failed to add user: {User}", userRest);
+                    return Ok("Korisnik nije dodan!");
+                }
             }
             catch (Exception e)
             {
+                _logger.LogError(e, "Exception occurred while adding user.");
                 return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
             }
         }
+
 
         [HttpPut]
         [Route("Korisnici/update/{id}")]

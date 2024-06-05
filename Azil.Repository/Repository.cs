@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Azil.Repository
 {
@@ -15,11 +16,13 @@ namespace Azil.Repository
     {
         private readonly Azil_DbContext appDbContext;
         private IRepositoryMappingService _mapper;
+        private readonly ILogger<Repository> _logger;
 
-        public Repository(Azil_DbContext appDbContext, IRepositoryMappingService mapper)
+        public Repository(Azil_DbContext appDbContext, IRepositoryMappingService mapper, ILogger<Repository> logger)
         {
             this.appDbContext = appDbContext;
             _mapper = mapper;
+            _logger = logger;
         }
         public string Test()
         {
@@ -76,13 +79,15 @@ namespace Azil.Repository
         {
             try
             {
+                _logger.LogInformation("Adding user to database: {@userEntity}", userEntity);
                 await appDbContext.Korisnici.AddAsync(userEntity);
                 await appDbContext.SaveChangesAsync();
+                _logger.LogInformation("User successfully added to database");
                 return true;
             }
             catch (Exception ex)
             {
-                // Log the exception
+                _logger.LogError(ex, "Error occurred while adding user to the database.");
                 return false;
             }
         }

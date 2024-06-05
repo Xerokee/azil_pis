@@ -16,10 +16,9 @@ namespace Azil.Repository.Automapper
             var config = new MapperConfiguration(
                 cfg =>
                 {
-                    cfg.CreateMap<Korisnici, UsersDomain>(); //ruta baza - GUI
-                    cfg.CreateMap<UsersDomain, Korisnici>(); //ruta GUI - baza
+                    cfg.AddProfile<MappingProfile>();
                 });
-            mapper = new Mapper(config);
+                mapper = new Mapper(config);
         }
         public TDestination Map<TDestination>(object source)
         {

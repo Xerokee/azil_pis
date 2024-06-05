@@ -18,6 +18,8 @@ using Microsoft.EntityFrameworkCore;
 using Azil.Repository.Automapper;
 using Azil.WebAPI.Models;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
+
 
 namespace Azil.WebAPI
 {
@@ -52,6 +54,8 @@ namespace Azil.WebAPI
             services.AddCors();
 
             services.AddControllers();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
