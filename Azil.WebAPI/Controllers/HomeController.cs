@@ -126,6 +126,30 @@ namespace Azil.WebAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("Korisnici/lozinka/{email}")]
+        public async Task<IActionResult> GetPasswordByEmail(string email)
+        {
+            _logger.LogInformation("Poziv metode GetPasswordByEmail s emailom: {Email}", email);
+
+            // Dohvati tuple koji sadrži korisnika i liste grešaka
+            var result = await _service.GetUserDomainByEmail(email);
+            var user = result.Item1;
+            var errorMessages = result.Item2;
+
+            if (user != null)
+            {
+                _logger.LogInformation("Korisnik pronađen: {User}", user);
+                return Ok(user.Lozinka);  // Vrati samo lozinku kao string
+            }
+            else
+            {
+                _logger.LogWarning("Korisnik nije pronađen za email: {Email}", email);
+                return NotFound("Korisnik nije pronađen");
+            }
+        }
+
+
         [HttpPost]
         [Route("Korisnici/add")]
         public async Task<IActionResult> AddUserAsync([FromBody] UsersDomain userRest)
@@ -216,6 +240,22 @@ namespace Azil.WebAPI.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
             }
+        }
+
+        [HttpGet]
+        [Route("KucniLjubimci")]
+        public async Task<IActionResult> GetAllAnimals()
+        {
+            var animals = await _service.GetAllAnimals();
+            return Ok(animals);
+        }
+
+        [HttpGet]
+        [Route("KucniLjubimci/{type}")]
+        public async Task<IActionResult> GetAnimalsByType(string type)
+        {
+            var animals = await _service.GetAnimalsByType(type);
+            return Ok(animals);
         }
 
         #region AdditionalCustomFunctions

@@ -13,14 +13,16 @@ namespace Azil.Repository.Automapper
                 .ForMember(dest => dest.ime, opt => opt.MapFrom(src => src.Ime))
                 .ForMember(dest => dest.email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.lozinka, opt => opt.MapFrom(src => src.Lozinka))
-                .ForMember(dest => dest.admin, opt => opt.MapFrom(src => src.Admin));
+                .ForMember(dest => dest.admin, opt => opt.MapFrom(src => src.Admin))
+                .ForMember(dest => dest.profileImg, opt => opt.MapFrom(src => src.ProfileImg));
 
             CreateMap<Korisnici, UsersDomain>()
                 .ForMember(dest => dest.IdKorisnika, opt => opt.MapFrom(src => src.id_korisnika))
                 .ForMember(dest => dest.Ime, opt => opt.MapFrom(src => src.ime))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.email))
                 .ForMember(dest => dest.Lozinka, opt => opt.MapFrom(src => src.lozinka))
-                .ForMember(dest => dest.Admin, opt => opt.MapFrom(src => src.admin));
+                .ForMember(dest => dest.Admin, opt => opt.MapFrom(src => src.admin))
+                .ForMember(dest => dest.ProfileImg, opt => opt.MapFrom(src => src.profileImg));
         }
     }
 }

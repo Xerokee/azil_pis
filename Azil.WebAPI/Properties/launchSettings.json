@@ -4,15 +4,15 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://192.168.75.1:12620",
-      "sslPort": 44310
+      "applicationUrl": "http://193.198.57.183:7081",
+      "sslPort": 7081
     }
   },
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "azil/Users",
+      "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -20,8 +20,8 @@
     "Azil.WebAPI": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "azil/Users",
-      "applicationUrl": "http://192.168.75.1:12620;https://192.168.75.1:44310",
+      "launchUrl": "swagger",
+      "applicationUrl": "http://193.198.57.183:7081;https://193.198.57.183:7081",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

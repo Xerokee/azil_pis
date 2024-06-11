@@ -11,5 +11,6 @@ namespace Azil.DAL.DataModel
         public string email { get; set; }
         public string lozinka { get; set; }
         public bool admin { get; set; }
+        public string profileImg { get; set; }
     }
 }

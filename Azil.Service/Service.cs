@@ -103,6 +103,28 @@ namespace Azil.Service
             return new Tuple<UsersDomain, List<ErrorMessage>>(usersDomain, erorMessages);
         }
 
+        public async Task<Tuple<UsersDomain, List<ErrorMessage>>> GetUserDomainByEmail(string email)
+        {
+            _logger.LogInformation("Poziv metode GetUserDomainByEmail s emailom: {Email}", email);
+            List<ErrorMessage> errorMessages = new List<ErrorMessage>();
+            UsersDomain usersDomain = _repository.GetUserDomainByEmail(email);
+
+            if (usersDomain != null)
+            {
+                _logger.LogInformation("Korisnik pronađen: {User}", usersDomain);
+                errorMessages.Add(new ErrorMessage("Podatci su uredu!"));
+                errorMessages.Add(new ErrorMessage("Podatci su u ispravnom obliku!"));
+            }
+            else
+            {
+                _logger.LogWarning("Korisnik nije pronađen: {Email}", email);
+                errorMessages.Add(new ErrorMessage("Podatci nisu uredu!"));
+                errorMessages.Add(new ErrorMessage("Podatci nisu u ispravnom obliku!"));
+            }
+            return new Tuple<UsersDomain, List<ErrorMessage>>(usersDomain, errorMessages);
+        }
+
+
         public async Task<bool> AddUserAsync(UsersDomain userDomain)
         {
             _logger.LogInformation("Mapping UsersDomain to Korisnici");
@@ -131,6 +153,17 @@ namespace Azil.Service
         {
             return await _repository.DeleteUserAsync(id);
         }
+
+        public async Task<IEnumerable<KucniLjubimci>> GetAllAnimals()
+        {
+            return await _repository.GetAllAnimals();
+        }
+
+        public async Task<IEnumerable<KucniLjubimci>> GetAnimalsByType(string type)
+        {
+            return await _repository.GetAnimalsByType(type);
+        }
+
         #region AdditionalCustomFunctions
 
         public async Task<bool> IsValidUser(int id)

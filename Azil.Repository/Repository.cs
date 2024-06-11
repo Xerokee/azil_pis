@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace Azil.Repository
 {
@@ -75,6 +76,22 @@ namespace Azil.Repository
 
             return user;
         }
+        public UsersDomain GetUserDomainByEmail(string email)
+        {
+            _logger.LogInformation("Poziv metode GetUserDomainByEmail u Repository s emailom: {Email}", email);
+            Korisnici userDb = appDbContext.Korisnici.FirstOrDefault(u => u.email == email);
+            if (userDb != null)
+            {
+                _logger.LogInformation("Korisnik pronađen u bazi podataka: {UserDb}", userDb);
+            }
+            else
+            {
+                _logger.LogWarning("Korisnik nije pronađen u bazi podataka: {Email}", email);
+            }
+            UsersDomain user = _mapper.Map<UsersDomain>(userDb);
+            return user;
+        }
+
         public async Task<bool> AddUserAsync(Korisnici userEntity)
         {
             try
@@ -103,6 +120,7 @@ namespace Azil.Repository
                 userEntity.email = userDomain.Email;
                 userEntity.lozinka = userDomain.Lozinka;
                 userEntity.admin = userDomain.Admin;
+                userEntity.profileImg = userDomain.ProfileImg;
 
                 appDbContext.Korisnici.Update(userEntity);
                 await appDbContext.SaveChangesAsync();
@@ -135,6 +153,23 @@ namespace Azil.Repository
                 return false;
             }
         }
+
+        public async Task<IEnumerable<KucniLjubimci>> GetAllAnimals()
+        {
+            return await appDbContext.KucniLjubimci.ToListAsync();
+        }
+
+        public async Task<IEnumerable<KucniLjubimci>> GetAnimalsByType(string type)
+        {
+            var animals = await appDbContext.KucniLjubimci
+                .Where(a => EF.Functions.Like(a.tip_ljubimca, type)) // Using EF.Functions.Like for better compatibility
+                .ToListAsync();
+
+            return animals;
+        }
+
+
+
         //public async Task<bool> UpdateUserOibAsync(UsersDomain userDomain)
         //{
         //	try

@@ -26,7 +26,7 @@ namespace Azil.WebAPI.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=192.168.75.1,1433;Database=Azil;Integrated Security=True;");
+                optionsBuilder.UseSqlServer("Server=193.198.57.183,7081;Database=MargetaAzil;User Id=mmargeta;Password=Vuvo125!;");
             }
         }
 

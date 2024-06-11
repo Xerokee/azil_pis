@@ -27,7 +27,7 @@ namespace Azil.WebAPI
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://192.168.75.1:12620", "https://192.168.75.1:44310");
+                    webBuilder.UseUrls("http://193.198.57.183:7081", "https://193.198.57.183:7081");
                 });
     }
 }

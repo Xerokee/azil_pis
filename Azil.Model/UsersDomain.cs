@@ -19,6 +19,7 @@ namespace Azil.Model
             Email = user.email;
             Lozinka = user.lozinka;
             Admin = user.admin;
+            ProfileImg = user.profileImg;
         }
 
         public int IdKorisnika { get; set; }
@@ -35,5 +36,6 @@ namespace Azil.Model
         [StringLength(100, MinimumLength = 6, ErrorMessage = "Lozinka mora biti između 6 i 100 znakova.")]
         public string Lozinka { get; set; }
         public bool Admin { get; set; }
+        public string ProfileImg { get; set; }
     }
 }

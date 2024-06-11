@@ -19,9 +19,12 @@ namespace Azil.Service.Common
         IEnumerable<KucniLjubimciUdomitelj> GetAllUsersDb5();
         IEnumerable<Uloge> GetAllUsersDb6();
         Task<Tuple<UsersDomain, List<ErrorMessage>>> GetUserDomainByUserId(int id_korisnika);
+        Task<Tuple<UsersDomain, List<ErrorMessage>>> GetUserDomainByEmail(string email);
         Task<bool> AddUserAsync(UsersDomain userDomain);
         Task<bool> UpdateUserAsync(UsersDomain userDomain);
         Task<bool> DeleteUserAsync(int id);
+        Task<IEnumerable<KucniLjubimci>> GetAllAnimals();
+        Task<IEnumerable<KucniLjubimci>> GetAnimalsByType(string type);
         Task<bool> IsValidUser(int id);
     }
 }
