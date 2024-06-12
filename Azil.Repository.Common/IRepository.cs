@@ -24,7 +24,9 @@ namespace Azil.Repository.Common
         Task<bool> DeleteUserAsync(int id);
         Task<IEnumerable<KucniLjubimci>> GetAllAnimals();
         Task<IEnumerable<KucniLjubimci>> GetAnimalsByType(string type);
+        Task<bool> AddAnimalAsync(AnimalsDomain animalDomain);
         Task<UsersDomain> IsValidUser(int id);
+        Task<bool> IsValidAnimal(int id);
         string Test();
     }
 }

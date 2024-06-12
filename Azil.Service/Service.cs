@@ -164,6 +164,24 @@ namespace Azil.Service
             return await _repository.GetAnimalsByType(type);
         }
 
+        public async Task<bool> AddAnimalAsync(AnimalsDomain animalDomain)
+        {
+            _logger.LogInformation("Mapping AnimalsDomain to KucniLjubimci");
+            try
+            {
+                var animalEntity = _mapper.Map<KucniLjubimci>(animalDomain);
+                _logger.LogInformation("Mapped AnimalsDomain to KucniLjubimci: {@animalEntity}", animalEntity);
+                bool result = await _repository.AddAnimalAsync(animalDomain);
+                _logger.LogInformation("AddAnimalAsync result: {result}", result);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding animal");
+                return false;
+            }
+        }
+
         #region AdditionalCustomFunctions
 
         public async Task<bool> IsValidUser(int id)
@@ -177,6 +195,11 @@ namespace Azil.Service
             {
                 return true;
             }
+        }
+
+        public async Task<bool> IsValidAnimal(int id)
+        {
+            return await _repository.IsValidAnimal(id);
         }
 
         public async Task<Tuple<IEnumerable<UsersDomain>, List<ErrorMessage>>> GetAllUsers()

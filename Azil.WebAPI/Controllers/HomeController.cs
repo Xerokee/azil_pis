@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
 
 namespace Azil.WebAPI.Controllers
 {
@@ -18,12 +19,14 @@ namespace Azil.WebAPI.Controllers
     {
         protected IService _service { get; private set; }
         private int _requestUserId;
+        private int _requestAnimalId;
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(IService service, ILogger<HomeController> logger)
         {
             _service = service;
             _requestUserId = -1;
+            _requestAnimalId = -1;
             _logger = logger;
         }
 
@@ -111,6 +114,28 @@ namespace Azil.WebAPI.Controllers
             HttpRequestResponse<UsersDomain> response = new HttpRequestResponse<UsersDomain>();
 
             Tuple<UsersDomain, List<ErrorMessage>> result = await _service.GetUserDomainByUserId(id_korisnika);
+
+            if (result != null)
+            {
+                response.Result = result.Item1;
+                response.ErrorMessages = result.Item2;
+                return Ok(response);
+            }
+            else
+            {
+                response.Result = result.Item1;
+                response.ErrorMessages = result.Item2;
+                return Ok(response);
+            }
+        }
+
+        [HttpGet]
+        [Route("Korisnici/email/{email}")]
+        public async Task<IActionResult> GetUserDomainByEmail(string email)
+        {
+            HttpRequestResponse<UsersDomain> response = new HttpRequestResponse<UsersDomain>();
+
+            Tuple<UsersDomain, List<ErrorMessage>> result = await _service.GetUserDomainByEmail(email);
 
             if (result != null)
             {
@@ -258,6 +283,49 @@ namespace Azil.WebAPI.Controllers
             return Ok(animals);
         }
 
+        [HttpPost]
+        [Route("KucniLjubimci/add")]
+        public async Task<IActionResult> AddAnimalAsync([FromBody] AnimalsDomain animalRest)
+        {
+            bool lastRequestId = await GetLastAnimalRequestId();
+
+            if (!lastRequestId)
+            {
+                _logger.LogWarning("RequestAnimalId not provided.");
+                return BadRequest("Nije unesen RequestAnimalId životinje koji poziva.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Model state is invalid: {ModelState}", ModelState);
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                _logger.LogInformation("Received animal: {Animal}", animalRest);
+                animalRest.IdLjubimca = 0; // Ensure the ID is set to 0 or null for a new record
+                bool addAnimal = await _service.AddAnimalAsync(animalRest);
+                if (addAnimal)
+                {
+                    _logger.LogInformation("Animal successfully added: {Animal}", animalRest);
+                    return Ok("Životinja dodana!");
+                }
+                else
+                {
+                    _logger.LogWarning("Failed to add animal: {Animal}", animalRest);
+                    return Ok("Životinja nije dodana!");
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Exception occurred while adding animal.");
+                return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
+            }
+        }
+
+
+
         #region AdditionalCustomFunctions
         [HttpGet]
         public async Task<bool> GetLastUserRequestId()
@@ -268,6 +336,21 @@ namespace Azil.WebAPI.Controllers
                 if (int.TryParse(headers["RequestUserId"].ToString(), out _requestUserId))
                 {
                     return await _service.IsValidUser(_requestUserId);
+                }
+                return false;
+            }
+            return false;
+        }
+
+        [HttpGet]
+        public async Task<bool> GetLastAnimalRequestId()
+        {
+            IHeaderDictionary headers = this.Request.Headers;
+            if (headers.ContainsKey("RequestAnimalId"))
+            {
+                if (int.TryParse(headers["RequestAnimalId"].ToString(), out _requestAnimalId))
+                {
+                    return await _service.IsValidAnimal(_requestAnimalId);
                 }
                 return false;
             }

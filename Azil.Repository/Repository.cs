@@ -168,6 +168,23 @@ namespace Azil.Repository
             return animals;
         }
 
+        public async Task<bool> AddAnimalAsync(AnimalsDomain animalDomain)
+        {
+            try
+            {
+                var animalEntity = _mapper.Map<KucniLjubimci>(animalDomain);
+                _logger.LogInformation("Adding animal to database: {@animalEntity}", animalEntity);
+                await appDbContext.KucniLjubimci.AddAsync(animalEntity);
+                await appDbContext.SaveChangesAsync();
+                _logger.LogInformation("Animal successfully added to database");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while adding animal to the database.");
+                return false;
+            }
+        }
 
 
         //public async Task<bool> UpdateUserOibAsync(UsersDomain userDomain)
@@ -191,6 +208,12 @@ namespace Azil.Repository
         {
             Korisnici userDb = await appDbContext.Korisnici.FindAsync(id);
             return _mapper.Map<UsersDomain>(userDb);
+        }
+
+        public async Task<bool> IsValidAnimal(int id)
+        {
+            KucniLjubimci animalDb = await appDbContext.KucniLjubimci.FindAsync(id);
+            return animalDb != null;
         }
     }
 }

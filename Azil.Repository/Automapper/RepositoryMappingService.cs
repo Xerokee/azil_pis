@@ -17,8 +17,9 @@ namespace Azil.Repository.Automapper
                 cfg =>
                 {
                     cfg.AddProfile<MappingProfile>();
+                    cfg.AddProfile<AnimalMappingProfile>();
                 });
-                mapper = new Mapper(config);
+            mapper = new Mapper(config);
         }
         public TDestination Map<TDestination>(object source)
         {
