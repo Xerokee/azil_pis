@@ -182,6 +182,20 @@ namespace Azil.Service
             }
         }
 
+        public async Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption)
+        {
+            try
+            {
+                await _repository.AddAdoptionAsync(adoption);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return false;
+            }
+        }
+
         #region AdditionalCustomFunctions
 
         public async Task<bool> IsValidUser(int id)

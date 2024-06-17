@@ -186,6 +186,21 @@ namespace Azil.Repository
             }
         }
 
+        public async Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption)
+        {
+            try
+            {
+                await appDbContext.DnevnikUdomljavanja.AddAsync(adoption);
+                await appDbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return false;
+            }
+        }
+
 
         //public async Task<bool> UpdateUserOibAsync(UsersDomain userDomain)
         //{

@@ -324,6 +324,25 @@ namespace Azil.WebAPI.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("DnevnikUdomljavanja/add")]
+        public async Task<IActionResult> AddAdoptionAsync([FromBody] DnevnikUdomljavanja adoption)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _service.AddAdoptionAsync(adoption);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
+            }
+        }
 
 
         #region AdditionalCustomFunctions
