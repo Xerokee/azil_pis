@@ -196,7 +196,7 @@ namespace Azil.WebAPI.Controllers
             try
             {
                 _logger.LogInformation("Received user: {User}", userRest);
-                userRest.IdKorisnika = 0; // Ensure the ID is set to 0 or null for a new record
+                userRest.id_korisnika = 0; // Ensure the ID is set to 0 or null for a new record
                 bool addUser = await _service.AddUserAsync(userRest);
                 if (addUser)
                 {
@@ -235,7 +235,7 @@ namespace Azil.WebAPI.Controllers
 
             try
             {
-                userRest.IdKorisnika = id;  // Assign the ID from the route to the userRest object
+                userRest.id_korisnika = id;  // Assign the ID from the route to the userRest object
                 bool updateUser = await _service.UpdateUserAsync(userRest);
                 return updateUser ? Ok("Korisnik ažuriran!") : Ok("Korisnik nije ažuriran!");
             }

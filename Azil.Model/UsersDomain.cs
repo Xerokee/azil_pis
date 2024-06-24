@@ -14,7 +14,7 @@ namespace Azil.Model
         }
         public UsersDomain(Korisnici user)
         {
-            IdKorisnika = user.id_korisnika;
+            id_korisnika = user.id_korisnika;
             Ime = user.ime;
             Email = user.email;
             Lozinka = user.lozinka;
@@ -22,7 +22,7 @@ namespace Azil.Model
             ProfileImg = user.profileImg;
         }
 
-        public int IdKorisnika { get; set; }
+        public int id_korisnika { get; set; }
 
         [Required(ErrorMessage = "Unesite ime korisnika.")]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Ime korisnika mora biti između 3 i 50 slova")]

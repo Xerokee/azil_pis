@@ -113,7 +113,7 @@ namespace Azil.Repository
         {
             try
             {
-                Korisnici userEntity = await appDbContext.Korisnici.FindAsync(userDomain.IdKorisnika);
+                Korisnici userEntity = await appDbContext.Korisnici.FindAsync(userDomain.id_korisnika);
                 if (userEntity == null) return false;
 
                 userEntity.ime = userDomain.Ime;
