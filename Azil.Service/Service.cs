@@ -103,6 +103,11 @@ namespace Azil.Service
             return new Tuple<UsersDomain, List<ErrorMessage>>(usersDomain, erorMessages);
         }
 
+        public async Task<UserRoleModel> GetUserRoleById(int id_korisnika)
+        {
+            return await _repository.GetUserRoleById(id_korisnika);
+        }
+
         public async Task<Tuple<UsersDomain, List<ErrorMessage>>> GetUserDomainByEmail(string email)
         {
             _logger.LogInformation("Poziv metode GetUserDomainByEmail s emailom: {Email}", email);
@@ -164,6 +169,16 @@ namespace Azil.Service
             return await _repository.GetAnimalsByType(type);
         }
 
+        public async Task<IEnumerable<KucniLjubimci>> GetAdoptedAnimals()
+        {
+            return await _repository.GetAdoptedAnimals();
+        }
+
+        public async Task<KucniLjubimci> GetKucniLjubimacById(int id)
+        {
+            return await _repository.GetKucniLjubimacById(id);
+        }
+
         public async Task<bool> AddAnimalAsync(AnimalsDomain animalDomain)
         {
             _logger.LogInformation("Mapping AnimalsDomain to KucniLjubimci");
@@ -191,7 +206,7 @@ namespace Azil.Service
             }
             catch (Exception ex)
             {
-                // Log the exception
+                _logger.LogError(ex, "Error adding adoption");
                 return false;
             }
         }

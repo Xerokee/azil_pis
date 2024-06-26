@@ -16,6 +16,7 @@ namespace Azil.DAL.DataModel
         [JsonPropertyName("datum_do")]
         [JsonConverter(typeof(DateFormatConverter))]
         public DateTime datum_do { get; set; }
+        public virtual Uloge Uloge { get; set; }
     }
 
     public class DateFormatConverter : JsonConverter<DateTime>

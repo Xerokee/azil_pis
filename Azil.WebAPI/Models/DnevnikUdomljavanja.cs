@@ -7,8 +7,12 @@ namespace Azil.WebAPI.Models
     {
         public int IdLjubimca { get; set; }
         public int IdKorisnika { get; set; }
+        public string ImeLjubimca { get; set; }
+        public string TipLjubimca { get; set; }
+        public bool Udomljen { get; set; }
         public DateTime? Datum { get; set; }
-        public string Opis { get; set; }
+        public string ImgUrl { get; set; }
+        public bool StanjeZivotinje { get; set; }
 
         public virtual Korisnici Korisnici { get; set; }
         public virtual KucniLjubimci KucniLjubimci { get; set; }

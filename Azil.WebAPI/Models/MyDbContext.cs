@@ -42,15 +42,31 @@ namespace Azil.WebAPI.Models
                     .HasColumnName("id_ljubimca")
                     .ValueGeneratedNever();
 
+                entity.Property(e => e.ImeLjubimca)
+                    .HasColumnName("ime_ljubimca")
+                    .HasColumnType("text");
+
+                entity.Property(e => e.TipLjubimca)
+                    .HasColumnName("tip_ljubimca")
+                    .HasColumnType("text");
+
+                entity.Property(e => e.Udomljen)
+                    .HasColumnName("udomljen")
+                    .HasColumnType("bool");
+
                 entity.Property(e => e.Datum)
                     .HasColumnName("datum")
                     .HasColumnType("date");
 
+                entity.Property(e => e.ImgUrl)
+                    .HasColumnName("imgUrl")
+                    .HasColumnType("text");
+
                 entity.Property(e => e.IdKorisnika).HasColumnName("id_korisnika");
 
-                entity.Property(e => e.Opis)
-                    .HasColumnName("opis")
-                    .HasColumnType("text");
+                entity.Property(e => e.StanjeZivotinje)
+                    .HasColumnName("stanje_zivotinje")
+                    .HasColumnType("bool");
             });
 
             modelBuilder.Entity<Korisnici>(entity =>

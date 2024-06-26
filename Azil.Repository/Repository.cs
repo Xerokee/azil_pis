@@ -48,26 +48,31 @@ namespace Azil.Repository
             IEnumerable<DnevnikUdomljavanja> userDb2 = appDbContext.DnevnikUdomljavanja.ToList();
             return userDb2;
         }
+
         public IEnumerable<KorisnikUloga> GetAllUsersDb3()
         {
             IEnumerable<KorisnikUloga> userDb3 = appDbContext.KorisnikUloga.ToList();
             return userDb3;
         }
+
         public IEnumerable<KucniLjubimci> GetAllUsersDb4()
         {
             IEnumerable<KucniLjubimci> userDb4 = appDbContext.KucniLjubimci.ToList();
             return userDb4;
         }
+
         public IEnumerable<KucniLjubimciUdomitelj> GetAllUsersDb5()
         {
             IEnumerable<KucniLjubimciUdomitelj> userDb5 = appDbContext.KucniLjubimciUdomitelj.ToList();
             return userDb5;
         }
+
         public IEnumerable<Uloge> GetAllUsersDb6()
         {
             IEnumerable<Uloge> userDb6 = appDbContext.Uloge.ToList();
             return userDb6;
         }
+
         public UsersDomain GetUserDomainByUserId(int id_korisnika)
         {
             Korisnici userDb = appDbContext.Korisnici.Find(id_korisnika);
@@ -76,6 +81,21 @@ namespace Azil.Repository
 
             return user;
         }
+
+        public async Task<UserRoleModel> GetUserRoleById(int id_korisnika)
+        {
+            var userRole = await appDbContext.KorisnikUloga
+                .Include(ku => ku.Uloge)
+                .Where(ku => ku.id_korisnika == id_korisnika)
+                .Select(ku => new UserRoleModel
+                {
+                    IdUloge = ku.id_uloge,
+                    NazivUloge = ku.Uloge.naziv_uloge
+                })
+                .FirstOrDefaultAsync();
+            return userRole;
+        }
+
         public UsersDomain GetUserDomainByEmail(string email)
         {
             _logger.LogInformation("Poziv metode GetUserDomainByEmail u Repository s emailom: {Email}", email);
@@ -168,6 +188,16 @@ namespace Azil.Repository
             return animals;
         }
 
+        public async Task<IEnumerable<KucniLjubimci>> GetAdoptedAnimals()
+        {
+            return await appDbContext.KucniLjubimci.Where(a => a.udomljen).ToListAsync();
+        }
+
+        public async Task<KucniLjubimci> GetKucniLjubimacById(int id)
+        {
+            return await appDbContext.KucniLjubimci.FindAsync(id);
+        }
+
         public async Task<bool> AddAnimalAsync(AnimalsDomain animalDomain)
         {
             try
@@ -190,13 +220,23 @@ namespace Azil.Repository
         {
             try
             {
+                // Add to dnevnik_udomljavanja
                 await appDbContext.DnevnikUdomljavanja.AddAsync(adoption);
+
+                // Update kucni_ljubimci
+                var animal = await appDbContext.KucniLjubimci.FindAsync(adoption.id_ljubimca);
+                if (animal != null)
+                {
+                    animal.udomljen = true;
+                    appDbContext.KucniLjubimci.Update(animal);
+                }
+
                 await appDbContext.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
             {
-                // Log the exception
+                _logger.LogError(ex, "Error occurred while adding adoption.");
                 return false;
             }
         }

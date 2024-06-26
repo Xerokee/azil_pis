@@ -18,12 +18,15 @@ namespace Azil.Repository.Common
         IEnumerable<KucniLjubimciUdomitelj> GetAllUsersDb5();
         IEnumerable<Uloge> GetAllUsersDb6();
         UsersDomain GetUserDomainByUserId(int id_korisnika);
+        Task<UserRoleModel> GetUserRoleById(int id_korisnika);
         UsersDomain GetUserDomainByEmail(string email);
         Task<bool> AddUserAsync(Korisnici userEntity);
         Task<bool> UpdateUserAsync(UsersDomain userDomain);
         Task<bool> DeleteUserAsync(int id);
         Task<IEnumerable<KucniLjubimci>> GetAllAnimals();
         Task<IEnumerable<KucniLjubimci>> GetAnimalsByType(string type);
+        Task<IEnumerable<KucniLjubimci>> GetAdoptedAnimals();
+        Task<KucniLjubimci> GetKucniLjubimacById(int id);
         Task<bool> AddAnimalAsync(AnimalsDomain animalDomain);
         Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption);
         Task<UsersDomain> IsValidUser(int id);

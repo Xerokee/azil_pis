@@ -130,6 +130,19 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("Korisnici/role/{id_korisnika}")]
+        public async Task<IActionResult> GetUserRoleById(int id_korisnika)
+        {
+            var userRole = await _service.GetUserRoleById(id_korisnika);
+            if (userRole != null)
+            {
+                return Ok(userRole);
+            }
+            return NotFound();
+        }
+
+
+        [HttpGet]
         [Route("Korisnici/email/{email}")]
         public async Task<IActionResult> GetUserDomainByEmail(string email)
         {
@@ -335,13 +348,28 @@ namespace Azil.WebAPI.Controllers
 
             try
             {
-                await _service.AddAdoptionAsync(adoption);
-                return Ok();
+                bool result = await _service.AddAdoptionAsync(adoption);
+                if (result)
+                {
+                    return Ok("Uspješno dodano!");
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Greška u dodavanju!");
+                }
             }
             catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
             }
+        }
+
+        [HttpGet]
+        [Route("AdoptedAnimals")]
+        public async Task<IActionResult> GetAdoptedAnimals()
+        {
+            var animals = await _service.GetAdoptedAnimals();
+            return Ok(animals);
         }
 
 

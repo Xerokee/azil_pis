@@ -36,13 +36,28 @@ namespace Azil.DAL.DataModel
                 entity.Property(e => e.id_korisnika).
                 HasColumnName("id_korisnika");
 
+                entity.Property(e => e.ime_ljubimca)
+                    .HasColumnName("ime_ljubimca")
+                    .IsUnicode(false);
+
+                entity.Property(e => e.tip_ljubimca)
+                    .HasColumnName("tip_ljubimca")
+                    .IsUnicode(false);
+
+                entity.Property(e => e.udomljen)
+                    .HasColumnName("udomljen")
+                    .IsUnicode(false);
+
                 entity.Property(e => e.datum)
                     .HasColumnName("datum")
                     .IsUnicode(false);
 
-                entity.Property(e => e.opis)
-                    .HasColumnName("opis")
+                entity.Property(e => e.imgUrl)
+                    .HasColumnName("imgUrl")
                     .IsUnicode(false);
+
+                entity.Property(e => e.stanje_zivotinje)
+                    .HasColumnName("stanje_zivotinje");
             });
 
             modelBuilder.Entity<Korisnici>(entity =>
@@ -89,6 +104,10 @@ namespace Azil.DAL.DataModel
                 entity.Property(e => e.datum_do)
                     .HasColumnName("datum_do")
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.Uloge)
+                    .WithMany()
+                    .HasForeignKey(d => d.id_uloge);
             });
 
             modelBuilder.Entity<KucniLjubimci>(entity =>
