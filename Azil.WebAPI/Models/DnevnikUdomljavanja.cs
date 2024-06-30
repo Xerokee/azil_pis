@@ -11,6 +11,7 @@ namespace Azil.WebAPI.Models
         public string TipLjubimca { get; set; }
         public bool Udomljen { get; set; }
         public DateTime? Datum { get; set; }
+        public TimeSpan? Vrijeme { get; set; }
         public string ImgUrl { get; set; }
         public bool StanjeZivotinje { get; set; }
 

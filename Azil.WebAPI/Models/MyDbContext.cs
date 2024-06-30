@@ -58,6 +58,10 @@ namespace Azil.WebAPI.Models
                     .HasColumnName("datum")
                     .HasColumnType("date");
 
+                entity.Property(e => e.Vrijeme)
+                    .HasColumnName("vrijeme")
+                    .HasColumnType("time");
+
                 entity.Property(e => e.ImgUrl)
                     .HasColumnName("imgUrl")
                     .HasColumnType("text");

@@ -52,6 +52,10 @@ namespace Azil.DAL.DataModel
                     .HasColumnName("datum")
                     .IsUnicode(false);
 
+                entity.Property(e => e.vrijeme)
+                    .HasColumnName("vrijeme")
+                    .IsUnicode(false);
+
                 entity.Property(e => e.imgUrl)
                     .HasColumnName("imgUrl")
                     .IsUnicode(false);

@@ -17,6 +17,10 @@ namespace Azil.DAL.DataModel
         [JsonPropertyName("datum")]
         [JsonConverter(typeof(DateFormatConverter2))]
         public DateTime? datum { get; set; }
+
+        [JsonPropertyName("vrijeme")]
+        [JsonConverter(typeof(TimeFormatConverter))]
+        public TimeSpan? vrijeme { get; set; }  // Dodano za vrijeme
         public string imgUrl { get; set; }
         public bool? stanje_zivotinje { get; set; }
     }
@@ -33,6 +37,21 @@ namespace Azil.DAL.DataModel
         public override void Write(Utf8JsonWriter writer, DateTime? value, JsonSerializerOptions options)
         {
             writer.WriteStringValue(value?.ToString(_dateFormat2));
+        }
+    }
+
+    public class TimeFormatConverter : JsonConverter<TimeSpan?>
+    {
+        private readonly string _timeFormat = @"hh\:mm\:ss";
+
+        public override TimeSpan? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            return TimeSpan.ParseExact(reader.GetString(), _timeFormat, null);
+        }
+
+        public override void Write(Utf8JsonWriter writer, TimeSpan? value, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(value?.ToString(_timeFormat));
         }
     }
 }
