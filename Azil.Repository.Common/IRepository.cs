@@ -29,6 +29,8 @@ namespace Azil.Repository.Common
         Task<KucniLjubimci> GetKucniLjubimacById(int id);
         Task<bool> AddAnimalAsync(AnimalsDomain animalDomain);
         Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption);
+        Task<bool> UpdateAdoptionAsync(DnevnikUdomljavanja adoption);
+        Task<bool> DeleteAdoptionAsync(int id);
         Task<UsersDomain> IsValidUser(int id);
         Task<bool> IsValidAnimal(int id);
         string Test();

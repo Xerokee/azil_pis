@@ -364,6 +364,70 @@ namespace Azil.WebAPI.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("DnevnikUdomljavanja/update/{id}")]
+        public async Task<IActionResult> UpdateAdoptionAsync(int id, [FromBody] DnevnikUdomljavanja adoption)
+        {
+            bool lastRequestId = await GetLastAnimalRequestId();
+
+            if (!lastRequestId)
+            {
+                return BadRequest("Nije unesen RequestAnimalId životinje koji poziva.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                adoption.id_ljubimca = id;
+                bool result = await _service.UpdateAdoptionAsync(adoption);
+                if (result)
+                {
+                    return Ok("Uspješno ažurirano!");
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Greška u ažuriranju!");
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
+            }
+        }
+
+        [HttpDelete]
+        [Route("DnevnikUdomljavanja/delete/{id}")]
+        public async Task<IActionResult> DeleteAdoptionAsync(int id)
+        {
+            bool lastRequestId = await GetLastAnimalRequestId();
+
+            if (!lastRequestId)
+            {
+                return BadRequest("Nije unesen RequestAnimalId životinje koji poziva.");
+            }
+
+            try
+            {
+                bool result = await _service.DeleteAdoptionAsync(id);
+                if (result)
+                {
+                    return Ok("Uspješno obrisano!");
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Greška u brisanju!");
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
+            }
+        }
+
         [HttpGet]
         [Route("AdoptedAnimals")]
         public async Task<IActionResult> GetAdoptedAnimals()

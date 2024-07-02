@@ -241,6 +241,40 @@ namespace Azil.Repository
             }
         }
 
+        public async Task<bool> UpdateAdoptionAsync(DnevnikUdomljavanja adoption)
+        {
+            var existingAdoption = await appDbContext.DnevnikUdomljavanja.FindAsync(adoption.id_ljubimca);
+            if (existingAdoption == null)
+            {
+                return false;
+            }
+
+            existingAdoption.ime_ljubimca = adoption.ime_ljubimca; 
+            existingAdoption.tip_ljubimca = adoption.tip_ljubimca;
+            existingAdoption.udomljen = adoption.udomljen;
+            existingAdoption.datum = adoption.datum;
+            existingAdoption.vrijeme = adoption.vrijeme;
+            existingAdoption.imgUrl = adoption.imgUrl;
+            existingAdoption.stanje_zivotinje = adoption.stanje_zivotinje;
+
+            appDbContext.DnevnikUdomljavanja.Update(existingAdoption);
+            await appDbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> DeleteAdoptionAsync(int id)
+        {
+            var adoption = await appDbContext.DnevnikUdomljavanja.FindAsync(id);
+            if (adoption == null)
+            {
+                return false;
+            }
+
+            appDbContext.DnevnikUdomljavanja.Remove(adoption);
+            await appDbContext.SaveChangesAsync();
+            return true;
+        }
+
 
         //public async Task<bool> UpdateUserOibAsync(UsersDomain userDomain)
         //{

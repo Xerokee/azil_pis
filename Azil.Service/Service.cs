@@ -211,6 +211,16 @@ namespace Azil.Service
             }
         }
 
+        public async Task<bool> UpdateAdoptionAsync(DnevnikUdomljavanja adoption)
+        {
+            return await _repository.UpdateAdoptionAsync(adoption);
+        }
+
+        public async Task<bool> DeleteAdoptionAsync(int id)
+        {
+            return await _repository.DeleteAdoptionAsync(id);
+        }
+
         #region AdditionalCustomFunctions
 
         public async Task<bool> IsValidUser(int id)

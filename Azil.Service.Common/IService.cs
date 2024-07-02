@@ -32,5 +32,7 @@ namespace Azil.Service.Common
         Task<bool> IsValidAnimal(int id);
         Task<bool> AddAnimalAsync(AnimalsDomain animalDomain);
         Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption);
+        Task<bool> UpdateAdoptionAsync(DnevnikUdomljavanja adoption);
+        Task<bool> DeleteAdoptionAsync(int id);
     }
 }
