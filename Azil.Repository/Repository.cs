@@ -249,7 +249,9 @@ namespace Azil.Repository
                 return false;
             }
 
-            existingAdoption.ime_ljubimca = adoption.ime_ljubimca; 
+            existingAdoption.id_ljubimca = adoption.id_ljubimca;
+            existingAdoption.id_korisnika = adoption.id_korisnika;
+            existingAdoption.ime_ljubimca = adoption.ime_ljubimca;
             existingAdoption.tip_ljubimca = adoption.tip_ljubimca;
             existingAdoption.udomljen = adoption.udomljen;
             existingAdoption.datum = adoption.datum;
