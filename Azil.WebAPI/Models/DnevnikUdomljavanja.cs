@@ -14,6 +14,7 @@ namespace Azil.WebAPI.Models
         public TimeSpan? Vrijeme { get; set; }
         public string ImgUrl { get; set; }
         public bool StanjeZivotinje { get; set; }
+        public bool StatusUdomljavanja { get; set; }
 
         public virtual Korisnici Korisnici { get; set; }
         public virtual KucniLjubimci KucniLjubimci { get; set; }

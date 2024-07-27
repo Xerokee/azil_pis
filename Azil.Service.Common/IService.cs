@@ -34,5 +34,8 @@ namespace Azil.Service.Common
         Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption);
         Task<bool> UpdateAdoptionAsync(DnevnikUdomljavanja adoption);
         Task<bool> DeleteAdoptionAsync(int id);
+        Task<DnevnikUdomljavanja> GetAdoptionById(int id);
+        Task<bool> GetAdoptionStatus(int id);
+        Task<bool> SetAdoptionStatus(int id, bool status);
     }
 }

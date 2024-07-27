@@ -306,5 +306,26 @@ namespace Azil.Repository
             KucniLjubimci animalDb = await appDbContext.KucniLjubimci.FindAsync(id);
             return animalDb != null;
         }
+
+        public async Task<DnevnikUdomljavanja> GetAdoptionById(int id)
+        {
+            return await appDbContext.DnevnikUdomljavanja.FindAsync(id);
+        }
+
+        public async Task<bool> GetAdoptionStatus(int id)
+        {
+            var adoption = await appDbContext.DnevnikUdomljavanja.FindAsync(id);
+            return adoption?.status_udomljavanja ?? false; // Vraćamo false ako nije pronađeno
+        }
+
+        public async Task<bool> SetAdoptionStatus(int id, bool status)
+        {
+            var adoption = await appDbContext.DnevnikUdomljavanja.FindAsync(id);
+            if (adoption == null) return false;
+
+            adoption.status_udomljavanja = status;
+            await appDbContext.SaveChangesAsync();
+            return true;
+        }
     }
 }

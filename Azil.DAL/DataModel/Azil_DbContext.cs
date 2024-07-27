@@ -62,6 +62,9 @@ namespace Azil.DAL.DataModel
 
                 entity.Property(e => e.stanje_zivotinje)
                     .HasColumnName("stanje_zivotinje");
+
+                entity.Property(e => e.status_udomljavanja)
+                   .HasColumnName("status_udomljavanja");
             });
 
             modelBuilder.Entity<Korisnici>(entity =>

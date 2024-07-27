@@ -34,5 +34,8 @@ namespace Azil.Repository.Common
         Task<UsersDomain> IsValidUser(int id);
         Task<bool> IsValidAnimal(int id);
         string Test();
+        Task<DnevnikUdomljavanja> GetAdoptionById(int id);
+        Task<bool> GetAdoptionStatus(int id); 
+        Task<bool> SetAdoptionStatus(int id, bool status);
     }
 }

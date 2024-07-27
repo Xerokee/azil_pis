@@ -436,6 +436,23 @@ namespace Azil.WebAPI.Controllers
             return Ok(animals);
         }
 
+        [HttpGet("{idLjubimca}/status")]
+        public async Task<IActionResult> GetAdoptionStatus(int idLjubimca)
+        {
+            bool status = await _service.GetAdoptionStatus(idLjubimca);
+            return Ok(status);
+        }
+
+        [HttpPut("{idLjubimca}/status")]
+        public async Task<IActionResult> SetAdoptionStatus(int idLjubimca, [FromBody] bool status)
+        {
+            var result = await _service.SetAdoptionStatus(idLjubimca, status);
+            if (result)
+            {
+                return Ok("Status udomljavanja ažuriran.");
+            }
+            return NotFound($"Zapis udomljavanja nije pronađen za ljubimca ID: {idLjubimca}");
+        }
 
         #region AdditionalCustomFunctions
         [HttpGet]

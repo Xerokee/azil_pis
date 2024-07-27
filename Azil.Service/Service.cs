@@ -221,6 +221,21 @@ namespace Azil.Service
             return await _repository.DeleteAdoptionAsync(id);
         }
 
+        public async Task<DnevnikUdomljavanja> GetAdoptionById(int id)
+        {
+            return await _repository.GetAdoptionById(id);
+        }
+
+        public async Task<bool> GetAdoptionStatus(int id)
+        {
+            return await _repository.GetAdoptionStatus(id);
+        }
+
+        public async Task<bool> SetAdoptionStatus(int id, bool status)
+        {
+            return await _repository.SetAdoptionStatus(id, status);
+        }
+
         #region AdditionalCustomFunctions
 
         public async Task<bool> IsValidUser(int id)

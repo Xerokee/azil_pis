@@ -23,6 +23,7 @@ namespace Azil.DAL.DataModel
         public TimeSpan? vrijeme { get; set; }  // Dodano za vrijeme
         public string imgUrl { get; set; }
         public bool? stanje_zivotinje { get; set; }
+        public bool? status_udomljavanja { get; set; }
     }
 
     public class DateFormatConverter2 : JsonConverter<DateTime?>

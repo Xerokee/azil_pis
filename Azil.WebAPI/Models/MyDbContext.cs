@@ -71,6 +71,10 @@ namespace Azil.WebAPI.Models
                 entity.Property(e => e.StanjeZivotinje)
                     .HasColumnName("stanje_zivotinje")
                     .HasColumnType("bool");
+
+                entity.Property(e => e.StatusUdomljavanja)
+                    .HasColumnName("status_udomljavanja")
+                    .HasColumnType("bool");
             });
 
             modelBuilder.Entity<Korisnici>(entity =>
