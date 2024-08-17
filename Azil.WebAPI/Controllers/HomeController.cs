@@ -453,7 +453,7 @@ namespace Azil.WebAPI.Controllers
                 return BadRequest("Neispravni podaci.");
             }
 
-            bool result = await _service.SetAdoptionStatus(idLjubimca, request.Status);
+            bool result = await _service.SetAdoptionStatus(idLjubimca, request.status_udomljavanja);
             if (result)
             {
                 return Ok("Status udomljavanja uspješno ažuriran.");
@@ -466,7 +466,7 @@ namespace Azil.WebAPI.Controllers
 
         public class AdoptionStatusUpdateRequest
         {
-            public bool Status { get; set; }
+            public bool status_udomljavanja { get; set; }
         }
 
         #region AdditionalCustomFunctions
