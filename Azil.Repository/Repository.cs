@@ -258,6 +258,7 @@ namespace Azil.Repository
             existingAdoption.vrijeme = adoption.vrijeme;
             existingAdoption.imgUrl = adoption.imgUrl;
             existingAdoption.stanje_zivotinje = adoption.stanje_zivotinje;
+            existingAdoption.status_udomljavanja = adoption.status_udomljavanja;
 
             appDbContext.DnevnikUdomljavanja.Update(existingAdoption);
             await appDbContext.SaveChangesAsync();
@@ -318,14 +319,25 @@ namespace Azil.Repository
             return adoption?.status_udomljavanja ?? false; // Vraćamo false ako nije pronađeno
         }
 
-        public async Task<bool> SetAdoptionStatus(int id, bool status)
+        public async Task<bool> SetAdoptionStatus(int idLjubimca, bool status_udomljavanja)
         {
-            var adoption = await appDbContext.DnevnikUdomljavanja.FindAsync(id);
-            if (adoption == null) return false;
+            try
+            {
+                var adoption = await appDbContext.DnevnikUdomljavanja.FindAsync(idLjubimca);
+                if (adoption == null) return false;
 
-            adoption.status_udomljavanja = status;
-            await appDbContext.SaveChangesAsync();
-            return true;
+                // Ažuriraj samo polje status_udomljavanja u tabeli DnevnikUdomljavanja
+                adoption.status_udomljavanja = status_udomljavanja;
+                appDbContext.Entry(adoption).Property(a => a.status_udomljavanja).IsModified = true;
+
+                await appDbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while updating adoption status.");
+                return false;
+            }
         }
     }
 }

@@ -443,15 +443,30 @@ namespace Azil.WebAPI.Controllers
             return Ok(status);
         }
 
-        [HttpPut("{idLjubimca}/status")]
-        public async Task<IActionResult> SetAdoptionStatus(int idLjubimca, [FromBody] bool status)
+        [HttpPut]
+        [Route("DnevnikUdomljavanja/{idLjubimca}/update/status")]
+        public async Task<IActionResult> SetAdoptionStatus(int idLjubimca, [FromBody] AdoptionStatusUpdateRequest request)
         {
-            var result = await _service.SetAdoptionStatus(idLjubimca, status);
+            if (request == null || !ModelState.IsValid)
+            {
+                _logger.LogWarning("Request model state is invalid.");
+                return BadRequest("Neispravni podaci.");
+            }
+
+            bool result = await _service.SetAdoptionStatus(idLjubimca, request.Status);
             if (result)
             {
-                return Ok("Status udomljavanja ažuriran.");
+                return Ok("Status udomljavanja uspješno ažuriran.");
             }
-            return NotFound($"Zapis udomljavanja nije pronađen za ljubimca ID: {idLjubimca}");
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Greška u ažuriranju statusa udomljavanja.");
+            }
+        }
+
+        public class AdoptionStatusUpdateRequest
+        {
+            public bool Status { get; set; }
         }
 
         #region AdditionalCustomFunctions

@@ -36,6 +36,6 @@ namespace Azil.Repository.Common
         string Test();
         Task<DnevnikUdomljavanja> GetAdoptionById(int id);
         Task<bool> GetAdoptionStatus(int id); 
-        Task<bool> SetAdoptionStatus(int id, bool status);
+        Task<bool> SetAdoptionStatus(int idLjubimca, bool status_udomljavanja);
     }
 }

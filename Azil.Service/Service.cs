@@ -231,9 +231,19 @@ namespace Azil.Service
             return await _repository.GetAdoptionStatus(id);
         }
 
-        public async Task<bool> SetAdoptionStatus(int id, bool status)
+        public async Task<bool> SetAdoptionStatus(int idLjubimca, bool status_udomljavanja)
         {
-            return await _repository.SetAdoptionStatus(id, status);
+            try
+            {
+                // Ažuriranje samo status_udomljavanja u tabeli DnevnikUdomljavanja
+                bool result = await _repository.SetAdoptionStatus(idLjubimca, status_udomljavanja);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error setting adoption status.");
+                return false;
+            }
         }
 
         #region AdditionalCustomFunctions

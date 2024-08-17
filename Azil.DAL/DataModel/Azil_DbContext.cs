@@ -145,6 +145,10 @@ namespace Azil.DAL.DataModel
                 entity.Property(e => e.imgUrl)
                     .HasColumnName("imgUrl")
                     .IsUnicode(false);
+
+                entity.Property(e => e.status_udomljavanja)
+                   .HasColumnName("status_udomljavanja")
+                   .IsUnicode(false);
             });
 
             modelBuilder.Entity<KucniLjubimciUdomitelj>(entity =>
