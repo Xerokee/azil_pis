@@ -23,7 +23,7 @@ namespace Azil.DAL.DataModel
         public virtual DbSet<KucniLjubimci> KucniLjubimci { get; set; }
         public virtual DbSet<KucniLjubimciUdomitelj> KucniLjubimciUdomitelj { get; set; }
         public virtual DbSet<Uloge> Uloge { get; set; }
-
+        public virtual DbSet<OdbijeneZivotinje> OdbijeneZivotinje { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -145,10 +145,6 @@ namespace Azil.DAL.DataModel
                 entity.Property(e => e.imgUrl)
                     .HasColumnName("imgUrl")
                     .IsUnicode(false);
-
-                entity.Property(e => e.status_udomljavanja)
-                   .HasColumnName("status_udomljavanja")
-                   .IsUnicode(false);
             });
 
             modelBuilder.Entity<KucniLjubimciUdomitelj>(entity =>
@@ -167,6 +163,22 @@ namespace Azil.DAL.DataModel
                 entity.ToTable("uloge");
 
                 entity.Property(e => e.naziv_uloge)
+                    .HasColumnName("naziv_uloge")
+                    .IsUnicode(false);
+            });
+            OnModelCreatingPartial(modelBuilder);
+
+            modelBuilder.Entity<OdbijeneZivotinje>(entity =>
+            {
+                entity.HasKey(e => e.id);
+
+                entity.ToTable("odbijene_zivotinje");
+
+                entity.Property(e => e.id_korisnika)
+                    .HasColumnName("naziv_uloge")
+                    .IsUnicode(false);
+
+                entity.Property(e => e.id_ljubimca)
                     .HasColumnName("naziv_uloge")
                     .IsUnicode(false);
             });

@@ -37,5 +37,6 @@ namespace Azil.Service.Common
         Task<DnevnikUdomljavanja> GetAdoptionById(int id);
         Task<bool> GetAdoptionStatus(int id);
         Task<bool> SetAdoptionStatus(int idLjubimca, bool status_udomljavanja);
+        Task<bool> SaveRejectionAsync(int userId, int animalId);
     }
 }

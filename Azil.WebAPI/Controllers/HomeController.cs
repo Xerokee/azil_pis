@@ -469,6 +469,32 @@ namespace Azil.WebAPI.Controllers
             public bool status_udomljavanja { get; set; }
         }
 
+        [HttpPost]
+        [Route("OdbijeneZivotinje")]
+        public async Task<IActionResult> SaveRejection([FromBody] RejectionRequest request)
+        {
+            if (request == null || request.UserId <= 0 || request.AnimalId <= 0)
+            {
+                return BadRequest("Neispravni podaci.");
+            }
+
+            bool result = await _service.SaveRejectionAsync(request.UserId, request.AnimalId);
+            if (result)
+            {
+                return Ok("Odbijanje uspješno spremljeno.");
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Greška pri spremanju odbijanja.");
+            }
+        }
+
+        public class RejectionRequest
+        {
+            public int UserId { get; set; }
+            public int AnimalId { get; set; }
+        }
+
         #region AdditionalCustomFunctions
         [HttpGet]
         public async Task<bool> GetLastUserRequestId()

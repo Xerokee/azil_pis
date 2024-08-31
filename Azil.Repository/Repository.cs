@@ -339,5 +339,27 @@ namespace Azil.Repository
                 return false;
             }
         }
+
+        public async Task<bool> SaveRejectionAsync(int userId, int animalId)
+        {
+            try
+            {
+                var rejection = new OdbijeneZivotinje
+                {
+                    id_korisnika = userId,
+                    id_ljubimca = animalId
+                };
+
+                await appDbContext.OdbijeneZivotinje.AddAsync(rejection);
+                await appDbContext.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Greška pri spremanju odbijanja u bazu podataka.");
+                return false;
+            }
+        }
     }
 }

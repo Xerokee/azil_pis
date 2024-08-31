@@ -163,10 +163,6 @@ namespace Azil.WebAPI.Models
                     .HasColumnName("imgUrl")
                     .HasColumnType("text");
 
-                entity.Property(e => e.StatusUdomljavanja)
-                    .HasColumnName("status_udomljavanja")
-                    .HasColumnType("bool");
-
                 entity.HasOne(d => d.IdLjubimcaNavigation)
                     .WithOne(p => p.KucniLjubimci)
                     .HasForeignKey<KucniLjubimci>(d => d.IdLjubimca)
@@ -211,6 +207,22 @@ namespace Azil.WebAPI.Models
                     .HasForeignKey<Uloge>(d => d.IdUloge)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_uloge_korisnici");
+            });
+
+            modelBuilder.Entity<OdbijeneZivotinje>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                    .HasName("PK__odbijene__3213E83F5BC9A5A8");
+
+                entity.ToTable("odbijene_zivotinje");
+
+                entity.Property(e => e.IdKorisnika)
+                    .HasColumnName("id_korisnika")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.IdLjubimca)
+                    .HasColumnName("id_ljubimca")
+                    .ValueGeneratedNever();
             });
 
             OnModelCreatingPartial(modelBuilder);

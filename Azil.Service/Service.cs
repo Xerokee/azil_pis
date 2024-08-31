@@ -246,6 +246,11 @@ namespace Azil.Service
             }
         }
 
+        public async Task<bool> SaveRejectionAsync(int userId, int animalId)
+        {
+            return await _repository.SaveRejectionAsync(userId, animalId);
+        }
+
         #region AdditionalCustomFunctions
 
         public async Task<bool> IsValidUser(int id)
