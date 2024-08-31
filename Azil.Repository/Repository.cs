@@ -340,6 +340,11 @@ namespace Azil.Repository
             }
         }
 
+        public async Task<IEnumerable<OdbijeneZivotinje>> GetAllRejections()
+        {
+            return await appDbContext.OdbijeneZivotinje.ToListAsync();
+        }
+
         public async Task<bool> SaveRejectionAsync(int userId, int animalId)
         {
             try
@@ -358,6 +363,24 @@ namespace Azil.Repository
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Greška pri spremanju odbijanja u bazu podataka.");
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteRejectionAsync(int id)
+        {
+            try
+            {
+                var rejection = await appDbContext.OdbijeneZivotinje.FindAsync(id);
+                if (rejection == null) return false;
+
+                appDbContext.OdbijeneZivotinje.Remove(rejection);
+                await appDbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while deleting rejection.");
                 return false;
             }
         }

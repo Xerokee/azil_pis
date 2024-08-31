@@ -246,9 +246,19 @@ namespace Azil.Service
             }
         }
 
+        public async Task<IEnumerable<OdbijeneZivotinje>> GetAllRejections()
+        {
+            return await _repository.GetAllRejections();
+        }
+
         public async Task<bool> SaveRejectionAsync(int userId, int animalId)
         {
             return await _repository.SaveRejectionAsync(userId, animalId);
+        }
+
+        public async Task<bool> DeleteRejectionAsync(int id)
+        {
+            return await _repository.DeleteRejectionAsync(id);
         }
 
         #region AdditionalCustomFunctions

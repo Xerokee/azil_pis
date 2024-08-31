@@ -175,11 +175,11 @@ namespace Azil.DAL.DataModel
                 entity.ToTable("odbijene_zivotinje");
 
                 entity.Property(e => e.id_korisnika)
-                    .HasColumnName("naziv_uloge")
+                    .HasColumnName("id_korisnika")
                     .IsUnicode(false);
 
                 entity.Property(e => e.id_ljubimca)
-                    .HasColumnName("naziv_uloge")
+                    .HasColumnName("id_ljubimca")
                     .IsUnicode(false);
             });
             OnModelCreatingPartial(modelBuilder);

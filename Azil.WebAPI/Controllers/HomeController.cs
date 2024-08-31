@@ -464,6 +464,14 @@ namespace Azil.WebAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("odbijene_zivotinje")]
+        public async Task<IActionResult> GetAllRejections()
+        {
+            var rejections = await _service.GetAllRejections();
+            return Ok(rejections);
+        }
+
         public class AdoptionStatusUpdateRequest
         {
             public bool status_udomljavanja { get; set; }
@@ -473,12 +481,12 @@ namespace Azil.WebAPI.Controllers
         [Route("OdbijeneZivotinje")]
         public async Task<IActionResult> SaveRejection([FromBody] RejectionRequest request)
         {
-            if (request == null || request.UserId <= 0 || request.AnimalId <= 0)
+            if (request == null || request.IdKorisnika <= 0 || request.IdLjubimca <= 0)
             {
                 return BadRequest("Neispravni podaci.");
             }
 
-            bool result = await _service.SaveRejectionAsync(request.UserId, request.AnimalId);
+            bool result = await _service.SaveRejectionAsync(request.IdKorisnika, request.IdLjubimca);
             if (result)
             {
                 return Ok("Odbijanje uspješno spremljeno.");
@@ -489,10 +497,26 @@ namespace Azil.WebAPI.Controllers
             }
         }
 
+        // Metoda za brisanje unosa iz tabele odbijene_zivotinje prema ID-u
+        [HttpDelete]
+        [Route("OdbijeneZivotinje/{id}")]
+        public async Task<IActionResult> DeleteRejection(int id)
+        {
+            bool result = await _service.DeleteRejectionAsync(id);
+            if (result)
+            {
+                return Ok("Odbijanje uspješno obrisano.");
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Greška pri brisanju odbijanja.");
+            }
+        }
+
         public class RejectionRequest
         {
-            public int UserId { get; set; }
-            public int AnimalId { get; set; }
+            public int IdKorisnika { get; set; }
+            public int IdLjubimca { get; set; }
         }
 
         #region AdditionalCustomFunctions
