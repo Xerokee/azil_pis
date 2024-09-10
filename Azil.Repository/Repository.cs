@@ -349,10 +349,20 @@ namespace Azil.Repository
         {
             try
             {
+                // Dohvati životinju iz dnevnik_udomljavanja prema danom id_ljubimca
+                var animalInAdoption = await appDbContext.DnevnikUdomljavanja.FindAsync(animalId);
+
+                if (animalInAdoption == null)
+                {
+                    _logger.LogWarning($"Životinja s ID {animalId} nije pronađena u dnevnik_udomljavanja.");
+                    return false;  // Životinja nije pronađena
+                }
+
+                // Ako je životinja pronađena, koristi ispravni id_ljubimca iz dnevnik_udomljavanja
                 var rejection = new OdbijeneZivotinje
                 {
                     id_korisnika = userId,
-                    id_ljubimca = animalId
+                    id_ljubimca = animalInAdoption.id_ljubimca  // Koristi ispravan ID ljubimca
                 };
 
                 await appDbContext.OdbijeneZivotinje.AddAsync(rejection);
