@@ -345,24 +345,25 @@ namespace Azil.Repository
             return await appDbContext.OdbijeneZivotinje.ToListAsync();
         }
 
-        public async Task<bool> SaveRejectionAsync(int userId, int animalId)
+        public async Task<bool> SaveRejectionAsync(int userId, string imeLjubimca)
         {
             try
             {
-                // Dohvati životinju iz dnevnik_udomljavanja prema danom id_ljubimca
-                var animalInAdoption = await appDbContext.DnevnikUdomljavanja.FindAsync(animalId);
+                // Dohvati životinju iz dnevnik_udomljavanja prema danom imenu ljubimca
+                var animalInAdoption = await appDbContext.DnevnikUdomljavanja
+                    .FirstOrDefaultAsync(a => a.ime_ljubimca == imeLjubimca);
 
                 if (animalInAdoption == null)
                 {
-                    _logger.LogWarning($"Životinja s ID {animalId} nije pronađena u dnevnik_udomljavanja.");
+                    _logger.LogWarning($"Životinja s imenom {imeLjubimca} nije pronađena u dnevnik_udomljavanja.");
                     return false;  // Životinja nije pronađena
                 }
 
-                // Ako je životinja pronađena, koristi ispravni id_ljubimca iz dnevnik_udomljavanja
+                // Ako je životinja pronađena, koristi ispravno ime_ljubimca iz dnevnik_udomljavanja
                 var rejection = new OdbijeneZivotinje
                 {
                     id_korisnika = userId,
-                    id_ljubimca = animalInAdoption.id_ljubimca  // Koristi ispravan ID ljubimca
+                    ime_ljubimca = animalInAdoption.ime_ljubimca  // Koristi ime ljubimca
                 };
 
                 await appDbContext.OdbijeneZivotinje.AddAsync(rejection);
@@ -376,6 +377,7 @@ namespace Azil.Repository
                 return false;
             }
         }
+
 
         public async Task<bool> DeleteRejectionAsync(int id)
         {

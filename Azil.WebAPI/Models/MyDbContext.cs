@@ -220,8 +220,8 @@ namespace Azil.WebAPI.Models
                     .HasColumnName("id_korisnika")
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.IdLjubimca)
-                    .HasColumnName("id_ljubimca")
+                entity.Property(e => e.ImeLjubimca)
+                    .HasColumnName("ime_ljubimca")
                     .ValueGeneratedNever();
             });
 

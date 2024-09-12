@@ -178,8 +178,8 @@ namespace Azil.DAL.DataModel
                     .HasColumnName("id_korisnika")
                     .IsUnicode(false);
 
-                entity.Property(e => e.id_ljubimca)
-                    .HasColumnName("id_ljubimca")
+                entity.Property(e => e.ime_ljubimca)
+                    .HasColumnName("ime_ljubimca")
                     .IsUnicode(false);
             });
             OnModelCreatingPartial(modelBuilder);

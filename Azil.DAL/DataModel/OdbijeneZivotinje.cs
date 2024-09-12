@@ -8,6 +8,6 @@ namespace Azil.DAL.DataModel
     {
         public int id { get; set; }
         public int id_korisnika { get; set; }
-        public int id_ljubimca { get; set; }
+        public string ime_ljubimca { get; set; }
     }
 }

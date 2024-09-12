@@ -481,12 +481,12 @@ namespace Azil.WebAPI.Controllers
         [Route("OdbijeneZivotinje")]
         public async Task<IActionResult> SaveRejection([FromBody] RejectionRequest request)
         {
-            if (request == null || request.IdKorisnika <= 0 || request.IdLjubimca <= 0)
+            if (request == null || request.IdKorisnika <= 0 || string.IsNullOrEmpty(request.ImeLjubimca))
             {
                 return BadRequest("Neispravni podaci.");
             }
 
-            bool result = await _service.SaveRejectionAsync(request.IdKorisnika, request.IdLjubimca);
+            bool result = await _service.SaveRejectionAsync(request.IdKorisnika, request.ImeLjubimca);
             if (result)
             {
                 return Ok("Odbijanje uspješno spremljeno.");
@@ -516,7 +516,7 @@ namespace Azil.WebAPI.Controllers
         public class RejectionRequest
         {
             public int IdKorisnika { get; set; }
-            public int IdLjubimca { get; set; }
+            public string ImeLjubimca { get; set; }
         }
 
         #region AdditionalCustomFunctions

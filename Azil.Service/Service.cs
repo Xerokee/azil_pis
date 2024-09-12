@@ -251,9 +251,9 @@ namespace Azil.Service
             return await _repository.GetAllRejections();
         }
 
-        public async Task<bool> SaveRejectionAsync(int userId, int animalId)
+        public async Task<bool> SaveRejectionAsync(int userId, string imeLjubimca)
         {
-            return await _repository.SaveRejectionAsync(userId, animalId);
+            return await _repository.SaveRejectionAsync(userId, imeLjubimca);
         }
 
         public async Task<bool> DeleteRejectionAsync(int id)
