@@ -216,6 +216,10 @@ namespace Azil.WebAPI.Models
 
                 entity.ToTable("odbijene_zivotinje");
 
+                entity.Property(e => e.IdLjubimca)
+                    .HasColumnName("id_ljubimca")
+                    .ValueGeneratedNever();
+
                 entity.Property(e => e.IdKorisnika)
                     .HasColumnName("id_korisnika")
                     .ValueGeneratedNever();

@@ -7,6 +7,7 @@ namespace Azil.DAL.DataModel
     public partial class OdbijeneZivotinje
     {
         public int id { get; set; }
+        public int id_ljubimca { get; set; } 
         public int id_korisnika { get; set; }
         public string ime_ljubimca { get; set; }
     }

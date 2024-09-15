@@ -174,6 +174,10 @@ namespace Azil.DAL.DataModel
 
                 entity.ToTable("odbijene_zivotinje");
 
+                entity.Property(e => e.id_ljubimca)
+                    .HasColumnName("id_ljubimca")
+                    .IsUnicode(false);
+
                 entity.Property(e => e.id_korisnika)
                     .HasColumnName("id_korisnika")
                     .IsUnicode(false);

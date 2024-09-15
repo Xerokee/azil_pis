@@ -345,7 +345,7 @@ namespace Azil.Repository
             return await appDbContext.OdbijeneZivotinje.ToListAsync();
         }
 
-        public async Task<bool> SaveRejectionAsync(int userId, string imeLjubimca)
+        public async Task<bool> SaveRejectionAsync(int userId, int animalId, string imeLjubimca)
         {
             try
             {
@@ -363,6 +363,7 @@ namespace Azil.Repository
                 var rejection = new OdbijeneZivotinje
                 {
                     id_korisnika = userId,
+                    id_ljubimca = animalId,
                     ime_ljubimca = animalInAdoption.ime_ljubimca  // Koristi ime ljubimca
                 };
 
