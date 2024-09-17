@@ -339,6 +339,7 @@ namespace Azil.WebAPI.Controllers
 
         [HttpPost]
         [Route("DnevnikUdomljavanja/add")]
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public async Task<IActionResult> AddAdoptionAsync([FromBody] DnevnikUdomljavanja adoption)
         {
             if (!ModelState.IsValid)
