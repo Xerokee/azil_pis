@@ -174,9 +174,24 @@ namespace Azil.Service
             return await _repository.GetAdoptedAnimals();
         }
 
-        public async Task<KucniLjubimci> GetKucniLjubimacById(int id)
+        public async Task<IEnumerable<GalerijaZivotinja>> GetAllAnimalGallery()
         {
-            return await _repository.GetKucniLjubimacById(id);
+            return await _repository.GetAllAnimalGallery();
+        }
+
+        public async Task<IEnumerable<GalerijaZivotinja>> GetGalleryByAnimalId(int id)
+        {
+            return await _repository.GetGalleryByAnimalId(id);
+        }
+
+        public async Task<KucniLjubimci> GetAnimalById(int id)
+        {
+            return await _repository.GetAnimalById(id);
+        }
+
+        public async Task<IEnumerable<KucniLjubimci>> GetAllAnimalsWithImages()
+        {
+            return await _repository.GetAllAnimalsWithImages();
         }
 
         public async Task<bool> AddAnimalAsync(AnimalsDomain animalDomain)

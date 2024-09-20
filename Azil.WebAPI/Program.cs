@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,13 @@ namespace Azil.WebAPI
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
                 Host.CreateDefaultBuilder(args)
+                .UseSerilog((context, services, configuration) =>
+                {
+                    configuration
+                        .WriteTo.Console() // Logovi æe se prikazivati u konzoli
+                        .WriteTo.File("logs/api_log.txt", rollingInterval: RollingInterval.Day) // Logovi æe biti zapisani u fajl
+                        .Enrich.FromLogContext();
+                })
                 .ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();

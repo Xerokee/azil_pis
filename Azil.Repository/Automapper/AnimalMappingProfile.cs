@@ -3,6 +3,7 @@ using Azil.DAL.DataModel;
 using Azil.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Azil.Repository.Automapper
@@ -18,7 +19,8 @@ namespace Azil.Repository.Automapper
                 .ForMember(dest => dest.tip_ljubimca, opt => opt.MapFrom(src => src.TipLjubimca))
                 .ForMember(dest => dest.opis_ljubimca, opt => opt.MapFrom(src => src.OpisLjubimca))
                 .ForMember(dest => dest.udomljen, opt => opt.MapFrom(src => src.Udomljen))
-                .ForMember(dest => dest.imgUrl, opt => opt.MapFrom(src => src.ImgUrl));
+                .ForMember(dest => dest.imgUrl, opt => opt.MapFrom(src => src.ImgUrl))
+                .ForMember(dest => dest.galerijaZivotinja, opt => opt.MapFrom(src => src.GalerijaZivotinja));
 
             CreateMap<KucniLjubimci, AnimalsDomain>()
                 .ForMember(dest => dest.IdLjubimca, opt => opt.MapFrom(src => src.id_ljubimca))
@@ -27,7 +29,8 @@ namespace Azil.Repository.Automapper
                 .ForMember(dest => dest.TipLjubimca, opt => opt.MapFrom(src => src.tip_ljubimca))
                 .ForMember(dest => dest.OpisLjubimca, opt => opt.MapFrom(src => src.opis_ljubimca))
                 .ForMember(dest => dest.Udomljen, opt => opt.MapFrom(src => src.udomljen))
-                .ForMember(dest => dest.ImgUrl, opt => opt.MapFrom(src => src.imgUrl));
+                .ForMember(dest => dest.ImgUrl, opt => opt.MapFrom(src => src.imgUrl))
+                .ForMember(dest => dest.GalerijaZivotinja, opt => opt.MapFrom(src => src.galerijaZivotinja));
         }
     }
 }

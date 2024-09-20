@@ -22,6 +22,7 @@ namespace Azil.Model
             OpisLjubimca = animal.opis_ljubimca;
             Udomljen = animal.udomljen;
             ImgUrl = animal.imgUrl;
+            GalerijaZivotinja = animal.galerijaZivotinja;
         }
 
         public int IdLjubimca { get; set; }
@@ -41,6 +42,7 @@ namespace Azil.Model
         public bool Udomljen { get; set; }
 
         public string ImgUrl { get; set; }
+        public List<GalerijaZivotinja> GalerijaZivotinja { get; set; }
     }
 }
 

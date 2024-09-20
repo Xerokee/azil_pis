@@ -181,11 +181,9 @@ namespace Azil.Repository
 
         public async Task<IEnumerable<KucniLjubimci>> GetAnimalsByType(string type)
         {
-            var animals = await appDbContext.KucniLjubimci
-                .Where(a => EF.Functions.Like(a.tip_ljubimca, type)) // Using EF.Functions.Like for better compatibility
+            return await appDbContext.KucniLjubimci
+                .Where(a => a.tip_ljubimca == type)
                 .ToListAsync();
-
-            return animals;
         }
 
         public async Task<IEnumerable<KucniLjubimci>> GetAdoptedAnimals()
@@ -193,9 +191,31 @@ namespace Azil.Repository
             return await appDbContext.KucniLjubimci.Where(a => a.udomljen).ToListAsync();
         }
 
-        public async Task<KucniLjubimci> GetKucniLjubimacById(int id)
+        public async Task<IEnumerable<GalerijaZivotinja>> GetAllAnimalGallery()
         {
-            return await appDbContext.KucniLjubimci.FindAsync(id);
+            return await appDbContext.GalerijaZivotinja.ToListAsync();
+        }
+
+        public async Task<IEnumerable<GalerijaZivotinja>> GetGalleryByAnimalId(int id)
+        {
+            return await appDbContext.GalerijaZivotinja
+                .Where(g => g.id_ljubimca == id)
+                .ToListAsync();
+        }
+
+        public async Task<KucniLjubimci> GetAnimalById(int id)
+        {
+            return await appDbContext.KucniLjubimci
+                .Include(a => a.galerijaZivotinja)
+                .FirstOrDefaultAsync(a => a.id_ljubimca == id);
+        }
+
+        public async Task<IEnumerable<KucniLjubimci>> GetAllAnimalsWithImages()
+        {
+            var animals = await appDbContext.KucniLjubimci
+                .Include(a => a.galerijaZivotinja)
+                .ToListAsync();
+            return animals;
         }
 
         public async Task<bool> AddAnimalAsync(AnimalsDomain animalDomain)

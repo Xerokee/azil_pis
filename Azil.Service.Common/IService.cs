@@ -27,7 +27,10 @@ namespace Azil.Service.Common
         Task<IEnumerable<KucniLjubimci>> GetAllAnimals();
         Task<IEnumerable<KucniLjubimci>> GetAnimalsByType(string type);
         Task<IEnumerable<KucniLjubimci>> GetAdoptedAnimals();
-        Task<KucniLjubimci> GetKucniLjubimacById(int id);
+        Task<IEnumerable<GalerijaZivotinja>> GetAllAnimalGallery();
+        Task<IEnumerable<GalerijaZivotinja>> GetGalleryByAnimalId(int id);
+        Task<KucniLjubimci> GetAnimalById(int id);
+        Task<IEnumerable<KucniLjubimci>> GetAllAnimalsWithImages();
         Task<bool> IsValidUser(int id);
         Task<bool> IsValidAnimal(int id);
         Task<bool> AddAnimalAsync(AnimalsDomain animalDomain);

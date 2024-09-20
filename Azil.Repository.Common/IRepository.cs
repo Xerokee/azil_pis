@@ -25,8 +25,11 @@ namespace Azil.Repository.Common
         Task<bool> DeleteUserAsync(int id);
         Task<IEnumerable<KucniLjubimci>> GetAllAnimals();
         Task<IEnumerable<KucniLjubimci>> GetAnimalsByType(string type);
+        Task<KucniLjubimci> GetAnimalById(int id);
         Task<IEnumerable<KucniLjubimci>> GetAdoptedAnimals();
-        Task<KucniLjubimci> GetKucniLjubimacById(int id);
+        Task<IEnumerable<GalerijaZivotinja>> GetAllAnimalGallery();
+        Task<IEnumerable<GalerijaZivotinja>> GetGalleryByAnimalId(int id);
+        Task<IEnumerable<KucniLjubimci>> GetAllAnimalsWithImages();
         Task<bool> AddAnimalAsync(AnimalsDomain animalDomain);
         Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption);
         Task<bool> UpdateAdoptionAsync(DnevnikUdomljavanja adoption);

@@ -163,11 +163,28 @@ namespace Azil.WebAPI.Models
                     .HasColumnName("imgUrl")
                     .HasColumnType("text");
 
+                entity.HasMany(e => e.GalerijaZivotinja)
+                    .WithOne()
+                    .HasForeignKey(g => g.IdLjubimca);
+
                 entity.HasOne(d => d.IdLjubimcaNavigation)
                     .WithOne(p => p.KucniLjubimci)
                     .HasForeignKey<KucniLjubimci>(d => d.IdLjubimca)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_kucni_Ljubimci_dnevnik_udomljavanja");
+            });
+
+            modelBuilder.Entity<GalerijaZivotinja>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.ToTable("galerija_zivotinja");
+
+                entity.Property(e => e.IdLjubimca)
+                    .HasColumnName("id_ljubimca");
+
+                entity.Property(e => e.ImgUrl)
+                    .HasColumnName("imgUrl");
             });
 
             modelBuilder.Entity<KucniLjubimciUdomitelj>(entity =>

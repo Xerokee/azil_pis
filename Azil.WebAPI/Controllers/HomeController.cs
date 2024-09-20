@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
+using System.Linq;
 
 namespace Azil.WebAPI.Controllers
 {
@@ -284,17 +285,69 @@ namespace Azil.WebAPI.Controllers
         [Route("KucniLjubimci")]
         public async Task<IActionResult> GetAllAnimals()
         {
-            var animals = await _service.GetAllAnimals();
+            var animals = await _service.GetAllAnimalsWithImages();
             return Ok(animals);
+        }
+
+        [HttpGet]
+        [Route("galerija_zivotinja")]
+        public async Task<IActionResult> GetAllAnimalGallery()
+        {
+            var gallery = await _service.GetAllAnimalGallery();
+            return Ok(gallery);
+        }
+
+        [HttpGet]
+        [Route("KucniLjubimci/{id}/galerija")]
+        public async Task<IActionResult> GetGalleryByAnimalId(int id)
+        {
+            _logger.LogInformation($"Received request for animal gallery with ID: {id}");
+
+            var galerija = await _service.GetGalleryByAnimalId(id);
+
+            if (galerija == null || !galerija.Any())
+            {
+                _logger.LogWarning($"No gallery found for animal with ID: {id}");
+                return NotFound($"No gallery found for animal with ID {id}.");
+            }
+
+            return Ok(galerija);
         }
 
         [HttpGet]
         [Route("KucniLjubimci/{type}")]
         public async Task<IActionResult> GetAnimalsByType(string type)
         {
-            var animals = await _service.GetAnimalsByType(type);
+            if (type.ToLower() != "pas" && type.ToLower() != "macka")
+            {
+                return BadRequest("Tip životinje mora biti 'pas' ili 'macka'.");
+            }
+
+            var animals = await _service.GetAnimalsByType(type.ToLower());
+
+            if (animals == null || !animals.Any())
+            {
+                return NotFound($"No animals of type {type} found.");
+            }
+
             return Ok(animals);
         }
+
+        [HttpGet("KucniLjubimci/{id:int}")]
+        public async Task<IActionResult> GetAnimalById([FromRoute] int id)
+        {
+            _logger.LogInformation("Fetching animal with ID: {Id}", id);
+            var animal = await _service.GetAnimalById(id);
+
+            if (animal == null)
+            {
+                _logger.LogWarning("Animal with ID {Id} not found.", id);
+                return NotFound($"Animal with ID {id} not found.");
+            }
+
+            return Ok(animal);
+        }
+
 
         [HttpPost]
         [Route("KucniLjubimci/add")]

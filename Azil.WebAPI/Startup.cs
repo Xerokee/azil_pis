@@ -59,7 +59,7 @@ namespace Azil.WebAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             if (env.IsDevelopment())
             {
@@ -75,6 +75,19 @@ namespace Azil.WebAPI
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthorization();
+
+            app.Use(async (context, next) =>
+            {
+                // Logiraj dolazni zahtjev
+                logger.LogInformation($"HTTP {context.Request.Method} {context.Request.Path}");
+
+                // Idi na sljedeæi middleware u pipelineu
+                await next();
+
+                // Logiraj odgovor nakon što je obraðen
+                logger.LogInformation($"Response: {context.Response.StatusCode}");
+            });
+
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseSwagger();

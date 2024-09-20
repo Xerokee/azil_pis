@@ -21,6 +21,7 @@ namespace Azil.DAL.DataModel
         public virtual DbSet<Korisnici> Korisnici { get; set; }
         public virtual DbSet<KorisnikUloga> KorisnikUloga { get; set; }
         public virtual DbSet<KucniLjubimci> KucniLjubimci { get; set; }
+        public virtual DbSet<GalerijaZivotinja> GalerijaZivotinja { get; set; }
         public virtual DbSet<KucniLjubimciUdomitelj> KucniLjubimciUdomitelj { get; set; }
         public virtual DbSet<Uloge> Uloge { get; set; }
         public virtual DbSet<OdbijeneZivotinje> OdbijeneZivotinje { get; set; }
@@ -145,6 +146,23 @@ namespace Azil.DAL.DataModel
                 entity.Property(e => e.imgUrl)
                     .HasColumnName("imgUrl")
                     .IsUnicode(false);
+
+                entity.HasMany(e => e.galerijaZivotinja)
+                    .WithOne()
+                    .HasForeignKey(g => g.id_ljubimca);
+            });
+
+            modelBuilder.Entity<GalerijaZivotinja>(entity =>
+            {
+                entity.HasKey(e => e.id);
+
+                entity.ToTable("galerija_zivotinja");
+
+                entity.Property(e => e.id_ljubimca)
+                    .HasColumnName("id_ljubimca");
+
+                entity.Property(e => e.imgUrl)
+                    .HasColumnName("imgUrl");
             });
 
             modelBuilder.Entity<KucniLjubimciUdomitelj>(entity =>
