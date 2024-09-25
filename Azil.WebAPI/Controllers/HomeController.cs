@@ -286,7 +286,11 @@ namespace Azil.WebAPI.Controllers
         public async Task<IActionResult> GetAllAnimals()
         {
             var animals = await _service.GetAllAnimalsWithImages();
-            return Ok(animals);
+
+            // Filtriraj životinje koje nisu udomljene
+            var availableAnimals = animals.Where(a => !a.udomljen);
+
+            return Ok(availableAnimals);
         }
 
         [HttpGet]
@@ -323,7 +327,8 @@ namespace Azil.WebAPI.Controllers
                 return BadRequest("Tip životinje mora biti 'pas' ili 'macka'.");
             }
 
-            var animals = await _service.GetAnimalsByType(type.ToLower());
+            // Dohvati životinje po tipu iz servisa
+            var animals = await _service.GetAnimalsByTypeAndAdoptionStatus(type.ToLower());
 
             if (animals == null || !animals.Any())
             {
@@ -332,6 +337,7 @@ namespace Azil.WebAPI.Controllers
 
             return Ok(animals);
         }
+
 
         [HttpGet("KucniLjubimci/{id:int}")]
         public async Task<IActionResult> GetAnimalById([FromRoute] int id)
@@ -346,6 +352,58 @@ namespace Azil.WebAPI.Controllers
             }
 
             return Ok(animal);
+        }
+
+        [HttpPut]
+        [Route("KucniLjubimci/{id}/udomi")]
+        public async Task<IActionResult> AdoptAnimal(int id)
+        {
+            // Dohvati ljubimca po ID-u
+            var animal = await _service.GetAnimalById(id);
+            if (animal == null)
+            {
+                return NotFound($"Animal with ID {id} not found.");
+            }
+
+            // Ažuriraj status na udomljen
+            animal.udomljen = true;
+
+            // Spremi promenu u bazu
+            bool result = await _service.UpdateAnimalAsync(animal);
+            if (result)
+            {
+                return Ok("Ljubimac je uspješno udomljen.");
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Greška prilikom udomljavanja.");
+            }
+        }
+
+        [HttpPut]
+        [Route("KucniLjubimci/{id}/odbij")]
+        public async Task<IActionResult> RejectAnimal(int id)
+        {
+            // Dohvati ljubimca po ID-u
+            var animal = await _service.GetAnimalById(id);
+            if (animal == null)
+            {
+                return NotFound($"Animal with ID {id} not found.");
+            }
+
+            // Postavi udomljen na false
+            animal.udomljen = false;
+
+            // Spremi promenu u bazu
+            bool result = await _service.UpdateAnimalAsync(animal);
+            if (result)
+            {
+                return Ok("Ljubimac je uspješno odbijen.");
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Greška prilikom odbijanja.");
+            }
         }
 
 
@@ -490,7 +548,7 @@ namespace Azil.WebAPI.Controllers
             return Ok(animals);
         }
 
-        [HttpGet("{idLjubimca}/status")]
+        [HttpGet("DnevnikUdomljavanja/{idLjubimca}/status")]
         public async Task<IActionResult> GetAdoptionStatus(int idLjubimca)
         {
             bool status = await _service.GetAdoptionStatus(idLjubimca);

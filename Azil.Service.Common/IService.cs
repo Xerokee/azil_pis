@@ -25,11 +25,14 @@ namespace Azil.Service.Common
         Task<bool> UpdateUserAsync(UsersDomain userDomain);
         Task<bool> DeleteUserAsync(int id);
         Task<IEnumerable<KucniLjubimci>> GetAllAnimals();
-        Task<IEnumerable<KucniLjubimci>> GetAnimalsByType(string type);
+        Task<IEnumerable<KucniLjubimci>> GetAnimalsByTypeAndAdoptionStatus(string type);
         Task<IEnumerable<KucniLjubimci>> GetAdoptedAnimals();
         Task<IEnumerable<GalerijaZivotinja>> GetAllAnimalGallery();
         Task<IEnumerable<GalerijaZivotinja>> GetGalleryByAnimalId(int id);
         Task<KucniLjubimci> GetAnimalById(int id);
+        Task<bool> UpdateAnimalAsync(KucniLjubimci animal);
+        Task<bool> AdoptAnimalAsync(int id);
+        Task<bool> RejectAnimalAsync(int id);
         Task<IEnumerable<KucniLjubimci>> GetAllAnimalsWithImages();
         Task<bool> IsValidUser(int id);
         Task<bool> IsValidAnimal(int id);

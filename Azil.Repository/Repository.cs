@@ -179,12 +179,28 @@ namespace Azil.Repository
             return await appDbContext.KucniLjubimci.ToListAsync();
         }
 
-        public async Task<IEnumerable<KucniLjubimci>> GetAnimalsByType(string type)
+        public async Task<IEnumerable<KucniLjubimci>> GetAnimalsByTypeAndAdoptionStatus(string type)
         {
-            return await appDbContext.KucniLjubimci
+            // Pridruži tabelu `DnevnikUdomljavanja` sa tabelom `KucniLjubimci` kako bi se proverio status udomljavanja
+            var animals = await appDbContext.KucniLjubimci
                 .Where(a => a.tip_ljubimca == type)
+                .GroupJoin(
+                    appDbContext.DnevnikUdomljavanja,
+                    animal => animal.id_ljubimca,
+                    adoption => adoption.id_ljubimca,
+                    (animal, adoptions) => new { animal, adoptions }
+                )
+                .SelectMany(
+                    joined => joined.adoptions.DefaultIfEmpty(),
+                    (joined, adoption) => new { joined.animal, udomljen = adoption != null && adoption.udomljen }
+                )
+                .Where(result => !result.udomljen) // Filtriraj samo neudomljene životinje
+                .Select(result => result.animal)   // Vrati samo informacije o životinjama
                 .ToListAsync();
+
+            return animals;
         }
+
 
         public async Task<IEnumerable<KucniLjubimci>> GetAdoptedAnimals()
         {
@@ -208,6 +224,36 @@ namespace Azil.Repository
             return await appDbContext.KucniLjubimci
                 .Include(a => a.galerijaZivotinja)
                 .FirstOrDefaultAsync(a => a.id_ljubimca == id);
+        }
+
+        public async Task<bool> UpdateAnimalAsync(KucniLjubimci animal)
+        {
+            try
+            {
+                appDbContext.KucniLjubimci.Update(animal);
+                await appDbContext.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> AdoptAnimalAsync(int id)
+        {
+            var animal = await appDbContext.KucniLjubimci.FindAsync(id);
+            if (animal == null) return false;
+            animal.udomljen = true;
+            return await UpdateAnimalAsync(animal);
+        }
+
+        public async Task<bool> RejectAnimalAsync(int id)
+        {
+            var animal = await appDbContext.KucniLjubimci.FindAsync(id);
+            if (animal == null) return false;
+            animal.udomljen = false;
+            return await UpdateAnimalAsync(animal);
         }
 
         public async Task<IEnumerable<KucniLjubimci>> GetAllAnimalsWithImages()

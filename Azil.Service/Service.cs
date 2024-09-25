@@ -164,14 +164,39 @@ namespace Azil.Service
             return await _repository.GetAllAnimals();
         }
 
-        public async Task<IEnumerable<KucniLjubimci>> GetAnimalsByType(string type)
+        public async Task<IEnumerable<KucniLjubimci>> GetAnimalsByTypeAndAdoptionStatus(string type)
         {
-            return await _repository.GetAnimalsByType(type);
+            // Pozovi repozitorijum da dohvati životinje po tipu i proveri njihov status udomljavanja
+            var animals = await _repository.GetAnimalsByTypeAndAdoptionStatus(type);
+            return animals;
         }
 
         public async Task<IEnumerable<KucniLjubimci>> GetAdoptedAnimals()
         {
             return await _repository.GetAdoptedAnimals();
+        }
+
+        public async Task<bool> UpdateAnimalAsync(KucniLjubimci animal)
+        {
+            try
+            {
+                return await _repository.UpdateAnimalAsync(animal);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while updating the animal.");
+                return false;
+            }
+        }
+
+        public async Task<bool> AdoptAnimalAsync(int id)
+        {
+            return await _repository.AdoptAnimalAsync(id);
+        }
+
+        public async Task<bool> RejectAnimalAsync(int id)
+        {
+            return await _repository.RejectAnimalAsync(id);
         }
 
         public async Task<IEnumerable<GalerijaZivotinja>> GetAllAnimalGallery()
