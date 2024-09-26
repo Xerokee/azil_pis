@@ -275,13 +275,33 @@ namespace Azil.Service
         {
             try
             {
-                // Ažuriranje samo status_udomljavanja u tabeli DnevnikUdomljavanja
-                bool result = await _repository.SetAdoptionStatus(idLjubimca, status_udomljavanja);
-                return result;
+                return await _repository.SetAdoptionStatus(idLjubimca, status_udomljavanja);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error setting adoption status.");
+                return false;
+            }
+        }
+
+        public async Task<DnevnikUdomljavanja> GetAdoptionStatusByUserId(int idKorisnika)
+        {
+            return await _repository.GetAdoptionByUserId(idKorisnika);
+        }
+
+        public async Task<bool> SetAdoptionStatusByUserId(int idKorisnika, bool status_udomljavanja)
+        {
+            try
+            {
+                var adoption = await _repository.GetAdoptionByUserId(idKorisnika);
+                if (adoption == null) return false;
+
+                adoption.status_udomljavanja = status_udomljavanja;
+                return await _repository.UpdateAdoptionAsync(adoption);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error setting adoption status by user ID.");
                 return false;
             }
         }

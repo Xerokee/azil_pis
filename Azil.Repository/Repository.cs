@@ -389,10 +389,47 @@ namespace Azil.Repository
         {
             try
             {
+                // Pronađi zapis u DnevnikUdomljavanja prema ID-u ljubimca
                 var adoption = await appDbContext.DnevnikUdomljavanja.FindAsync(idLjubimca);
                 if (adoption == null) return false;
 
-                // Ažuriraj samo polje status_udomljavanja u tabeli DnevnikUdomljavanja
+                // Ažuriraj polje status_udomljavanja
+                adoption.status_udomljavanja = status_udomljavanja;
+
+                // Označi status_udomljavanja kao modificiran
+                appDbContext.Entry(adoption).Property(a => a.status_udomljavanja).IsModified = true;
+
+                await appDbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while updating adoption status.");
+                return false;
+            }
+        }
+
+        public async Task<DnevnikUdomljavanja> GetAdoptionByUserId(int idKorisnika)
+        {
+            // Dohvaćanje zapisa udomljavanja prema ID-u korisnika
+            return await appDbContext.DnevnikUdomljavanja
+                .FirstOrDefaultAsync(adoption => adoption.id_korisnika == idKorisnika);
+        }
+
+        public async Task<bool> SetAdoptionStatusByUserId(int idKorisnika, bool status_udomljavanja)
+        {
+            try
+            {
+                // Dohvati zapis udomljavanja prema idKorisnika
+                var adoption = await appDbContext.DnevnikUdomljavanja
+                    .FirstOrDefaultAsync(adoption => adoption.id_korisnika == idKorisnika);
+
+                if (adoption == null)
+                {
+                    return false;
+                }
+
+                // Ažuriraj status udomljavanja
                 adoption.status_udomljavanja = status_udomljavanja;
                 appDbContext.Entry(adoption).Property(a => a.status_udomljavanja).IsModified = true;
 

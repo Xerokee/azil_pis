@@ -548,16 +548,18 @@ namespace Azil.WebAPI.Controllers
             return Ok(animals);
         }
 
-        [HttpGet("DnevnikUdomljavanja/{idLjubimca}/status")]
-        public async Task<IActionResult> GetAdoptionStatus(int idLjubimca)
+        // Dohvaćanje statusa udomljavanja prema id_korisnika
+        [HttpGet("DnevnikUdomljavanja/{idKorisnika}/status")]
+        public async Task<IActionResult> GetAdoptionStatusByUserId(int idKorisnika)
         {
-            bool status = await _service.GetAdoptionStatus(idLjubimca);
-            return Ok(status);
+            var adoption = await _service.GetAdoptionStatusByUserId(idKorisnika);
+            return Ok(adoption?.status_udomljavanja);
         }
 
+        // Ažuriranje statusa udomljavanja prema id_korisnika
         [HttpPut]
-        [Route("DnevnikUdomljavanja/{idLjubimca}/update/status")]
-        public async Task<IActionResult> SetAdoptionStatus(int idLjubimca, [FromBody] AdoptionStatusUpdateRequest request)
+        [Route("DnevnikUdomljavanja/{idKorisnika}/update/status")]
+        public async Task<IActionResult> SetAdoptionStatusByUserId(int idKorisnika, [FromBody] AdoptionStatusUpdateRequest request)
         {
             if (request == null || !ModelState.IsValid)
             {
@@ -565,7 +567,7 @@ namespace Azil.WebAPI.Controllers
                 return BadRequest("Neispravni podaci.");
             }
 
-            bool result = await _service.SetAdoptionStatus(idLjubimca, request.status_udomljavanja);
+            bool result = await _service.SetAdoptionStatusByUserId(idKorisnika, request.status_udomljavanja);
             if (result)
             {
                 return Ok("Status udomljavanja uspješno ažuriran.");
