@@ -143,6 +143,10 @@ namespace Azil.DAL.DataModel
                     .HasColumnName("udomljen")
                     .IsUnicode(false);
 
+                entity.Property(e => e.zahtjev_udomljen)
+                    .HasColumnName("zahtjev_udomljen")
+                    .IsUnicode(false);
+
                 entity.Property(e => e.imgUrl)
                     .HasColumnName("imgUrl")
                     .IsUnicode(false);
@@ -150,6 +154,14 @@ namespace Azil.DAL.DataModel
                 entity.HasMany(e => e.galerijaZivotinja)
                     .WithOne()
                     .HasForeignKey(g => g.id_ljubimca);
+
+                entity.Property(e => e.dob)
+                    .HasColumnName("dob")
+                    .IsUnicode(false);
+
+                entity.Property(e => e.boja)
+                    .HasColumnName("boja")
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<GalerijaZivotinja>(entity =>

@@ -237,6 +237,11 @@ namespace Azil.Service
             }
         }
 
+        public async Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? dobMin, int? dobMax, string boja)
+        {
+            return await _repository.GetFilteredAnimalsByAgeRange(tipLjubimca, dobMin, dobMax, boja);
+        }
+
         public async Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption)
         {
             try

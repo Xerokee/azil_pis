@@ -23,9 +23,13 @@ namespace Azil.WebAPI.Models
         public string OpisLjubimca { get; set; }
         [Column("udomljen")]
         public bool? Udomljen { get; set; }
+        [Column("zahtjev_udomljen")]
+        public bool? ZahtjevUdomljen { get; set; }
         [Column("imgUrl")]
         public string ImgUrl { get; set; }
         public List<GalerijaZivotinja> GalerijaZivotinja { get; set; }
+        public int Dob { get; set; }
+        public string Boja { get; set; }
 
         public virtual DnevnikUdomljavanja IdLjubimcaNavigation { get; set; }
         public virtual ICollection<KucniLjubimciUdomitelj> KucniLjubimciUdomitelj { get; set; }

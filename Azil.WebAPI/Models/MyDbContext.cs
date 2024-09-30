@@ -159,6 +159,8 @@ namespace Azil.WebAPI.Models
 
                 entity.Property(e => e.Udomljen).HasColumnName("udomljen");
 
+                entity.Property(e => e.ZahtjevUdomljen).HasColumnName("zahtjev_udomljen");
+
                 entity.Property(e => e.ImgUrl)
                     .HasColumnName("imgUrl")
                     .HasColumnType("text");
@@ -166,6 +168,13 @@ namespace Azil.WebAPI.Models
                 entity.HasMany(e => e.GalerijaZivotinja)
                     .WithOne()
                     .HasForeignKey(g => g.IdLjubimca);
+
+                entity.Property(e => e.Dob)
+                    .HasColumnName("dob");
+
+                entity.Property(e => e.Boja)
+                    .HasColumnName("boja")
+                    .HasColumnType("text");
 
                 entity.HasOne(d => d.IdLjubimcaNavigation)
                     .WithOne(p => p.KucniLjubimci)

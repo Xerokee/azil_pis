@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Azil.WebAPI.Controllers
 {
@@ -22,13 +23,16 @@ namespace Azil.WebAPI.Controllers
         private int _requestUserId;
         private int _requestAnimalId;
         private readonly ILogger<HomeController> _logger;
+        private readonly Azil_DbContext _context;
 
-        public HomeController(IService service, ILogger<HomeController> logger)
+        public HomeController(IService service, ILogger<HomeController> logger, Azil_DbContext context)
         {
             _service = service;
             _requestUserId = -1;
             _requestAnimalId = -1;
             _logger = logger;
+            _context = context;
+            _context = context;
         }
 
         [HttpGet]
@@ -366,7 +370,7 @@ namespace Azil.WebAPI.Controllers
             }
 
             // Ažuriraj status na udomljen
-            animal.udomljen = true;
+            animal.zahtjev_udomljen = true;
 
             // Spremi promenu u bazu
             bool result = await _service.UpdateAnimalAsync(animal);
@@ -378,6 +382,13 @@ namespace Azil.WebAPI.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Greška prilikom udomljavanja.");
             }
+        }
+
+        [HttpGet("GetFilteredAnimalsByAgeRange")]
+        public async Task<IActionResult> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? dobMin, int? dobMax, string boja)
+        {
+            var animals = await _service.GetFilteredAnimalsByAgeRange(tipLjubimca, dobMin, dobMax, boja);
+            return Ok(animals);
         }
 
         [HttpPut]
@@ -392,7 +403,7 @@ namespace Azil.WebAPI.Controllers
             }
 
             // Postavi udomljen na false
-            animal.udomljen = false;
+            animal.zahtjev_udomljen = false;
 
             // Spremi promenu u bazu
             bool result = await _service.UpdateAnimalAsync(animal);

@@ -33,6 +33,7 @@ namespace Azil.Repository.Common
         Task<IEnumerable<GalerijaZivotinja>> GetAllAnimalGallery();
         Task<IEnumerable<GalerijaZivotinja>> GetGalleryByAnimalId(int id);
         Task<IEnumerable<KucniLjubimci>> GetAllAnimalsWithImages();
+        Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? dobMin, int? dobMax, string boja);
         Task<bool> AddAnimalAsync(AnimalsDomain animalDomain);
         Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption);
         Task<bool> UpdateAdoptionAsync(DnevnikUdomljavanja adoption);

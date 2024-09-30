@@ -244,7 +244,7 @@ namespace Azil.Repository
         {
             var animal = await appDbContext.KucniLjubimci.FindAsync(id);
             if (animal == null) return false;
-            animal.udomljen = true;
+            animal.zahtjev_udomljen = true;
             return await UpdateAnimalAsync(animal);
         }
 
@@ -252,7 +252,7 @@ namespace Azil.Repository
         {
             var animal = await appDbContext.KucniLjubimci.FindAsync(id);
             if (animal == null) return false;
-            animal.udomljen = false;
+            animal.zahtjev_udomljen = false;
             return await UpdateAnimalAsync(animal);
         }
 
@@ -280,6 +280,31 @@ namespace Azil.Repository
                 _logger.LogError(ex, "Error occurred while adding animal to the database.");
                 return false;
             }
+        }
+
+        public async Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? dobMin, int? dobMax, string boja)
+        {
+            var query = appDbContext.KucniLjubimci.AsQueryable();
+
+            // Filtriraj po tipu ljubimca
+            if (!string.IsNullOrEmpty(tipLjubimca) && tipLjubimca != "Sve")
+            {
+                query = query.Where(a => a.tip_ljubimca == tipLjubimca);
+            }
+
+            // Filtriraj po rasponu godina
+            if (dobMin.HasValue && dobMax.HasValue)
+            {
+                query = query.Where(a => a.dob >= dobMin.Value && a.dob <= dobMax.Value);
+            }
+
+            // Filtriraj po boji
+            if (!string.IsNullOrEmpty(boja) && boja != "Sve")
+            {
+                query = query.Where(a => a.boja == boja);
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption)

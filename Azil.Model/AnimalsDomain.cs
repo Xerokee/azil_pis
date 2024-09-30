@@ -21,8 +21,11 @@ namespace Azil.Model
             TipLjubimca = animal.tip_ljubimca;
             OpisLjubimca = animal.opis_ljubimca;
             Udomljen = animal.udomljen;
+            ZahtjevUdomljen = animal.zahtjev_udomljen;
             ImgUrl = animal.imgUrl;
             GalerijaZivotinja = animal.galerijaZivotinja;
+            Dob = animal.dob;
+            Boja = animal.boja;
         }
 
         public int IdLjubimca { get; set; }
@@ -40,9 +43,12 @@ namespace Azil.Model
         [StringLength(200, MinimumLength = 3, ErrorMessage = "Opis ljubimca mora biti između 3 i 200 slova")]
         public string OpisLjubimca { get; set; }
         public bool Udomljen { get; set; }
+        public bool ZahtjevUdomljen { get; set; } = false;
 
         public string ImgUrl { get; set; }
         public List<GalerijaZivotinja> GalerijaZivotinja { get; set; }
+        public int Dob { get; set; }
+        public string Boja { get; set; }
     }
 }
 
