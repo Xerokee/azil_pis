@@ -253,6 +253,8 @@ namespace Azil.WebAPI.Models
                 entity.Property(e => e.ImeLjubimca)
                     .HasColumnName("ime_ljubimca")
                     .ValueGeneratedNever();
+
+                entity.Property(e => e.ZahtjevUdomljen).HasColumnName("zahtjev_udomljen");
             });
 
             OnModelCreatingPartial(modelBuilder);

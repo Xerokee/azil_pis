@@ -10,5 +10,6 @@ namespace Azil.DAL.DataModel
         public int id_ljubimca { get; set; } 
         public int id_korisnika { get; set; }
         public string ime_ljubimca { get; set; }
+        public bool zahtjev_udomljen { get; set; }
     }
 }
