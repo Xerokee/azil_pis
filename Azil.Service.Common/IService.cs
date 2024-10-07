@@ -37,7 +37,7 @@ namespace Azil.Service.Common
         Task<bool> IsValidUser(int id);
         Task<bool> IsValidAnimal(int id);
         Task<bool> AddAnimalAsync(AnimalsDomain animalDomain);
-        Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? dobMin, int? dobMax, string boja);
+        Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? minDob, int? maxDob, int? dob, string boja);
         Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption);
         Task<bool> UpdateAdoptionAsync(DnevnikUdomljavanja adoption);
         Task<bool> DeleteAdoptionAsync(int id);

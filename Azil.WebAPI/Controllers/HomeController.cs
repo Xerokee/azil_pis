@@ -385,10 +385,28 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpGet("GetFilteredAnimalsByAgeRange")]
-        public async Task<IActionResult> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? dobMin, int? dobMax, string boja)
+        public async Task<IActionResult> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? minDob, int? maxDob, int? dob, string boja)
         {
-            var animals = await _service.GetFilteredAnimalsByAgeRange(tipLjubimca, dobMin, dobMax, boja);
-            return Ok(animals);
+            try
+            {
+                _logger.LogInformation("Fetching filtered animals with parameters: Tip: {TipLjubimca}, MinDob: {MinDob}, MaxDob: {MaxDob}, Dob: {Dob}, Boja: {Boja}",
+                    tipLjubimca, minDob, maxDob, dob, boja);
+
+                var animals = await _service.GetFilteredAnimalsByAgeRange(tipLjubimca, minDob, maxDob, dob, boja);
+
+                if (animals == null || !animals.Any())
+                {
+                    _logger.LogInformation("No animals found with the given filter.");
+                    return NotFound("No animals found with the given filter.");
+                }
+
+                return Ok(animals);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while filtering animals.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Greška prilikom dohvaćanja filtriranih životinja.");
+            }
         }
 
         [HttpPut]

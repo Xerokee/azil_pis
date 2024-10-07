@@ -15,6 +15,9 @@ namespace Azil.Repository
 {
     public class Repository : IRepository
     {
+        private const int MIN_DOB = 0;  // Minimalna dob životinja
+        private const int MAX_DOB = 20; // Maksimalna dob životinja
+
         private readonly Azil_DbContext appDbContext;
         private IRepositoryMappingService _mapper;
         private readonly ILogger<Repository> _logger;
@@ -282,7 +285,7 @@ namespace Azil.Repository
             }
         }
 
-        public async Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? dobMin, int? dobMax, string boja)
+        public async Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? minDob, int? maxDob, int? dob, string boja)
         {
             var query = appDbContext.KucniLjubimci.AsQueryable();
 
@@ -292,10 +295,42 @@ namespace Azil.Repository
                 query = query.Where(a => a.tip_ljubimca == tipLjubimca);
             }
 
-            // Filtriraj po rasponu godina
-            if (dobMin.HasValue && dobMax.HasValue)
+            // Ako je specificirana konkretna dob, koristimo je za filtriranje
+            if (dob.HasValue)
             {
-                query = query.Where(a => a.dob >= dobMin.Value && a.dob <= dobMax.Value);
+                query = query.Where(a => a.dob == dob.Value);
+            }
+            else if (minDob.HasValue && maxDob.HasValue)
+            {
+                // Ako su zadani minDob i maxDob, filtriraj prema njima
+                query = query.Where(a => a.dob >= minDob && a.dob <= maxDob);
+            }
+            else if (minDob.HasValue)
+            {
+                // Ako je zadana samo minimalna dob, filtriraj sve životinje s dobi većom ili jednakom minDob
+                query = query.Where(a => a.dob >= minDob);
+            }
+            else if (maxDob.HasValue)
+            {
+                // Ako je zadana samo maksimalna dob, filtriraj sve životinje s dobi manjom ili jednakom maxDob
+                query = query.Where(a => a.dob <= maxDob);
+            }
+
+            // Logika za specifične dobne raspone:
+            if (minDob == 0 && maxDob == 1)
+            {
+                // Raspodijeli u dobni raspon od 0 do 1 godinu
+                query = query.Where(a => a.dob >= 0 && a.dob <= 1);
+            }
+            else if (minDob == 2 && maxDob == 5)
+            {
+                // Raspodijeli u dobni raspon od 2 do 5 godina
+                query = query.Where(a => a.dob >= 2 && a.dob <= 5);
+            }
+            else if (minDob >= 5)
+            {
+                // Raspodijeli sve životinje koje imaju više od 5 godina
+                query = query.Where(a => a.dob >= 5);
             }
 
             // Filtriraj po boji
@@ -303,6 +338,9 @@ namespace Azil.Repository
             {
                 query = query.Where(a => a.boja == boja);
             }
+
+            // Filtriraj da se prikažu samo životinje koje nisu udomljene
+            query = query.Where(a => !a.udomljen && !a.zahtjev_udomljen);
 
             return await query.ToListAsync();
         }
