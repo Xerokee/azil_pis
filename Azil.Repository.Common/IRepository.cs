@@ -49,5 +49,6 @@ namespace Azil.Repository.Common
         Task<IEnumerable<OdbijeneZivotinje>> GetAllRejections();
         Task<bool> SaveRejectionAsync(int userId, int animalId, string imeLjubimca);
         Task<bool> DeleteRejectionAsync(int id);
+        Task<bool> UpdateAnimal(KucniLjubimci animal, int id);
     }
 }

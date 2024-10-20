@@ -656,12 +656,45 @@ namespace Azil.WebAPI.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("KucniLjubimci/{id}/update")]
+        public async Task<IActionResult> UpdateAnimal(int id, [FromBody] UpdateKucniLjubimac animalUpdate)
+        {
+            KucniLjubimci animal = new KucniLjubimci();
+            animal.ime_ljubimca = animalUpdate.ime_ljubimca;
+            animal.dob = animalUpdate.dob;
+            animal.opis_ljubimca = animalUpdate.opis_ljubimca;
+
+            // Spremi promenu u bazu
+            bool result = await _service.UpdateAnimal(animal, id);
+            if (result)
+            {
+                return Ok("Ljubimac je uspješno udomljen.");
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Greška prilikom udomljavanja.");
+            }
+        }
+
+
+        public class UpdateKucniLjubimac
+        {
+            public string ime_ljubimca { get; set; }
+            public int dob { get; set; }
+            public string opis_ljubimca { get; set; }
+        }
+
         public class RejectionRequest
         {
             public int IdKorisnika { get; set; }
             public string ImeLjubimca { get; set; }
             public int IdLjubimca { get; set; }
         }
+
+
+
+
 
         #region AdditionalCustomFunctions
         [HttpGet]

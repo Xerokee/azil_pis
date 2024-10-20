@@ -350,15 +350,10 @@ namespace Azil.Repository
             try
             {
                 // Add to dnevnik_udomljavanja
-                await appDbContext.DnevnikUdomljavanja.AddAsync(adoption);
+                // await appDbContext.DnevnikUdomljavanja.AddAsync(adoption);
+                EntityEntry<DnevnikUdomljavanja> dnevnik_created = await appDbContext.DnevnikUdomljavanja.AddAsync(adoption);
 
                 // Update kucni_ljubimci
-                var animal = await appDbContext.KucniLjubimci.FindAsync(adoption.id_ljubimca);
-                if (animal != null)
-                {
-                    animal.udomljen = true;
-                    appDbContext.KucniLjubimci.Update(animal);
-                }
 
                 await appDbContext.SaveChangesAsync();
                 return true;
@@ -560,6 +555,40 @@ namespace Azil.Repository
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while deleting rejection.");
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateAnimal(KucniLjubimci animal, int id)
+        {
+            try
+            {
+                KucniLjubimci animalDb = await appDbContext.KucniLjubimci.FindAsync(id);
+                if (animalDb != null)
+                {
+                    animalDb.ime_ljubimca = animal.ime_ljubimca;
+                    animalDb.dob = animal.dob;
+                    animalDb.opis_ljubimca = animal.opis_ljubimca;
+                }
+                appDbContext.KucniLjubimci.Update(animalDb);
+
+                var dnevnikDb = await appDbContext.DnevnikUdomljavanja.Where(d => d.id == id).ToListAsync();
+
+                if (dnevnikDb.Any())
+                {
+                    foreach (var d in dnevnikDb)
+                    {
+                        d.ime_ljubimca = animal.ime_ljubimca;
+                        appDbContext.DnevnikUdomljavanja.Update(d);
+                    }
+                }
+
+
+                await appDbContext.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
                 return false;
             }
         }

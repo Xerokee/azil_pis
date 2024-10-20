@@ -362,6 +362,20 @@ namespace Azil.Service
             }
             return new Tuple<IEnumerable<UsersDomain>, List<ErrorMessage>>(usersDomain, erorMessages);
         }
+
+        public async Task<bool> UpdateAnimal(KucniLjubimci animal, int id)
+        {
+            try
+            {
+                return await _repository.UpdateAnimal(animal, id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while updating the animal.");
+                return false;
+            }
+        }
+
         #endregion AdditionalCustomFunctions
     }
 }

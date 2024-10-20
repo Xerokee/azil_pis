@@ -6,6 +6,7 @@ namespace Azil.DAL.DataModel
 {
     public partial class KucniLjubimci
     {
+        public KucniLjubimci() { }
         public int id_ljubimca { get; set; }
         public int id_udomitelja { get; set; }
         public string ime_ljubimca { get; set; }
