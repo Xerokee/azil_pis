@@ -25,6 +25,7 @@ namespace Azil.DAL.DataModel
         public virtual DbSet<KucniLjubimciUdomitelj> KucniLjubimciUdomitelj { get; set; }
         public virtual DbSet<Uloge> Uloge { get; set; }
         public virtual DbSet<OdbijeneZivotinje> OdbijeneZivotinje { get; set; }
+        public virtual DbSet<Aktivnosti> Aktivnosti { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -196,7 +197,6 @@ namespace Azil.DAL.DataModel
                     .HasColumnName("naziv_uloge")
                     .IsUnicode(false);
             });
-            OnModelCreatingPartial(modelBuilder);
 
             modelBuilder.Entity<OdbijeneZivotinje>(entity =>
             {
@@ -220,6 +220,24 @@ namespace Azil.DAL.DataModel
                     .HasColumnName("zahtjev_udomljen")
                     .IsUnicode(false);
             });
+
+            modelBuilder.Entity<Aktivnosti>(entity =>
+            {
+                entity.HasKey(e => e.id);
+
+                entity.ToTable("aktivnosti");
+
+                entity.Property(e => e.id_ljubimca)
+                    .HasColumnName("id_ljubimca");
+
+                entity.Property(e => e.datum)
+                    .HasColumnName("datum");
+
+                entity.Property(e => e.opis)
+                    .HasColumnName("opis")
+                    .IsUnicode(false);
+            });
+
             OnModelCreatingPartial(modelBuilder);
         }
 

@@ -13,6 +13,8 @@ using Microsoft.Extensions.Logging;
 using AutoMapper;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using static Azil.WebAPI.Controllers.HomeController;
 
 namespace Azil.WebAPI.Controllers
 {
@@ -88,6 +90,14 @@ namespace Azil.WebAPI.Controllers
         {
             IEnumerable<Uloge> userDb6 = _service.GetAllUsersDb6();
             return userDb6;
+        }
+
+        [HttpGet]
+        [Route("aktivnosti")]
+        public IEnumerable<Aktivnosti> GetAllUsersDb7()
+        {
+            IEnumerable<Aktivnosti> userDb7 = _service.GetAllUsersDb7();
+            return userDb7;
         }
 
         [HttpGet]
@@ -677,12 +687,41 @@ namespace Azil.WebAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("Aktivnosti/{id_ljubimca}")]
+        public async Task<IActionResult> GetAktivnostiById(int id_ljubimca)
+        {
+            HttpRequestResponse<List<ActivityDomain>> response = new HttpRequestResponse<List<ActivityDomain>>();
+
+            Tuple<List<ActivityDomain>, List<ErrorMessage>> result = await _service.GetAktivnostiById(id_ljubimca);
+
+            if (result != null)
+            {
+                response.Result = result.Item1;
+                response.ErrorMessages = result.Item2;
+                return Ok(response);
+            }
+            else
+            {
+                response.Result = result.Item1;
+                response.ErrorMessages = result.Item2;
+                return Ok(response);
+            }
+        }
 
         public class UpdateKucniLjubimac
         {
             public string ime_ljubimca { get; set; }
             public int dob { get; set; }
             public string opis_ljubimca { get; set; }
+        }
+
+        public class AktivnostiModel
+        {
+            public int id { get; set; }
+            public int id_ljubimca { get; set; }
+            public string datum { get; set; }
+            public string opis { get; set; }
         }
 
         public class RejectionRequest
@@ -692,9 +731,39 @@ namespace Azil.WebAPI.Controllers
             public int IdLjubimca { get; set; }
         }
 
+        [HttpPost]
+        [Route("Aktivnosti/add")]
+        public async Task<IActionResult> AddAktivnostAsync([FromBody] AktivnostiModel aktivnostRest)
+        {
+            try
+            {
+                Aktivnosti novaAktivnost = new Aktivnosti();
+                novaAktivnost.id_ljubimca = aktivnostRest.id_ljubimca;
+                string format = "dd-MM-yyyy";
+                DateTime dateTimeDatum = DateTime.ParseExact(aktivnostRest.datum, format, CultureInfo.InvariantCulture);
+                novaAktivnost.datum = dateTimeDatum;
+                novaAktivnost.opis = aktivnostRest.opis;
+
+                bool addAktivnost = await _service.AddAktivnostAsync(novaAktivnost);
+                if (addAktivnost)
+                {
+                    _logger.LogInformation("Activity successfully added.");
+                    return Ok("Aktivnost dodana!");
+                }
+                else
+                {
+                    _logger.LogWarning("Failed to add activity.");
+                    return Ok("Aktivnost nije dodana!");
+                }
 
 
-
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Exception occurred while adding activity.");
+                return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
+            }
+        }
 
         #region AdditionalCustomFunctions
         [HttpGet]

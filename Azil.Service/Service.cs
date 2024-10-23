@@ -83,6 +83,12 @@ namespace Azil.Service
             return userDb6;
         }
 
+        public IEnumerable<Aktivnosti> GetAllUsersDb7()
+        {
+            IEnumerable<Aktivnosti> userDb7 = _repository.GetAllUsersDb7();
+            return userDb7;
+        }
+
         public async Task<Tuple<UsersDomain, List<ErrorMessage>>> GetUserDomainByUserId(int id_korisnika)
         {
             //return _repository.GetUserDomainByUserId(userId);
@@ -326,6 +332,36 @@ namespace Azil.Service
             return await _repository.DeleteRejectionAsync(id);
         }
 
+        public async Task<bool> UpdateAnimal(KucniLjubimci animal, int id)
+        {
+            try
+            {
+                return await _repository.UpdateAnimal(animal, id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while updating the animal.");
+                return false;
+            }
+        }
+
+        public async Task<Tuple<List<ActivityDomain>, List<ErrorMessage>>> GetAktivnostiById(int id_ljubimca)
+        {
+            List<ErrorMessage> erorMessages = new List<ErrorMessage>();
+            List<ActivityDomain> aktivnostiDomain = await _repository.GetAktivnostiById(id_ljubimca);
+
+
+            if (aktivnostiDomain.Count() == 0)
+            {
+                erorMessages.Add(new ErrorMessage("Nema dodanih aktivnosti!"));
+            }
+            else
+            {
+                erorMessages.Add(new ErrorMessage("Dohvaćanje uspješno!"));
+            }
+            return new Tuple<List<ActivityDomain>, List<ErrorMessage>>(aktivnostiDomain, erorMessages);
+        }
+
         #region AdditionalCustomFunctions
 
         public async Task<bool> IsValidUser(int id)
@@ -363,15 +399,15 @@ namespace Azil.Service
             return new Tuple<IEnumerable<UsersDomain>, List<ErrorMessage>>(usersDomain, erorMessages);
         }
 
-        public async Task<bool> UpdateAnimal(KucniLjubimci animal, int id)
+        public async Task<bool> AddAktivnostAsync(Aktivnosti aktivnostRest)
         {
             try
             {
-                return await _repository.UpdateAnimal(animal, id);
+                return await _repository.AddAktivnostAsync(aktivnostRest);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while updating the animal.");
+                _logger.LogError(ex, "Error occurred while adding activity.");
                 return false;
             }
         }

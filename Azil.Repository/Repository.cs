@@ -76,6 +76,12 @@ namespace Azil.Repository
             return userDb6;
         }
 
+        public IEnumerable<Aktivnosti> GetAllUsersDb7()
+        {
+            IEnumerable<Aktivnosti> userDb7 = appDbContext.Aktivnosti.ToList();
+            return userDb7;
+        }
+
         public UsersDomain GetUserDomainByUserId(int id_korisnika)
         {
             Korisnici userDb = appDbContext.Korisnici.Find(id_korisnika);
@@ -589,6 +595,34 @@ namespace Azil.Repository
             }
             catch
             {
+                return false;
+            }
+        }
+
+        public async Task<List<ActivityDomain>> GetAktivnostiById(int id_ljubimca)
+        {
+            IEnumerable<Aktivnosti> aktivnostiDb = await appDbContext.Aktivnosti.Where(a => a.id_ljubimca == id_ljubimca).ToListAsync();
+            aktivnostiDb = aktivnostiDb.OrderByDescending(a => a.datum).ToList();
+            List<ActivityDomain> aktivnostiDomain = new List<ActivityDomain>();
+            foreach(Aktivnosti a in aktivnostiDb)
+            {
+                aktivnostiDomain.Add(new ActivityDomain(a.id, a.id_ljubimca, a.datum, a.opis));
+            }
+            return aktivnostiDomain;
+        }
+
+        public async Task<bool> AddAktivnostAsync(Aktivnosti aktivnostRest)
+        {
+            try
+            {
+                EntityEntry<Aktivnosti> aktivnost_created = await appDbContext.Aktivnosti.AddAsync(aktivnostRest);
+
+                await appDbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while adding activity.");
                 return false;
             }
         }
