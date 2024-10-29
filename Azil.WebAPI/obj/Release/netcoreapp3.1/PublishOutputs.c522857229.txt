@@ -68,6 +68,8 @@ D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\obj\Release\netco
 D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\obj\Release\netcoreapp3.1\PubTmp\Out\Azil.WebAPI.pdb
 D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\obj\Release\netcoreapp3.1\PubTmp\Out\AutoMapper.dll
 D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\obj\Release\netcoreapp3.1\PubTmp\Out\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\obj\Release\netcoreapp3.1\PubTmp\Out\Microsoft.AspNetCore.JsonPatch.dll
+D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\obj\Release\netcoreapp3.1\PubTmp\Out\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\obj\Release\netcoreapp3.1\PubTmp\Out\Microsoft.Bcl.AsyncInterfaces.dll
 D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\obj\Release\netcoreapp3.1\PubTmp\Out\Microsoft.Bcl.HashCode.dll
 D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\obj\Release\netcoreapp3.1\PubTmp\Out\Microsoft.Data.SqlClient.dll
@@ -92,6 +94,7 @@ D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\obj\Release\netco
 D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\obj\Release\netcoreapp3.1\PubTmp\Out\Microsoft.Identity.Client.dll
 D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\obj\Release\netcoreapp3.1\PubTmp\Out\Microsoft.OpenApi.dll
 D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\obj\Release\netcoreapp3.1\PubTmp\Out\Newtonsoft.Json.dll
+D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\obj\Release\netcoreapp3.1\PubTmp\Out\Newtonsoft.Json.Bson.dll
 D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\obj\Release\netcoreapp3.1\PubTmp\Out\Serilog.dll
 D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\obj\Release\netcoreapp3.1\PubTmp\Out\Serilog.AspNetCore.dll
 D:\Vuv 3\Projektiranje informacijskih sustava\Azil\Azil.WebAPI\obj\Release\netcoreapp3.1\PubTmp\Out\Serilog.Extensions.Hosting.dll

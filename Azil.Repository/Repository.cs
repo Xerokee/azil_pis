@@ -82,6 +82,12 @@ namespace Azil.Repository
             return userDb7;
         }
 
+        public IEnumerable<Slika> GetAllUsersDb8()
+        {
+            IEnumerable<Slika> userDb8 = appDbContext.Slike.ToList();
+            return userDb8;
+        }
+
         public UsersDomain GetUserDomainByUserId(int id_korisnika)
         {
             Korisnici userDb = appDbContext.Korisnici.Find(id_korisnika);
@@ -623,6 +629,52 @@ namespace Azil.Repository
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while adding activity.");
+                return false;
+            }
+        }
+
+        public async Task<bool> AddImage(Slika novaSlika)
+        {
+            try
+            {
+
+                await appDbContext.Slike.AddAsync(novaSlika);
+                await appDbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while adding image.");
+                return false;
+            }
+        }
+
+        public async Task<List<SlikaDomain>> GetSlikeById(int id_ljubimca)
+        {
+            IEnumerable<Slika> slikeDb = await appDbContext.Slike.Where(s => s.id_ljubimca == id_ljubimca).ToListAsync();
+            List<SlikaDomain> slikeDomain = new List<SlikaDomain>();
+            foreach (Slika s in slikeDb)
+            {
+                slikeDomain.Add(new SlikaDomain(s.id, s.id_ljubimca, Convert.ToBase64String(s.slika_data)));
+            }
+            return slikeDomain;
+        }
+
+        public async Task<bool> DeleteSlikaAsync(int id)
+        {
+            try
+            {
+                Slika slikaDb = await appDbContext.Slike.FindAsync(id);
+                if (slikaDb != null)
+                {
+                    appDbContext.Slike.Remove(slikaDb);
+                    await appDbContext.SaveChangesAsync();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
                 return false;
             }
         }

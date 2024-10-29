@@ -18,6 +18,7 @@ namespace Azil.Repository.Common
         IEnumerable<KucniLjubimciUdomitelj> GetAllUsersDb5();
         IEnumerable<Uloge> GetAllUsersDb6();
         IEnumerable<Aktivnosti> GetAllUsersDb7();
+        IEnumerable<Slika> GetAllUsersDb8();
         UsersDomain GetUserDomainByUserId(int id_korisnika);
         Task<UserRoleModel> GetUserRoleById(int id_korisnika);
         UsersDomain GetUserDomainByEmail(string email);
@@ -53,5 +54,8 @@ namespace Azil.Repository.Common
         Task<bool> UpdateAnimal(KucniLjubimci animal, int id);
         Task<List<ActivityDomain>> GetAktivnostiById(int id_ljubimca);
         Task<bool> AddAktivnostAsync(Aktivnosti aktivnostRest);
+        Task<bool> AddImage(Slika novaSlika);
+        Task<List<SlikaDomain>> GetSlikeById(int id_ljubimca);
+        Task<bool> DeleteSlikaAsync(int id);
     }
 }

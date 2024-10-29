@@ -15,6 +15,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using static Azil.WebAPI.Controllers.HomeController;
+using System.IO;
 
 namespace Azil.WebAPI.Controllers
 {
@@ -98,6 +99,14 @@ namespace Azil.WebAPI.Controllers
         {
             IEnumerable<Aktivnosti> userDb7 = _service.GetAllUsersDb7();
             return userDb7;
+        }
+
+        [HttpGet]
+        [Route("slike")]
+        public IEnumerable<Slika> GetAllUsersDb8()
+        {
+            IEnumerable<Slika> userDb8 = _service.GetAllUsersDb8();
+            return userDb8;
         }
 
         [HttpGet]
@@ -761,6 +770,97 @@ namespace Azil.WebAPI.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "Exception occurred while adding activity.");
+                return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
+            }
+        }
+
+        [HttpPost]
+        [Route("Slike/add/{id_ljubimca}")]
+        public async Task<IActionResult> AddImage(int id_ljubimca, IFormFile image)
+        {
+            try
+            {
+                if (image == null || image.Length == 0) { return BadRequest("No file was uploaded."); }
+
+                var novaSlika = new Slika();
+                novaSlika.id_ljubimca = id_ljubimca;
+                novaSlika.slika_data = await ConvertToBytes(image);
+
+                bool result = await _service.AddImage(novaSlika);
+
+                if (result)
+                {
+                    _logger.LogInformation("Image successfully added.");
+                    return Ok("Slika uspješno dodana!");
+                }
+                else
+                {
+                    _logger.LogWarning("Failed to add image.");
+                    return Ok("Slika nije dodana!");
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Exception occurred while adding activity.");
+                return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
+            }
+        }
+
+        private async Task<byte[]> ConvertToBytes(IFormFile image)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await image.CopyToAsync(memoryStream);
+                return memoryStream.ToArray();
+            }
+        }
+
+        [HttpGet]
+        [Route("Slike/{id_ljubimca}")]
+        public async Task<IActionResult> GetSlikeById(int id_ljubimca)
+        {
+            HttpRequestResponse<List<SlikaDomain>> response = new HttpRequestResponse<List<SlikaDomain>>();
+
+            Tuple<List<SlikaDomain>, List<ErrorMessage>> result = await _service.GetSlikeById(id_ljubimca);
+
+            if (result != null)
+            {
+                response.Result = result.Item1;
+                response.ErrorMessages = result.Item2;
+                return Ok(response);
+            }
+            else
+            {
+                response.Result = result.Item1;
+                response.ErrorMessages = result.Item2;
+                return Ok(response);
+            }
+        }
+
+        [HttpDelete]
+        [Route("Slike/delete/{id}")]
+        public async Task<IActionResult> DeleteSlikaAsync(int id)
+        {
+            try
+            {
+                bool result = await _service.DeleteSlikaAsync(id);
+
+                if (result)
+                {
+                    _logger.LogInformation("Image successfully deleted.");
+                    return Ok("Slika uspješno obrisana!");
+                }
+                else
+                {
+                    _logger.LogWarning("Failed to delete image.");
+                    return Ok("Slika nije obrisana!");
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Exception occurred while deleting image.");
                 return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
             }
         }

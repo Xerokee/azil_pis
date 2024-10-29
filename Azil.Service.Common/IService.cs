@@ -19,6 +19,7 @@ namespace Azil.Service.Common
         IEnumerable<KucniLjubimciUdomitelj> GetAllUsersDb5();
         IEnumerable<Uloge> GetAllUsersDb6();
         IEnumerable<Aktivnosti> GetAllUsersDb7();
+        IEnumerable<Slika> GetAllUsersDb8();
         Task<Tuple<UsersDomain, List<ErrorMessage>>> GetUserDomainByUserId(int id_korisnika);
         Task<UserRoleModel> GetUserRoleById(int id_korisnika);
         Task<Tuple<UsersDomain, List<ErrorMessage>>> GetUserDomainByEmail(string email);
@@ -53,5 +54,8 @@ namespace Azil.Service.Common
         Task<bool> UpdateAnimal(KucniLjubimci animal, int id);
         Task<Tuple<List<ActivityDomain>, List<ErrorMessage>>> GetAktivnostiById(int id_ljubimca);
         Task<bool> AddAktivnostAsync(Aktivnosti aktivnostRest);
+        Task<bool> AddImage(Slika novaSlika);
+        Task<Tuple<List<SlikaDomain>, List<ErrorMessage>>> GetSlikeById(int id_ljubimca);
+        Task<bool> DeleteSlikaAsync(int id);
     }
 }

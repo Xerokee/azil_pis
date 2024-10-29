@@ -89,6 +89,12 @@ namespace Azil.Service
             return userDb7;
         }
 
+        public IEnumerable<Slika> GetAllUsersDb8()
+        {
+            IEnumerable<Slika> userDb8 = _repository.GetAllUsersDb8();
+            return userDb8;
+        }
+
         public async Task<Tuple<UsersDomain, List<ErrorMessage>>> GetUserDomainByUserId(int id_korisnika)
         {
             //return _repository.GetUserDomainByUserId(userId);
@@ -408,6 +414,51 @@ namespace Azil.Service
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while adding activity.");
+                return false;
+            }
+        }
+
+        public async Task<bool> AddImage(Slika novaSlika)
+        {
+            try
+            {
+                await _repository.AddImage(novaSlika);
+                return true; 
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while adding image.");
+                return false;
+            }
+        }
+
+        public async Task<Tuple<List<SlikaDomain>, List<ErrorMessage>>> GetSlikeById(int id_ljubimca)
+        {
+            List<ErrorMessage> erorMessages = new List<ErrorMessage>();
+            List<SlikaDomain> slikeDomain = await _repository.GetSlikeById(id_ljubimca);
+
+
+            if (slikeDomain.Count() == 0)
+            {
+                erorMessages.Add(new ErrorMessage("Nema dodanih slika!"));
+            }
+            else
+            {
+                erorMessages.Add(new ErrorMessage("Dohvaćanje uspješno!"));
+            }
+            return new Tuple<List<SlikaDomain>, List<ErrorMessage>>(slikeDomain, erorMessages);
+        }
+
+        public async Task<bool> DeleteSlikaAsync(int id)
+        {
+            try
+            {
+                await _repository.DeleteSlikaAsync(id);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while deleting image.");
                 return false;
             }
         }
