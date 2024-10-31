@@ -563,12 +563,14 @@ namespace Azil.WebAPI.Controllers
         [Route("DnevnikUdomljavanja/delete/{id}")]
         public async Task<IActionResult> DeleteAdoptionAsync(int id)
         {
+            /*
             bool lastRequestId = await GetLastAnimalRequestId();
 
             if (!lastRequestId)
             {
                 return BadRequest("Nije unesen RequestAnimalId životinje koji poziva.");
             }
+            */
 
             try
             {
