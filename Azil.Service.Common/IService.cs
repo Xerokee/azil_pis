@@ -57,5 +57,6 @@ namespace Azil.Service.Common
         Task<bool> AddImage(Slika novaSlika);
         Task<Tuple<List<SlikaDomain>, List<ErrorMessage>>> GetSlikeById(int id_ljubimca);
         Task<bool> DeleteSlikaAsync(int id);
+        Task<bool> AdoptAnimalByAdmin(int id);
     }
 }

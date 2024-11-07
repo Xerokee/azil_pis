@@ -867,6 +867,21 @@ namespace Azil.WebAPI.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("KucniLjubimci/{id}/udomljen")]
+        public async Task<IActionResult> AdoptAnimalByAdmin(int id)
+        {
+            bool result = await _service.AdoptAnimalByAdmin(id);
+            if (result)
+            {
+                return Ok("Ljubimac je uspješno udomljen.");
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Greška prilikom udomljavanja.");
+            }
+        }
+
         #region AdditionalCustomFunctions
         [HttpGet]
         public async Task<bool> GetLastUserRequestId()

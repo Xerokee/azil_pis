@@ -463,6 +463,19 @@ namespace Azil.Service
             }
         }
 
+        public async Task<bool> AdoptAnimalByAdmin(int id)
+        {
+            try
+            {
+                return await _repository.AdoptAnimalByAdmin(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while adopting animal by admin.");
+                return false;
+            }
+        }
+
         #endregion AdditionalCustomFunctions
     }
 }

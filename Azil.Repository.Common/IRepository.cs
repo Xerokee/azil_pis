@@ -57,5 +57,6 @@ namespace Azil.Repository.Common
         Task<bool> AddImage(Slika novaSlika);
         Task<List<SlikaDomain>> GetSlikeById(int id_ljubimca);
         Task<bool> DeleteSlikaAsync(int id);
+        Task<bool> AdoptAnimalByAdmin(int id);
     }
 }

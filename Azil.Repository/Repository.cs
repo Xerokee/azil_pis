@@ -678,5 +678,22 @@ namespace Azil.Repository
                 return false;
             }
         }
+
+        public async Task<bool> AdoptAnimalByAdmin(int id)
+        {
+            try
+            {
+                KucniLjubimci animal = await appDbContext.KucniLjubimci.FindAsync(id);
+                animal.udomljen = true;
+                appDbContext.KucniLjubimci.Update(animal);
+                await appDbContext.SaveChangesAsync();
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }
