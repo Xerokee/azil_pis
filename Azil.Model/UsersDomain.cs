@@ -15,7 +15,9 @@ namespace Azil.Model
         public UsersDomain(Korisnici user)
         {
             id_korisnika = user.id_korisnika;
+            KorisnickoIme = user.korisnickoIme;
             Ime = user.ime;
+            Prezime = user.prezime;
             Email = user.email;
             Lozinka = user.lozinka;
             Admin = user.admin;
@@ -24,9 +26,13 @@ namespace Azil.Model
 
         public int id_korisnika { get; set; }
 
+        public string KorisnickoIme { get; set; }
+
         [Required(ErrorMessage = "Unesite ime korisnika.")]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Ime korisnika mora biti između 3 i 50 slova")]
         public string Ime { get; set; }
+
+        public string Prezime { get; set; }
 
         [Required(ErrorMessage = "Unesite email korisnika.")]
         [EmailAddress(ErrorMessage = "Neispravan format email adrese.")]

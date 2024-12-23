@@ -151,7 +151,9 @@ namespace Azil.Repository
                 Korisnici userEntity = await appDbContext.Korisnici.FindAsync(userDomain.id_korisnika);
                 if (userEntity == null) return false;
 
+                userEntity.korisnickoIme = userDomain.KorisnickoIme;
                 userEntity.ime = userDomain.Ime;
+                userEntity.prezime = userDomain.Prezime;
                 userEntity.email = userDomain.Email;
                 userEntity.lozinka = userDomain.Lozinka;
                 userEntity.admin = userDomain.Admin;

@@ -94,8 +94,16 @@ namespace Azil.WebAPI.Models
                     .HasColumnName("email")
                     .HasColumnType("text");
 
+                entity.Property(e => e.KorisnickoIme)
+                    .HasColumnName("korisnickoIme")
+                    .HasColumnType("text");
+
                 entity.Property(e => e.Ime)
                     .HasColumnName("ime")
+                    .HasColumnType("text");
+
+                entity.Property(e => e.Prezime)
+                    .HasColumnName("prezime")
                     .HasColumnType("text");
 
                 entity.Property(e => e.Lozinka).HasColumnName("lozinka");

@@ -7,7 +7,9 @@ namespace Azil.DAL.DataModel
     public partial class Korisnici
     {
         public int id_korisnika { get; set; }
+        public string korisnickoIme { get; set; }
         public string ime { get; set; }
+        public string prezime { get; set; }
         public string email { get; set; }
         public string lozinka { get; set; }
         public bool admin { get; set; }

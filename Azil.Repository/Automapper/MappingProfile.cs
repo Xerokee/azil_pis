@@ -10,7 +10,9 @@ namespace Azil.Repository.Automapper
         {
             CreateMap<UsersDomain, Korisnici>()
                 .ForMember(dest => dest.id_korisnika, opt => opt.MapFrom(src => src.id_korisnika))
+                .ForMember(dest => dest.korisnickoIme, opt => opt.MapFrom(src => src.KorisnickoIme))
                 .ForMember(dest => dest.ime, opt => opt.MapFrom(src => src.Ime))
+                .ForMember(dest => dest.prezime, opt => opt.MapFrom(src => src.Prezime))
                 .ForMember(dest => dest.email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.lozinka, opt => opt.MapFrom(src => src.Lozinka))
                 .ForMember(dest => dest.admin, opt => opt.MapFrom(src => src.Admin))
@@ -18,7 +20,9 @@ namespace Azil.Repository.Automapper
 
             CreateMap<Korisnici, UsersDomain>()
                 .ForMember(dest => dest.id_korisnika, opt => opt.MapFrom(src => src.id_korisnika))
+                .ForMember(dest => dest.KorisnickoIme, opt => opt.MapFrom(src => src.korisnickoIme))
                 .ForMember(dest => dest.Ime, opt => opt.MapFrom(src => src.ime))
+                .ForMember(dest => dest.Prezime, opt => opt.MapFrom(src => src.prezime))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.email))
                 .ForMember(dest => dest.Lozinka, opt => opt.MapFrom(src => src.lozinka))
                 .ForMember(dest => dest.Admin, opt => opt.MapFrom(src => src.admin))
