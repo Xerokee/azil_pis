@@ -9,6 +9,7 @@ namespace Azil.DAL.DataModel
         public int id { get; set; }
         public int id_ljubimca { get; set; }
         public DateTime datum { get; set; }
+        public string aktivnost { get; set; }
         public string opis { get; set; }
     }
 }

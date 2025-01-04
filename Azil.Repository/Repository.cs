@@ -614,7 +614,7 @@ namespace Azil.Repository
             List<ActivityDomain> aktivnostiDomain = new List<ActivityDomain>();
             foreach(Aktivnosti a in aktivnostiDb)
             {
-                aktivnostiDomain.Add(new ActivityDomain(a.id, a.id_ljubimca, a.datum, a.opis));
+                aktivnostiDomain.Add(new ActivityDomain(a.id, a.id_ljubimca, a.datum, a.aktivnost, a.opis));
             }
             return aktivnostiDomain;
         }

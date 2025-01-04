@@ -9,13 +9,15 @@ namespace Azil.Model
         public int id { get; set; }
         public int id_ljubimca { get; set; }
         public string datum { get; set; }
+        public string aktivnost { get; set; }
         public string opis { get; set; }
 
-        public ActivityDomain(int id, int id_ljubimca, DateTime? datum, string opis)
+        public ActivityDomain(int id, int id_ljubimca, DateTime? datum, string aktivnost, string opis)
         {
             this.id = id;
             this.id_ljubimca = id_ljubimca;
             this.datum = datum.Value.ToShortDateString();
+            this.aktivnost= aktivnost;
             this.opis = opis;
         }
     }

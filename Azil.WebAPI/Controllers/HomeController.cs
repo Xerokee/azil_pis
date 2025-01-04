@@ -732,6 +732,7 @@ namespace Azil.WebAPI.Controllers
             public int id { get; set; }
             public int id_ljubimca { get; set; }
             public string datum { get; set; }
+            public string aktivnost { get; set; }
             public string opis { get; set; }
         }
 
@@ -753,6 +754,7 @@ namespace Azil.WebAPI.Controllers
                 string format = "dd-MM-yyyy";
                 DateTime dateTimeDatum = DateTime.ParseExact(aktivnostRest.datum, format, CultureInfo.InvariantCulture);
                 novaAktivnost.datum = dateTimeDatum;
+                novaAktivnost.aktivnost = aktivnostRest.aktivnost;
                 novaAktivnost.opis = aktivnostRest.opis;
 
                 bool addAktivnost = await _service.AddAktivnostAsync(novaAktivnost);

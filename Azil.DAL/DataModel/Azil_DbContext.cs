@@ -242,6 +242,10 @@ namespace Azil.DAL.DataModel
                 entity.Property(e => e.datum)
                     .HasColumnName("datum");
 
+                entity.Property(e => e.aktivnost)
+                    .HasColumnName("aktivnost")
+                    .IsUnicode(false);
+
                 entity.Property(e => e.opis)
                     .HasColumnName("opis")
                     .IsUnicode(false);
