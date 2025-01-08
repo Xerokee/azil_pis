@@ -461,15 +461,11 @@ namespace Azil.Repository
         {
             try
             {
-                // Pronađi zapis u DnevnikUdomljavanja prema ID-u ljubimca
                 var adoption = await appDbContext.DnevnikUdomljavanja.FindAsync(idLjubimca);
                 if (adoption == null) return false;
 
-                // Ažuriraj polje status_udomljavanja
-                adoption.status_udomljavanja = status_udomljavanja;
-
-                // Označi status_udomljavanja kao modificiran
-                appDbContext.Entry(adoption).Property(a => a.status_udomljavanja).IsModified = true;
+                adoption.udomljen = false;
+                adoption.id_korisnika = 0;
 
                 await appDbContext.SaveChangesAsync();
                 return true;
