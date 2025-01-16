@@ -19,6 +19,7 @@ namespace Azil.Repository.Common
         IEnumerable<Uloge> GetAllUsersDb6();
         IEnumerable<Aktivnosti> GetAllUsersDb7();
         IEnumerable<Slika> GetAllUsersDb8();
+        IEnumerable<SifrTipLjubimca> GetAllUsersDb9();
         UsersDomain GetUserDomainByUserId(int id_korisnika);
         Task<UserRoleModel> GetUserRoleById(int id_korisnika);
         UsersDomain GetUserDomainByEmail(string email);
@@ -26,16 +27,16 @@ namespace Azil.Repository.Common
         Task<bool> UpdateUserAsync(UsersDomain userDomain);
         Task<bool> DeleteUserAsync(int id);
         Task<IEnumerable<KucniLjubimci>> GetAllAnimals();
-        Task<IEnumerable<KucniLjubimci>> GetAnimalsByTypeAndAdoptionStatus(string type);
-        Task<KucniLjubimci> GetAnimalById(int id);
+        // Task<IEnumerable<KucniLjubimci>> GetAnimalsByTypeAndAdoptionStatus(string type);
+        Task<KucniLjubimciDomain> GetAnimalById(int id);
         Task<bool> UpdateAnimalAsync(KucniLjubimci animal);
         Task<bool> AdoptAnimalAsync(int id);
         Task<bool> RejectAnimalAsync(int id);
         Task<IEnumerable<KucniLjubimci>> GetAdoptedAnimals();
         Task<IEnumerable<GalerijaZivotinja>> GetAllAnimalGallery();
         Task<IEnumerable<GalerijaZivotinja>> GetGalleryByAnimalId(int id);
-        Task<IEnumerable<KucniLjubimci>> GetAllAnimalsWithImages();
-        Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? minDob, int? maxDob, int? dob, string boja);
+        Task<List<KucniLjubimciDomain>> GetAllAnimalsWithImages();
+        // Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? minDob, int? maxDob, int? dob, string boja);
         Task<bool> AddAnimalAsync(AnimalsDomain animalDomain);
         Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption);
         Task<bool> UpdateAdoptionAsync(DnevnikUdomljavanja adoption);
@@ -58,5 +59,7 @@ namespace Azil.Repository.Common
         Task<List<SlikaDomain>> GetSlikeById(int id_ljubimca);
         Task<bool> DeleteSlikaAsync(int id);
         Task<bool> AdoptAnimalByAdmin(int id);
+        Task<IEnumerable<SifrTipLjubimcaDomain>> GetSifrarnik();
+        List<KucniLjubimciDomain> GetKucniLjubimci();
     }
 }

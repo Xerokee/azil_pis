@@ -64,6 +64,19 @@ namespace Azil.Repository
             return userDb4;
         }
 
+        public List<KucniLjubimciDomain> GetKucniLjubimci()
+        {
+            IEnumerable<KucniLjubimci> userDb4 = appDbContext.KucniLjubimci.ToList();
+            IEnumerable<SifrTipLjubimca> tipoviLjubimcaDb = appDbContext.Sifrarnik.ToList();
+
+            List<KucniLjubimciDomain> kucniLjubimci = new List<KucniLjubimciDomain>();
+            foreach (KucniLjubimci lj in userDb4)
+            {
+                kucniLjubimci.Add(new KucniLjubimciDomain(lj.id_ljubimca, lj.id_udomitelja, lj.ime_ljubimca, tipoviLjubimcaDb.FirstOrDefault(tip => tip.id == lj.tip_ljubimca).naziv, lj.opis_ljubimca, lj.udomljen, lj.zahtjev_udomljen, lj.imgUrl, lj.galerijaZivotinja, lj.dob, lj.boja));
+            }
+            return kucniLjubimci;
+        }
+
         public IEnumerable<KucniLjubimciUdomitelj> GetAllUsersDb5()
         {
             IEnumerable<KucniLjubimciUdomitelj> userDb5 = appDbContext.KucniLjubimciUdomitelj.ToList();
@@ -86,6 +99,12 @@ namespace Azil.Repository
         {
             IEnumerable<Slika> userDb8 = appDbContext.Slike.ToList();
             return userDb8;
+        }
+
+        public IEnumerable<SifrTipLjubimca> GetAllUsersDb9()
+        {
+            IEnumerable<SifrTipLjubimca> userDb9 = appDbContext.Sifrarnik.ToList();
+            return userDb9;
         }
 
         public UsersDomain GetUserDomainByUserId(int id_korisnika)
@@ -196,6 +215,7 @@ namespace Azil.Repository
             return await appDbContext.KucniLjubimci.ToListAsync();
         }
 
+        /*
         public async Task<IEnumerable<KucniLjubimci>> GetAnimalsByTypeAndAdoptionStatus(string type)
         {
             // Pridruži tabelu `DnevnikUdomljavanja` sa tabelom `KucniLjubimci` kako bi se proverio status udomljavanja
@@ -217,7 +237,7 @@ namespace Azil.Repository
 
             return animals;
         }
-
+        */
 
         public async Task<IEnumerable<KucniLjubimci>> GetAdoptedAnimals()
         {
@@ -236,11 +256,15 @@ namespace Azil.Repository
                 .ToListAsync();
         }
 
-        public async Task<KucniLjubimci> GetAnimalById(int id)
+        public async Task<KucniLjubimciDomain> GetAnimalById(int id)
         {
-            return await appDbContext.KucniLjubimci
+            IEnumerable<SifrTipLjubimca> tipoviLjubimcaDb = appDbContext.Sifrarnik.ToList();
+            var animalDb = await appDbContext.KucniLjubimci
                 .Include(a => a.galerijaZivotinja)
                 .FirstOrDefaultAsync(a => a.id_ljubimca == id);
+            KucniLjubimciDomain animal = new KucniLjubimciDomain(animalDb.id_ljubimca, animalDb.id_udomitelja, animalDb.ime_ljubimca, tipoviLjubimcaDb.FirstOrDefault(tip => tip.id == animalDb.tip_ljubimca).naziv, animalDb.opis_ljubimca, animalDb.udomljen, animalDb.zahtjev_udomljen, animalDb.imgUrl, animalDb.galerijaZivotinja, animalDb.dob, animalDb.boja);
+            
+            return animal;
         }
 
         public async Task<bool> UpdateAnimalAsync(KucniLjubimci animal)
@@ -273,12 +297,21 @@ namespace Azil.Repository
             return await UpdateAnimalAsync(animal);
         }
 
-        public async Task<IEnumerable<KucniLjubimci>> GetAllAnimalsWithImages()
+        public async Task<List<KucniLjubimciDomain>> GetAllAnimalsWithImages()
         {
             var animals = await appDbContext.KucniLjubimci
                 .Include(a => a.galerijaZivotinja)
                 .ToListAsync();
-            return animals;
+
+            IEnumerable<KucniLjubimci> userDb4 = appDbContext.KucniLjubimci.ToList();
+            IEnumerable<SifrTipLjubimca> tipoviLjubimcaDb = appDbContext.Sifrarnik.ToList();
+
+            List<KucniLjubimciDomain> kucniLjubimci = new List<KucniLjubimciDomain>();
+            foreach (KucniLjubimci lj in userDb4)
+            {
+                kucniLjubimci.Add(new KucniLjubimciDomain(lj.id_ljubimca, lj.id_udomitelja, lj.ime_ljubimca, tipoviLjubimcaDb.FirstOrDefault(tip => tip.id == lj.tip_ljubimca).naziv, lj.opis_ljubimca, lj.udomljen, lj.zahtjev_udomljen, lj.imgUrl, lj.galerijaZivotinja, lj.dob, lj.boja));
+            }
+            return kucniLjubimci;
         }
 
         public async Task<bool> AddAnimalAsync(AnimalsDomain animalDomain)
@@ -299,6 +332,7 @@ namespace Azil.Repository
             }
         }
 
+        /*
         public async Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? minDob, int? maxDob, int? dob, string boja)
         {
             var query = appDbContext.KucniLjubimci.AsQueryable();
@@ -358,6 +392,7 @@ namespace Azil.Repository
 
             return await query.ToListAsync();
         }
+        */
 
         public async Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption)
         {
@@ -692,6 +727,13 @@ namespace Azil.Repository
             {
                 return false;
             }
+        }
+
+        public async Task<IEnumerable<SifrTipLjubimcaDomain>> GetSifrarnik()
+        {
+            IEnumerable<SifrTipLjubimca> tipoviLjubimcaDb = await appDbContext.Sifrarnik.ToListAsync();
+            IEnumerable<SifrTipLjubimcaDomain> tipoviLjubimca = _mapper.Map<IEnumerable<SifrTipLjubimcaDomain>>(tipoviLjubimcaDb);
+            return tipoviLjubimca;
         }
     }
 }

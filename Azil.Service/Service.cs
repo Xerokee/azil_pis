@@ -71,6 +71,12 @@ namespace Azil.Service
             return userDb4;
         }
 
+        public List<KucniLjubimciDomain> GetKucniLjubimci()
+        {
+            List<KucniLjubimciDomain> kucniLjubimci = _repository.GetKucniLjubimci();
+            return kucniLjubimci;
+        }
+
         public IEnumerable<KucniLjubimciUdomitelj> GetAllUsersDb5()
         {
             IEnumerable<KucniLjubimciUdomitelj> userDb5 = _repository.GetAllUsersDb5();
@@ -93,6 +99,12 @@ namespace Azil.Service
         {
             IEnumerable<Slika> userDb8 = _repository.GetAllUsersDb8();
             return userDb8;
+        }
+
+        public IEnumerable<SifrTipLjubimca> GetAllUsersDb9()
+        {
+            IEnumerable<SifrTipLjubimca> userDb9 = _repository.GetAllUsersDb9();
+            return userDb9;
         }
 
         public async Task<Tuple<UsersDomain, List<ErrorMessage>>> GetUserDomainByUserId(int id_korisnika)
@@ -176,12 +188,14 @@ namespace Azil.Service
             return await _repository.GetAllAnimals();
         }
 
+        /*
         public async Task<IEnumerable<KucniLjubimci>> GetAnimalsByTypeAndAdoptionStatus(string type)
         {
             // Pozovi repozitorijum da dohvati životinje po tipu i proveri njihov status udomljavanja
             var animals = await _repository.GetAnimalsByTypeAndAdoptionStatus(type);
             return animals;
         }
+        */
 
         public async Task<IEnumerable<KucniLjubimci>> GetAdoptedAnimals()
         {
@@ -221,12 +235,12 @@ namespace Azil.Service
             return await _repository.GetGalleryByAnimalId(id);
         }
 
-        public async Task<KucniLjubimci> GetAnimalById(int id)
+        public async Task<KucniLjubimciDomain> GetAnimalById(int id)
         {
             return await _repository.GetAnimalById(id);
         }
 
-        public async Task<IEnumerable<KucniLjubimci>> GetAllAnimalsWithImages()
+        public async Task<List<KucniLjubimciDomain>> GetAllAnimalsWithImages()
         {
             return await _repository.GetAllAnimalsWithImages();
         }
@@ -249,10 +263,12 @@ namespace Azil.Service
             }
         }
 
+        /*
         public async Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? minDob, int? maxDob, int? dob, string boja)
         {
             return await _repository.GetFilteredAnimalsByAgeRange(tipLjubimca, minDob, maxDob, dob, boja);
         }
+        */
 
         public async Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption)
         {
@@ -474,6 +490,11 @@ namespace Azil.Service
                 _logger.LogError(ex, "Error occurred while adopting animal by admin.");
                 return false;
             }
+        }
+
+        public async Task<IEnumerable<SifrTipLjubimcaDomain>> GetSifrarnik()
+        {
+            return await _repository.GetSifrarnik();
         }
 
         #endregion AdditionalCustomFunctions

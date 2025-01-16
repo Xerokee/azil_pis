@@ -71,9 +71,9 @@ namespace Azil.WebAPI.Controllers
 
         [HttpGet]
         [Route("kucni_ljubimci")]
-        public IEnumerable<KucniLjubimci> GetAllUsersDb4()
+        public List<KucniLjubimciDomain> GetAllUsersDb4()
         {
-            IEnumerable<KucniLjubimci> userDb4 = _service.GetAllUsersDb4();
+            List<KucniLjubimciDomain> userDb4 = _service.GetKucniLjubimci();
             return userDb4;
         }
 
@@ -107,6 +107,14 @@ namespace Azil.WebAPI.Controllers
         {
             IEnumerable<Slika> userDb8 = _service.GetAllUsersDb8();
             return userDb8;
+        }
+
+        [HttpGet]
+        [Route("sifrTipLjubimca")]
+        public IEnumerable<SifrTipLjubimca> GetAllUsersDb9()
+        {
+            IEnumerable<SifrTipLjubimca> userDb9 = _service.GetAllUsersDb9();
+            return userDb9;
         }
 
         [HttpGet]
@@ -341,6 +349,7 @@ namespace Azil.WebAPI.Controllers
             return Ok(galerija);
         }
 
+        /*
         [HttpGet]
         [Route("KucniLjubimci/{type}")]
         public async Task<IActionResult> GetAnimalsByType(string type)
@@ -360,7 +369,7 @@ namespace Azil.WebAPI.Controllers
 
             return Ok(animals);
         }
-
+        */
 
         [HttpGet("KucniLjubimci/{id:int}")]
         public async Task<IActionResult> GetAnimalById([FromRoute] int id)
@@ -381,18 +390,14 @@ namespace Azil.WebAPI.Controllers
         [Route("KucniLjubimci/{id}/udomi")]
         public async Task<IActionResult> AdoptAnimal(int id)
         {
-            // Dohvati ljubimca po ID-u
-            var animal = await _service.GetAnimalById(id);
-            if (animal == null)
-            {
-                return NotFound($"Animal with ID {id} not found.");
-            }
+
 
             // Ažuriraj status na udomljen
-            animal.zahtjev_udomljen = true;
+            //animalDb.zahtjev_udomljen = true;
 
             // Spremi promenu u bazu
-            bool result = await _service.UpdateAnimalAsync(animal);
+            //bool result = await _service.UpdateAnimalAsync(animalDb);
+            bool result = await _service.AdoptAnimalAsync(id);
             if (result)
             {
                 return Ok("Ljubimac je uspješno udomljen.");
@@ -403,6 +408,7 @@ namespace Azil.WebAPI.Controllers
             }
         }
 
+        /*
         [HttpGet("GetFilteredAnimalsByAgeRange")]
         public async Task<IActionResult> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? minDob, int? maxDob, int? dob, string boja)
         {
@@ -427,23 +433,14 @@ namespace Azil.WebAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Greška prilikom dohvaćanja filtriranih životinja.");
             }
         }
+        */
 
         [HttpPut]
         [Route("KucniLjubimci/{id}/odbij")]
         public async Task<IActionResult> RejectAnimal(int id)
         {
-            // Dohvati ljubimca po ID-u
-            var animal = await _service.GetAnimalById(id);
-            if (animal == null)
-            {
-                return NotFound($"Animal with ID {id} not found.");
-            }
-
-            // Postavi udomljen na false
-            animal.zahtjev_udomljen = false;
-
             // Spremi promenu u bazu
-            bool result = await _service.UpdateAnimalAsync(animal);
+            bool result = await _service.RejectAnimalAsync(id);
             if (result)
             {
                 return Ok("Ljubimac je uspješno odbijen.");
@@ -453,7 +450,6 @@ namespace Azil.WebAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Greška prilikom odbijanja.");
             }
         }
-
 
         [HttpPost]
         [Route("KucniLjubimci/add")]
@@ -718,6 +714,14 @@ namespace Azil.WebAPI.Controllers
                 response.ErrorMessages = result.Item2;
                 return Ok(response);
             }
+        }
+
+        [HttpGet]
+        [Route("SifrarnikTipLjubimca")]
+        public async Task<IActionResult> GetSifrarnikTipLjubimca()
+        {
+            var sifrarnik = await _service.GetSifrarnik();
+            return Ok(sifrarnik);
         }
 
         public class UpdateKucniLjubimac

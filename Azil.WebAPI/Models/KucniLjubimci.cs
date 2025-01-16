@@ -18,7 +18,7 @@ namespace Azil.WebAPI.Models
         [Column("ime_ljubimca")]
         public string ImeLjubimca { get; set; }
         [Column("tip_ljubimca")]
-        public string TipLjubimca { get; set; }
+        public int TipLjubimca { get; set; }
         [Column("opis_ljubimca")]
         public string OpisLjubimca { get; set; }
         [Column("udomljen")]

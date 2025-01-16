@@ -27,6 +27,7 @@ namespace Azil.DAL.DataModel
         public virtual DbSet<OdbijeneZivotinje> OdbijeneZivotinje { get; set; }
         public virtual DbSet<Slika> Slike { get; set; }
         public virtual DbSet<Aktivnosti> Aktivnosti { get; set; }
+        public virtual DbSet<SifrTipLjubimca> Sifrarnik { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -262,6 +263,21 @@ namespace Azil.DAL.DataModel
 
                 entity.Property(e => e.slika_data)
                     .HasColumnName("slika_data");
+            });
+
+            OnModelCreatingPartial(modelBuilder);
+
+            modelBuilder.Entity<SifrTipLjubimca>(entity =>
+            {
+                entity.HasKey(e => e.id);
+
+                entity.ToTable("sifrTipLjubimca");
+
+                entity.Property(e => e.id)
+                    .HasColumnName("id");
+
+                entity.Property(e => e.naziv)
+                    .HasColumnName("naziv");
             });
 
             OnModelCreatingPartial(modelBuilder);
