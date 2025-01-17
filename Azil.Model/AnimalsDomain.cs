@@ -35,8 +35,7 @@ namespace Azil.Model
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Ime ljubimca mora biti između 3 i 50 slova")]
         public string ImeLjubimca { get; set; }
 
-        [Required(ErrorMessage = "Unesite tip ljubimca.")]
-        [StringLength(50, MinimumLength = 3, ErrorMessage = "Tip ljubimca mora biti između 3 i 50 slova")]
+        [Required(ErrorMessage = "Odaberite tip ljubimca.")]
         public int TipLjubimca { get; set; }
 
         [Required(ErrorMessage = "Unesite opis ljubimca.")]

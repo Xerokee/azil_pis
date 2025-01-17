@@ -17,12 +17,14 @@ namespace Azil.Service
 {
     public class Service : IService
     {
+        private readonly Azil_DbContext appDbContext;
         IRepository _repository;
         IRepositoryMappingService _mapper;
         private readonly ILogger<Service> _logger;
 
-        public Service(IRepository repository, IRepositoryMappingService mapper, ILogger<Service> logger)
+        public Service(Azil_DbContext appDbContext, IRepository repository, IRepositoryMappingService mapper, ILogger<Service> logger)
         {
+            this.appDbContext = appDbContext;
             _repository = repository;
             _mapper = mapper;
             _logger = logger;
@@ -247,21 +249,32 @@ namespace Azil.Service
 
         public async Task<bool> AddAnimalAsync(AnimalsDomain animalDomain)
         {
-            _logger.LogInformation("Mapping AnimalsDomain to KucniLjubimci");
+            _logger.LogInformation("Početak dodavanja životinje u bazu: {@AnimalDomain}", animalDomain);
+
             try
             {
+                if (!await appDbContext.Sifrarnik.AnyAsync(x => x.id == animalDomain.TipLjubimca))
+                {
+                    _logger.LogWarning("Tip ljubimca sa ID-jem {TipLjubimca} nije pronađen.", animalDomain.TipLjubimca);
+                    return false; // Tip ljubimca nije validan
+                }
+
                 var animalEntity = _mapper.Map<KucniLjubimci>(animalDomain);
-                _logger.LogInformation("Mapped AnimalsDomain to KucniLjubimci: {@animalEntity}", animalEntity);
-                bool result = await _repository.AddAnimalAsync(animalDomain);
-                _logger.LogInformation("AddAnimalAsync result: {result}", result);
-                return result;
+                _logger.LogInformation("Mapa domain modela na entitet: {@AnimalEntity}", animalEntity);
+
+                await appDbContext.KucniLjubimci.AddAsync(animalEntity);
+                await appDbContext.SaveChangesAsync();
+
+                _logger.LogInformation("Životinja uspešno dodana u bazu: {@AnimalEntity}", animalEntity);
+                return true;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding animal");
+                _logger.LogError(ex, "Greška pri dodavanju životinje u bazu.");
                 return false;
             }
         }
+
 
         /*
         public async Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? minDob, int? maxDob, int? dob, string boja)

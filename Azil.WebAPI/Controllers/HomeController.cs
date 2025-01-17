@@ -455,40 +455,52 @@ namespace Azil.WebAPI.Controllers
         [Route("KucniLjubimci/add")]
         public async Task<IActionResult> AddAnimalAsync([FromBody] AnimalsDomain animalRest)
         {
-            bool lastRequestId = await GetLastAnimalRequestId();
+            _logger.LogInformation("Primljeni podaci za dodavanje životinje: {@AnimalRest}", animalRest);
 
+            // Validacija RequestAnimalId
+            bool lastRequestId = await GetLastAnimalRequestId();
             if (!lastRequestId)
             {
-                _logger.LogWarning("RequestAnimalId not provided.");
-                return BadRequest("Nije unesen RequestAnimalId životinje koji poziva.");
+                _logger.LogWarning("RequestAnimalId nije pronađen.");
+                return BadRequest("RequestAnimalId nije unesen ili je nevažeći.");
             }
 
+            // Validacija ModelState
             if (!ModelState.IsValid)
             {
-                _logger.LogWarning("Model state is invalid: {ModelState}", ModelState);
+                _logger.LogWarning("Model state nije ispravan: {ModelState}", ModelState);
                 return BadRequest(ModelState);
+            }
+
+            // Validacija tipa ljubimca
+            if (animalRest.TipLjubimca != 1 && animalRest.TipLjubimca != 2)
+            {
+                _logger.LogWarning("Neispravan tip ljubimca: {TipLjubimca}", animalRest.TipLjubimca);
+                return BadRequest("Tip ljubimca mora biti 1 (Pas) ili 2 (Mačka).");
             }
 
             try
             {
-                _logger.LogInformation("Received animal: {Animal}", animalRest);
-                animalRest.IdLjubimca = 0; // Ensure the ID is set to 0 or null for a new record
+                _logger.LogInformation("Zapoceto dodavanje životinje: {@AnimalRest}", animalRest);
+
+                animalRest.IdLjubimca = 0; // Resetiranje ID-a za novi zapis
                 bool addAnimal = await _service.AddAnimalAsync(animalRest);
+
                 if (addAnimal)
                 {
-                    _logger.LogInformation("Animal successfully added: {Animal}", animalRest);
-                    return Ok("Životinja dodana!");
+                    _logger.LogInformation("Životinja uspešno dodana: {@AnimalRest}", animalRest);
+                    return Ok("Životinja uspješno dodana!");
                 }
                 else
                 {
-                    _logger.LogWarning("Failed to add animal: {Animal}", animalRest);
-                    return Ok("Životinja nije dodana!");
+                    _logger.LogWarning("Dodavanje životinje nije uspjelo: {@AnimalRest}", animalRest);
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Dodavanje životinje nije uspelo.");
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _logger.LogError(e, "Exception occurred while adding animal.");
-                return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
+                _logger.LogError(ex, "Greška pri dodavanju životinje.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Greška na serveru.");
             }
         }
 
