@@ -307,6 +307,11 @@ namespace Azil.Service
             return await _repository.DeleteAdoptionAsync(id);
         }
 
+        public async Task<bool> UpdateAdoptionStatus(int idLjubimca, int idUdomljavanja)
+        {
+            return await _repository.UpdateAdoptionStatus(idLjubimca, idUdomljavanja);
+        }
+
         public async Task<DnevnikUdomljavanja> GetAdoptionById(int id)
         {
             return await _repository.GetAdoptionById(id);

@@ -41,6 +41,7 @@ namespace Azil.Repository.Common
         Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption);
         Task<bool> UpdateAdoptionAsync(DnevnikUdomljavanja adoption);
         Task<bool> DeleteAdoptionAsync(int id);
+        Task<bool> UpdateAdoptionStatus(int idLjubimca, int idUdomljavanja);
         Task<UsersDomain> IsValidUser(int id);
         Task<bool> IsValidAnimal(int id);
         string Test();

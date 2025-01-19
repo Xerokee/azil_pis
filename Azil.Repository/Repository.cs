@@ -399,8 +399,8 @@ namespace Azil.Repository
             try
             {
                 // Add to dnevnik_udomljavanja
-                // await appDbContext.DnevnikUdomljavanja.AddAsync(adoption);
-                EntityEntry<DnevnikUdomljavanja> dnevnik_created = await appDbContext.DnevnikUdomljavanja.AddAsync(adoption);
+                await appDbContext.DnevnikUdomljavanja.AddAsync(adoption);
+                // EntityEntry<DnevnikUdomljavanja> dnevnik_created = await appDbContext.DnevnikUdomljavanja.AddAsync(adoption);
 
                 // Update kucni_ljubimci
 
@@ -447,6 +447,22 @@ namespace Azil.Repository
             }
 
             appDbContext.DnevnikUdomljavanja.Remove(adoption);
+            await appDbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> UpdateAdoptionStatus(int idLjubimca, int idUdomljavanja)
+        {
+            var kucniLjubimac = await appDbContext.KucniLjubimci.FindAsync(idLjubimca);
+            kucniLjubimac.zahtjev_udomljen = false;
+            kucniLjubimac.udomljen = false;
+            kucniLjubimac.id_udomitelja = 0;
+
+            appDbContext.KucniLjubimci.Update(kucniLjubimac);
+
+            var adoption = await appDbContext.DnevnikUdomljavanja.FirstOrDefaultAsync(a => a.id_ljubimca == idUdomljavanja);
+            appDbContext.DnevnikUdomljavanja.Remove(adoption);
+
             await appDbContext.SaveChangesAsync();
             return true;
         }

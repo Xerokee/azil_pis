@@ -598,6 +598,28 @@ namespace Azil.WebAPI.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("DnevnikUdomljavanja/{idLjubimca}/vrati/{idUdomljavanja}")]
+        public async Task<IActionResult> UpdateAdoptionStatus(int idLjubimca, int idUdomljavanja)
+        {
+            try
+            {
+                bool result = await _service.UpdateAdoptionStatus(idLjubimca, idUdomljavanja);
+                if (result)
+                {
+                    return Ok("Uspješno vraćeno!");
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Greška u vraćanju!");
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
+            }
+        }
+
         [HttpGet]
         [Route("AdoptedAnimals")]
         public async Task<IActionResult> GetAdoptedAnimals()
