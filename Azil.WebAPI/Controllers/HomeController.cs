@@ -35,7 +35,6 @@ namespace Azil.WebAPI.Controllers
             _requestAnimalId = -1;
             _logger = logger;
             _context = context;
-            _context = context;
         }
 
         [HttpGet]
@@ -349,18 +348,28 @@ namespace Azil.WebAPI.Controllers
             return Ok(galerija);
         }
 
-        /*
         [HttpGet]
         [Route("KucniLjubimci/{type}")]
         public async Task<IActionResult> GetAnimalsByType(string type)
         {
-            if (type.ToLower() != "pas" && type.ToLower() != "macka")
+            if (type.ToLower() != "pas" && type.ToLower() != "mačka")
             {
-                return BadRequest("Tip životinje mora biti 'pas' ili 'macka'.");
+                return BadRequest("Tip životinje mora biti 'pas' ili 'mačka'.");
             }
 
-            // Dohvati životinje po tipu iz servisa
-            var animals = await _service.GetAnimalsByTypeAndAdoptionStatus(type.ToLower());
+            // Dohvati odgovarajući id tipa ljubimca iz šifrarnika
+            var tipLjubimca = await _context.Sifrarnik
+                                                 .Where(s => s.naziv.ToLower() == type.ToLower())
+                                                 .Select(s => s.id)
+                                                 .FirstOrDefaultAsync();
+
+            if (tipLjubimca == 0)
+            {
+                return NotFound($"Tip ljubimca '{type}' nije pronađen.");
+            }
+
+            // Dohvati životinje po tipu i statusu udomljavanja
+            var animals = await _service.GetAnimalsByTypeAndAdoptionStatus(tipLjubimca);
 
             if (animals == null || !animals.Any())
             {
@@ -369,7 +378,6 @@ namespace Azil.WebAPI.Controllers
 
             return Ok(animals);
         }
-        */
 
         [HttpGet("KucniLjubimci/{id:int}")]
         public async Task<IActionResult> GetAnimalById([FromRoute] int id)
@@ -408,14 +416,21 @@ namespace Azil.WebAPI.Controllers
             }
         }
 
-        /*
+
         [HttpGet("GetFilteredAnimalsByAgeRange")]
-        public async Task<IActionResult> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? minDob, int? maxDob, int? dob, string boja)
+        public async Task<IActionResult> GetFilteredAnimalsByAgeRange(int tipLjubimca, int? minDob, int? maxDob, int? dob, string boja)
         {
             try
             {
                 _logger.LogInformation("Fetching filtered animals with parameters: Tip: {TipLjubimca}, MinDob: {MinDob}, MaxDob: {MaxDob}, Dob: {Dob}, Boja: {Boja}",
                     tipLjubimca, minDob, maxDob, dob, boja);
+
+                // Ako je tipLjubimca string, tražimo id tipa u šifrarniku
+                if (tipLjubimca == 0)
+                {
+                    // Ovdje bi trebala biti logika za pretvaranje naziva u ID
+                    return BadRequest("Tip ljubimca mora biti 'pas' ili 'mačka'.");
+                }
 
                 var animals = await _service.GetFilteredAnimalsByAgeRange(tipLjubimca, minDob, maxDob, dob, boja);
 
@@ -433,7 +448,7 @@ namespace Azil.WebAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Greška prilikom dohvaćanja filtriranih životinja.");
             }
         }
-        */
+
 
         [HttpPut]
         [Route("KucniLjubimci/{id}/odbij")]

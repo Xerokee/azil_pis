@@ -215,12 +215,11 @@ namespace Azil.Repository
             return await appDbContext.KucniLjubimci.ToListAsync();
         }
 
-        /*
-        public async Task<IEnumerable<KucniLjubimci>> GetAnimalsByTypeAndAdoptionStatus(string type)
+        public async Task<IEnumerable<KucniLjubimci>> GetAnimalsByTypeAndAdoptionStatus(int type)
         {
             // Pridruži tabelu `DnevnikUdomljavanja` sa tabelom `KucniLjubimci` kako bi se proverio status udomljavanja
             var animals = await appDbContext.KucniLjubimci
-                .Where(a => a.tip_ljubimca == type)
+                .Where(a => a.tip_ljubimca == type) // Filtriraj životinje po tipu
                 .GroupJoin(
                     appDbContext.DnevnikUdomljavanja,
                     animal => animal.id_ljubimca,
@@ -237,7 +236,6 @@ namespace Azil.Repository
 
             return animals;
         }
-        */
 
         public async Task<IEnumerable<KucniLjubimci>> GetAdoptedAnimals()
         {
@@ -332,15 +330,25 @@ namespace Azil.Repository
             }
         }
 
-        /*
-        public async Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? minDob, int? maxDob, int? dob, string boja)
+
+        public async Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(int tipLjubimca, int? minDob, int? maxDob, int? dob, string boja)
         {
             var query = appDbContext.KucniLjubimci.AsQueryable();
 
-            // Filtriraj po tipu ljubimca
-            if (!string.IsNullOrEmpty(tipLjubimca) && tipLjubimca != "Sve")
+            // Filtriraj po tipu ljubimca ako tipLjubimca nije 0 (ili neodređen)
+            if (tipLjubimca > 0)
             {
-                query = query.Where(a => a.tip_ljubimca == tipLjubimca);
+                // Poveži tip ljubimca sa nazivom iz šifrarnika
+                var tipLjubimcaNaziv = await appDbContext.Sifrarnik
+                                                         .Where(s => s.id == tipLjubimca)
+                                                         .Select(s => s.naziv)
+                                                         .FirstOrDefaultAsync();
+
+                if (tipLjubimcaNaziv != null)
+                {
+                    // Ako je tip ljubimca pronađen, filtriraj po njemu
+                    query = query.Where(a => a.tip_ljubimca == tipLjubimca);
+                }
             }
 
             // Ako je specificirana konkretna dob, koristimo je za filtriranje
@@ -392,7 +400,7 @@ namespace Azil.Repository
 
             return await query.ToListAsync();
         }
-        */
+
 
         public async Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption)
         {

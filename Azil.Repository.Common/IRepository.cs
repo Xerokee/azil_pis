@@ -27,7 +27,7 @@ namespace Azil.Repository.Common
         Task<bool> UpdateUserAsync(UsersDomain userDomain);
         Task<bool> DeleteUserAsync(int id);
         Task<IEnumerable<KucniLjubimci>> GetAllAnimals();
-        // Task<IEnumerable<KucniLjubimci>> GetAnimalsByTypeAndAdoptionStatus(string type);
+        Task<IEnumerable<KucniLjubimci>> GetAnimalsByTypeAndAdoptionStatus(int type);
         Task<KucniLjubimciDomain> GetAnimalById(int id);
         Task<bool> UpdateAnimalAsync(KucniLjubimci animal);
         Task<bool> AdoptAnimalAsync(int id);
@@ -36,7 +36,7 @@ namespace Azil.Repository.Common
         Task<IEnumerable<GalerijaZivotinja>> GetAllAnimalGallery();
         Task<IEnumerable<GalerijaZivotinja>> GetGalleryByAnimalId(int id);
         Task<List<KucniLjubimciDomain>> GetAllAnimalsWithImages();
-        // Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? minDob, int? maxDob, int? dob, string boja);
+        Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(int tipLjubimca, int? minDob, int? maxDob, int? dob, string boja);
         Task<bool> AddAnimalAsync(AnimalsDomain animalDomain);
         Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption);
         Task<bool> UpdateAdoptionAsync(DnevnikUdomljavanja adoption);

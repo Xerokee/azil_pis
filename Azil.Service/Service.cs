@@ -189,15 +189,12 @@ namespace Azil.Service
         {
             return await _repository.GetAllAnimals();
         }
-
-        /*
-        public async Task<IEnumerable<KucniLjubimci>> GetAnimalsByTypeAndAdoptionStatus(string type)
+        public async Task<IEnumerable<KucniLjubimci>> GetAnimalsByTypeAndAdoptionStatus(int type)
         {
             // Pozovi repozitorijum da dohvati životinje po tipu i proveri njihov status udomljavanja
             var animals = await _repository.GetAnimalsByTypeAndAdoptionStatus(type);
             return animals;
         }
-        */
 
         public async Task<IEnumerable<KucniLjubimci>> GetAdoptedAnimals()
         {
@@ -275,13 +272,10 @@ namespace Azil.Service
             }
         }
 
-
-        /*
-        public async Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? minDob, int? maxDob, int? dob, string boja)
+        public async Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(int tipLjubimca, int? minDob, int? maxDob, int? dob, string boja)
         {
             return await _repository.GetFilteredAnimalsByAgeRange(tipLjubimca, minDob, maxDob, dob, boja);
         }
-        */
 
         public async Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption)
         {
