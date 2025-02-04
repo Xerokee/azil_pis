@@ -418,21 +418,21 @@ namespace Azil.WebAPI.Controllers
 
 
         [HttpGet("GetFilteredAnimalsByAgeRange")]
-        public async Task<IActionResult> GetFilteredAnimalsByAgeRange(int tipLjubimca, int? minDob, int? maxDob, int? dob, string boja)
+        public async Task<IActionResult> GetFilteredAnimalsByAgeRange(string tipLjubimca, int? minDob, int? maxDob, int? dob, string boja)
         {
             try
             {
                 _logger.LogInformation("Fetching filtered animals with parameters: Tip: {TipLjubimca}, MinDob: {MinDob}, MaxDob: {MaxDob}, Dob: {Dob}, Boja: {Boja}",
                     tipLjubimca, minDob, maxDob, dob, boja);
 
-                // Ako je tipLjubimca string, tražimo id tipa u šifrarniku
-                if (tipLjubimca == 0)
+                // Ako je tipLjubimca string (npr. "Pas"), treba ga pretvoriti u ID
+                int? tipLjubimcaId = await _service.GetTipLjubimcaId(tipLjubimca);
+                if (tipLjubimcaId == null)
                 {
-                    // Ovdje bi trebala biti logika za pretvaranje naziva u ID
-                    return BadRequest("Tip ljubimca mora biti 'pas' ili 'mačka'.");
+                    return BadRequest("Tip ljubimca mora biti 'Pas' ili 'Mačka'.");
                 }
 
-                var animals = await _service.GetFilteredAnimalsByAgeRange(tipLjubimca, minDob, maxDob, dob, boja);
+                var animals = await _service.GetFilteredAnimalsByAgeRange(tipLjubimcaId.Value, minDob, maxDob, dob, boja);
 
                 if (animals == null || !animals.Any())
                 {

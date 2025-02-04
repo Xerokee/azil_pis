@@ -62,5 +62,6 @@ namespace Azil.Service.Common
         Task<bool> AdoptAnimalByAdmin(int id);
         Task<IEnumerable<SifrTipLjubimcaDomain>> GetSifrarnik();
         List<KucniLjubimciDomain> GetKucniLjubimci();
+        Task<int?> GetTipLjubimcaId(string tipLjubimca);
     }
 }

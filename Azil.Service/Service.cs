@@ -277,6 +277,15 @@ namespace Azil.Service
             return await _repository.GetFilteredAnimalsByAgeRange(tipLjubimca, minDob, maxDob, dob, boja);
         }
 
+        public async Task<int?> GetTipLjubimcaId(string naziv)
+        {
+            return await appDbContext.Sifrarnik
+                .Where(s => s.naziv.ToLower() == naziv.ToLower())
+                .Select(s => (int?)s.id)
+                .FirstOrDefaultAsync();
+        }
+
+
         public async Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption)
         {
             try
