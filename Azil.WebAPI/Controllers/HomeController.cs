@@ -602,9 +602,8 @@ namespace Azil.WebAPI.Controllers
                 {
                     return Ok("Uspješno obrisano!");
                 }
-                else
                 {
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Greška u brisanju!");
+                    return NotFound(new { message = "Zapis nije pronađen ili je već obrisan." });
                 }
             }
             catch (Exception e)

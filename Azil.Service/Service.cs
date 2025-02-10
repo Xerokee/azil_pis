@@ -307,8 +307,22 @@ namespace Azil.Service
 
         public async Task<bool> DeleteAdoptionAsync(int id)
         {
-            return await _repository.DeleteAdoptionAsync(id);
+            try
+            {
+                bool deleted = await _repository.DeleteAdoptionAsync(id);
+                if (!deleted)
+                {
+                    Console.WriteLine($"Brisanje neuspjelo. ID: {id} možda ne postoji.");
+                }
+                return deleted;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Greška u Service prilikom brisanja: {ex.Message}");
+                return false;
+            }
         }
+
 
         public async Task<bool> UpdateAdoptionStatus(int idLjubimca, int idUdomljavanja)
         {

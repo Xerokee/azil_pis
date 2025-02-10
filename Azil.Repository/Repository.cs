@@ -448,16 +448,31 @@ namespace Azil.Repository
 
         public async Task<bool> DeleteAdoptionAsync(int id)
         {
-            var adoption = await appDbContext.DnevnikUdomljavanja.FindAsync(id);
-            if (adoption == null)
+            try
             {
+                // Prvo provjeri postoji li zapis
+                var adoption = await appDbContext.DnevnikUdomljavanja
+                    .Where(a => a.id == id)
+                    .FirstOrDefaultAsync();
+
+                if (adoption == null)
+                {
+                    Console.WriteLine($"DeleteAdoptionAsync: Ne postoji zapis s id={id}");
+                    return false;
+                }
+
+                // Ako postoji, obriši ga
+                appDbContext.DnevnikUdomljavanja.Remove(adoption);
+                await appDbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Greška prilikom brisanja udomljavanja: {ex.Message}");
                 return false;
             }
-
-            appDbContext.DnevnikUdomljavanja.Remove(adoption);
-            await appDbContext.SaveChangesAsync();
-            return true;
         }
+
 
         public async Task<bool> UpdateAdoptionStatus(int idLjubimca, int idUdomljavanja)
         {
