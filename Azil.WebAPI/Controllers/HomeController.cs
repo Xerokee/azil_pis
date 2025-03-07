@@ -966,6 +966,28 @@ namespace Azil.WebAPI.Controllers
             }
             return false;
         }
+
+        [HttpGet]
+        [Route("Statistika")]
+        public async Task<IActionResult> GetStatistika()
+        {
+            HttpRequestResponse<StatistikaDomain> response = new HttpRequestResponse<StatistikaDomain>();
+
+            Tuple<StatistikaDomain, List<ErrorMessage>> result = _service.GetStatistika();
+
+            if (result != null)
+            {
+                response.Result = result.Item1;
+                response.ErrorMessages = result.Item2;
+                return Ok(response);
+            }
+            else
+            {
+                response.Result = result.Item1;
+                response.ErrorMessages = result.Item2;
+                return Ok(response);
+            }
+        }
         #endregion AdditionalCustomFunctions
     }
 }

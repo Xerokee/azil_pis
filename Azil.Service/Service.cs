@@ -527,9 +527,27 @@ namespace Azil.Service
             }
         }
 
+
         public async Task<IEnumerable<SifrTipLjubimcaDomain>> GetSifrarnik()
         {
             return await _repository.GetSifrarnik();
+        }
+
+        public Tuple<StatistikaDomain, List<ErrorMessage>> GetStatistika()
+        {
+            List<ErrorMessage> errorMessages = new List<ErrorMessage>();
+            StatistikaDomain statistikaDomain = _repository.GetStatistika();
+
+            if (statistikaDomain != null)
+            {
+                errorMessages.Add(new ErrorMessage("Statistika je uredu!"));
+            }
+            else
+            {
+                errorMessages.Add(new ErrorMessage("Statistika nije uredu!"));
+            }
+
+            return Tuple.Create(statistikaDomain, errorMessages);
         }
 
         #endregion AdditionalCustomFunctions

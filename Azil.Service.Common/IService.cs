@@ -63,5 +63,6 @@ namespace Azil.Service.Common
         Task<IEnumerable<SifrTipLjubimcaDomain>> GetSifrarnik();
         List<KucniLjubimciDomain> GetKucniLjubimci();
         Task<int?> GetTipLjubimcaId(string tipLjubimca);
+        Tuple<StatistikaDomain, List<ErrorMessage>> GetStatistika();
     }
 }

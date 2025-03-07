@@ -774,5 +774,18 @@ namespace Azil.Repository
             IEnumerable<SifrTipLjubimcaDomain> tipoviLjubimca = _mapper.Map<IEnumerable<SifrTipLjubimcaDomain>>(tipoviLjubimcaDb);
             return tipoviLjubimca;
         }
+
+        public StatistikaDomain GetStatistika()
+        {
+            int raspolozive_zivotinje = appDbContext.KucniLjubimci.Where(a => a.udomljen == false && a.zahtjev_udomljen == false).ToList().Count();
+            int udomljene_zivotinje = appDbContext.KucniLjubimci.Where(a => a.udomljen).ToList().Count();
+            int broj_zivotinja = appDbContext.KucniLjubimci.ToList().Count();
+            int broj_odbijenih_zahtjeva = appDbContext.OdbijeneZivotinje.ToList().Count();
+            int broj_zahtjeva = appDbContext.DnevnikUdomljavanja.Where(a => a.udomljen == false).ToList().Count();
+
+            StatistikaDomain statistikaDomain = new StatistikaDomain(raspolozive_zivotinje, udomljene_zivotinje, broj_zivotinja, broj_odbijenih_zahtjeva, broj_zahtjeva);
+
+            return statistikaDomain;
+        }
     }
 }
