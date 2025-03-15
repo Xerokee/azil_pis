@@ -21,6 +21,7 @@ namespace Azil.Service.Common
         IEnumerable<Aktivnosti> GetAllUsersDb7();
         IEnumerable<Slika> GetAllUsersDb8();
         IEnumerable<SifrTipLjubimca> GetAllUsersDb9();
+        IEnumerable<SifrBojaLjubimca> GetAllUsersDb10();
         Task<Tuple<UsersDomain, List<ErrorMessage>>> GetUserDomainByUserId(int id_korisnika);
         Task<UserRoleModel> GetUserRoleById(int id_korisnika);
         Task<Tuple<UsersDomain, List<ErrorMessage>>> GetUserDomainByEmail(string email);
@@ -29,6 +30,7 @@ namespace Azil.Service.Common
         Task<bool> DeleteUserAsync(int id);
         Task<IEnumerable<KucniLjubimci>> GetAllAnimals();
         Task<IEnumerable<KucniLjubimci>> GetAnimalsByTypeAndAdoptionStatus(int type);
+        Task<IEnumerable<KucniLjubimci>> GetAnimalsByColorAndAdoptionStatus(int color);
         Task<IEnumerable<KucniLjubimci>> GetAdoptedAnimals();
         Task<IEnumerable<GalerijaZivotinja>> GetAllAnimalGallery();
         Task<IEnumerable<GalerijaZivotinja>> GetGalleryByAnimalId(int id);
@@ -40,7 +42,7 @@ namespace Azil.Service.Common
         Task<bool> IsValidUser(int id);
         Task<bool> IsValidAnimal(int id);
         Task<bool> AddAnimalAsync(AnimalsDomain animalDomain);
-        Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(int tipLjubimca, int? minDob, int? maxDob, int? dob, string boja);
+        Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(int tipLjubimca, int? minDob, int? maxDob, int? dob, int boja);
         Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption);
         Task<bool> UpdateAdoptionAsync(DnevnikUdomljavanja adoption);
         Task<bool> DeleteAdoptionAsync(int id);
@@ -61,8 +63,10 @@ namespace Azil.Service.Common
         Task<bool> DeleteSlikaAsync(int id);
         Task<bool> AdoptAnimalByAdmin(int id);
         Task<IEnumerable<SifrTipLjubimcaDomain>> GetSifrarnik();
+        Task<IEnumerable<SifrBojaLjubimcaDomain>> GetSifrarnik2();
         List<KucniLjubimciDomain> GetKucniLjubimci();
         Task<int?> GetTipLjubimcaId(string tipLjubimca);
+        Task<int?> GetBojaLjubimcaId(string bojaLjubimca);
         Tuple<StatistikaDomain, List<ErrorMessage>> GetStatistika();
     }
 }

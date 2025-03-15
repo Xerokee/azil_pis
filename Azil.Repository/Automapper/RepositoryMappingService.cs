@@ -19,6 +19,7 @@ namespace Azil.Repository.Automapper
                     cfg.AddProfile<MappingProfile>();
                     cfg.AddProfile<AnimalMappingProfile>();
                     cfg.CreateMap<SifrTipLjubimca, SifrTipLjubimcaDomain>();
+                    cfg.CreateMap<SifrBojaLjubimca, SifrBojaLjubimcaDomain>();
                 });
             mapper = new Mapper(config);
         }

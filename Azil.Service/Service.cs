@@ -109,6 +109,12 @@ namespace Azil.Service
             return userDb9;
         }
 
+        public IEnumerable<SifrBojaLjubimca> GetAllUsersDb10()
+        {
+            IEnumerable<SifrBojaLjubimca> userDb10 = _repository.GetAllUsersDb10();
+            return userDb10;
+        }
+
         public async Task<Tuple<UsersDomain, List<ErrorMessage>>> GetUserDomainByUserId(int id_korisnika)
         {
             //return _repository.GetUserDomainByUserId(userId);
@@ -189,10 +195,18 @@ namespace Azil.Service
         {
             return await _repository.GetAllAnimals();
         }
+
         public async Task<IEnumerable<KucniLjubimci>> GetAnimalsByTypeAndAdoptionStatus(int type)
         {
             // Pozovi repozitorijum da dohvati životinje po tipu i proveri njihov status udomljavanja
             var animals = await _repository.GetAnimalsByTypeAndAdoptionStatus(type);
+            return animals;
+        }
+
+        public async Task<IEnumerable<KucniLjubimci>> GetAnimalsByColorAndAdoptionStatus(int color)
+        {
+            // Pozovi repozitorijum da dohvati životinje po tipu i proveri njihov status udomljavanja
+            var animals = await _repository.GetAnimalsByColorAndAdoptionStatus(color);
             return animals;
         }
 
@@ -256,6 +270,12 @@ namespace Azil.Service
                     return false; // Tip ljubimca nije validan
                 }
 
+                if (!await appDbContext.Sifrarnik2.AnyAsync(x => x.id == animalDomain.Boja))
+                {
+                    _logger.LogWarning("Boja ljubimca sa ID-jem {Boja} nije pronađena.", animalDomain.Boja);
+                    return false; // Boja ljubimca nije validna
+                }
+
                 var animalEntity = _mapper.Map<KucniLjubimci>(animalDomain);
                 _logger.LogInformation("Mapa domain modela na entitet: {@AnimalEntity}", animalEntity);
 
@@ -272,7 +292,7 @@ namespace Azil.Service
             }
         }
 
-        public async Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(int tipLjubimca, int? minDob, int? maxDob, int? dob, string boja)
+        public async Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(int tipLjubimca, int? minDob, int? maxDob, int? dob, int boja)
         {
             return await _repository.GetFilteredAnimalsByAgeRange(tipLjubimca, minDob, maxDob, dob, boja);
         }
@@ -285,6 +305,13 @@ namespace Azil.Service
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<int?> GetBojaLjubimcaId(string naziv)
+        {
+            return await appDbContext.Sifrarnik2
+                .Where(s => s.naziv.ToLower() == naziv.ToLower())
+                .Select(s => (int?)s.id)
+                .FirstOrDefaultAsync();
+        }
 
         public async Task<bool> AddAdoptionAsync(DnevnikUdomljavanja adoption)
         {
@@ -531,6 +558,11 @@ namespace Azil.Service
         public async Task<IEnumerable<SifrTipLjubimcaDomain>> GetSifrarnik()
         {
             return await _repository.GetSifrarnik();
+        }
+
+        public async Task<IEnumerable<SifrBojaLjubimcaDomain>> GetSifrarnik2()
+        {
+            return await _repository.GetSifrarnik2();
         }
 
         public Tuple<StatistikaDomain, List<ErrorMessage>> GetStatistika()

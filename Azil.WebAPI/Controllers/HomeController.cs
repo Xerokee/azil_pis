@@ -117,6 +117,14 @@ namespace Azil.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("sifrBojaLjubimca")]
+        public IEnumerable<SifrBojaLjubimca> GetAllUsersDb10()
+        {
+            IEnumerable<SifrBojaLjubimca> userDb10 = _service.GetAllUsersDb10();
+            return userDb10;
+        }
+
+        [HttpGet]
         [Route("Users")]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -379,6 +387,37 @@ namespace Azil.WebAPI.Controllers
             return Ok(animals);
         }
 
+        [HttpGet]
+        [Route("KucniLjubimci/{color}")]
+        public async Task<IActionResult> GetAnimalsByColor(string color)
+        {
+            if (color.ToLower() != "crna" && color.ToLower() != "bijela" && color.ToLower() != "smeđa")
+            {
+                return BadRequest("Tip životinje mora biti 'pas' ili 'mačka'.");
+            }
+
+            // Dohvati odgovarajući id tipa ljubimca iz šifrarnika
+            var bojaLjubimca = await _context.Sifrarnik2
+                                                 .Where(s => s.naziv.ToLower() == color.ToLower())
+                                                 .Select(s => s.id)
+                                                 .FirstOrDefaultAsync();
+
+            if (bojaLjubimca == 0)
+            {
+                return NotFound($"Boja ljubimca '{color}' nije pronađen.");
+            }
+
+            // Dohvati životinje po tipu i statusu udomljavanja
+            var animals = await _service.GetAnimalsByColorAndAdoptionStatus(bojaLjubimca);
+
+            if (animals == null || !animals.Any())
+            {
+                return NotFound($"No animals of color {color} found.");
+            }
+
+            return Ok(animals);
+        }
+
         [HttpGet("KucniLjubimci/{id:int}")]
         public async Task<IActionResult> GetAnimalById([FromRoute] int id)
         {
@@ -432,7 +471,14 @@ namespace Azil.WebAPI.Controllers
                     return BadRequest("Tip ljubimca mora biti 'Pas' ili 'Mačka'.");
                 }
 
-                var animals = await _service.GetFilteredAnimalsByAgeRange(tipLjubimcaId.Value, minDob, maxDob, dob, boja);
+                // Ako je bojaLjubimca string (npr. "Crna"), treba ga pretvoriti u ID
+                int? bojaLjubimcaId = await _service.GetBojaLjubimcaId(boja);
+                if (bojaLjubimcaId == null)
+                {
+                    return BadRequest("Boja ljubimca mora biti 'Crna', Bijela ili 'Smeđa'.");
+                }
+
+                var animals = await _service.GetFilteredAnimalsByAgeRange(tipLjubimcaId.Value, minDob, maxDob, dob, bojaLjubimcaId.Value);
 
                 if (animals == null || !animals.Any())
                 {
@@ -494,6 +540,13 @@ namespace Azil.WebAPI.Controllers
                 return BadRequest("Tip ljubimca mora biti 1 (Pas) ili 2 (Mačka).");
             }
 
+            // Validacija boje ljubimca
+            if (animalRest.Boja != 1 && animalRest.Boja != 2 && animalRest.Boja != 3)
+            {
+                _logger.LogWarning("Neispravna boja ljubimca: {Boja}", animalRest.Boja);
+                return BadRequest("Boja ljubimca mora biti 1 (Crna), 2 (Bijela) ili 3 (Smeđa).");
+            }
+
             try
             {
                 _logger.LogInformation("Zapoceto dodavanje životinje: {@AnimalRest}", animalRest);
@@ -503,13 +556,13 @@ namespace Azil.WebAPI.Controllers
 
                 if (addAnimal)
                 {
-                    _logger.LogInformation("Životinja uspešno dodana: {@AnimalRest}", animalRest);
+                    _logger.LogInformation("Životinja uspješno dodana: {@AnimalRest}", animalRest);
                     return Ok("Životinja uspješno dodana!");
                 }
                 else
                 {
                     _logger.LogWarning("Dodavanje životinje nije uspjelo: {@AnimalRest}", animalRest);
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Dodavanje životinje nije uspelo.");
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Dodavanje životinje nije uspjelo.");
                 }
             }
             catch (Exception ex)
@@ -770,6 +823,14 @@ namespace Azil.WebAPI.Controllers
         {
             var sifrarnik = await _service.GetSifrarnik();
             return Ok(sifrarnik);
+        }
+
+        [HttpGet]
+        [Route("SifrarnikBojaLjubimca")]
+        public async Task<IActionResult> GetSifrarnikBojaLjubimca()
+        {
+            var sifrarnik2 = await _service.GetSifrarnik2();
+            return Ok(sifrarnik2);
         }
 
         public class UpdateKucniLjubimac

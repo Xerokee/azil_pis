@@ -68,11 +68,12 @@ namespace Azil.Repository
         {
             IEnumerable<KucniLjubimci> userDb4 = appDbContext.KucniLjubimci.ToList();
             IEnumerable<SifrTipLjubimca> tipoviLjubimcaDb = appDbContext.Sifrarnik.ToList();
+            IEnumerable<SifrBojaLjubimca> bojeLjubimcaDb = appDbContext.Sifrarnik2.ToList();
 
             List<KucniLjubimciDomain> kucniLjubimci = new List<KucniLjubimciDomain>();
             foreach (KucniLjubimci lj in userDb4)
             {
-                kucniLjubimci.Add(new KucniLjubimciDomain(lj.id_ljubimca, lj.id_udomitelja, lj.ime_ljubimca, tipoviLjubimcaDb.FirstOrDefault(tip => tip.id == lj.tip_ljubimca).naziv, lj.opis_ljubimca, lj.udomljen, lj.zahtjev_udomljen, lj.imgUrl, lj.galerijaZivotinja, lj.dob, lj.boja));
+                kucniLjubimci.Add(new KucniLjubimciDomain(lj.id_ljubimca, lj.id_udomitelja, lj.ime_ljubimca, tipoviLjubimcaDb.FirstOrDefault(tip => tip.id == lj.tip_ljubimca).naziv, lj.opis_ljubimca, lj.udomljen, lj.zahtjev_udomljen, lj.imgUrl, lj.galerijaZivotinja, lj.dob, bojeLjubimcaDb.FirstOrDefault(boja => boja.id == lj.boja).naziv));
             }
             return kucniLjubimci;
         }
@@ -105,6 +106,12 @@ namespace Azil.Repository
         {
             IEnumerable<SifrTipLjubimca> userDb9 = appDbContext.Sifrarnik.ToList();
             return userDb9;
+        }
+
+        public IEnumerable<SifrBojaLjubimca> GetAllUsersDb10()
+        {
+            IEnumerable<SifrBojaLjubimca> userDb10 = appDbContext.Sifrarnik2.ToList();
+            return userDb10;
         }
 
         public UsersDomain GetUserDomainByUserId(int id_korisnika)
@@ -237,6 +244,28 @@ namespace Azil.Repository
             return animals;
         }
 
+        public async Task<IEnumerable<KucniLjubimci>> GetAnimalsByColorAndAdoptionStatus(int color)
+        {
+            // Pridruži tabelu `DnevnikUdomljavanja` sa tabelom `KucniLjubimci` kako bi se proverio status udomljavanja
+            var animals = await appDbContext.KucniLjubimci
+                .Where(a => a.tip_ljubimca == color) // Filtriraj životinje po tipu
+                .GroupJoin(
+                    appDbContext.DnevnikUdomljavanja,
+                    animal => animal.id_ljubimca,
+                    adoption => adoption.id_ljubimca,
+                    (animal, adoptions) => new { animal, adoptions }
+                )
+                .SelectMany(
+                    joined => joined.adoptions.DefaultIfEmpty(),
+                    (joined, adoption) => new { joined.animal, udomljen = adoption != null && adoption.udomljen }
+                )
+                .Where(result => !result.udomljen) // Filtriraj samo neudomljene životinje
+                .Select(result => result.animal)   // Vrati samo informacije o životinjama
+                .ToListAsync();
+
+            return animals;
+        }
+
         public async Task<IEnumerable<KucniLjubimci>> GetAdoptedAnimals()
         {
             return await appDbContext.KucniLjubimci.Where(a => a.udomljen).ToListAsync();
@@ -257,10 +286,11 @@ namespace Azil.Repository
         public async Task<KucniLjubimciDomain> GetAnimalById(int id)
         {
             IEnumerable<SifrTipLjubimca> tipoviLjubimcaDb = appDbContext.Sifrarnik.ToList();
+            IEnumerable<SifrBojaLjubimca> bojeLjubimcaDb = appDbContext.Sifrarnik2.ToList();
             var animalDb = await appDbContext.KucniLjubimci
                 .Include(a => a.galerijaZivotinja)
                 .FirstOrDefaultAsync(a => a.id_ljubimca == id);
-            KucniLjubimciDomain animal = new KucniLjubimciDomain(animalDb.id_ljubimca, animalDb.id_udomitelja, animalDb.ime_ljubimca, tipoviLjubimcaDb.FirstOrDefault(tip => tip.id == animalDb.tip_ljubimca).naziv, animalDb.opis_ljubimca, animalDb.udomljen, animalDb.zahtjev_udomljen, animalDb.imgUrl, animalDb.galerijaZivotinja, animalDb.dob, animalDb.boja);
+            KucniLjubimciDomain animal = new KucniLjubimciDomain(animalDb.id_ljubimca, animalDb.id_udomitelja, animalDb.ime_ljubimca, tipoviLjubimcaDb.FirstOrDefault(tip => tip.id == animalDb.tip_ljubimca).naziv, animalDb.opis_ljubimca, animalDb.udomljen, animalDb.zahtjev_udomljen, animalDb.imgUrl, animalDb.galerijaZivotinja, animalDb.dob, bojeLjubimcaDb.FirstOrDefault(boja => boja.id == animalDb.boja).naziv);
             
             return animal;
         }
@@ -303,11 +333,12 @@ namespace Azil.Repository
 
             IEnumerable<KucniLjubimci> userDb4 = appDbContext.KucniLjubimci.ToList();
             IEnumerable<SifrTipLjubimca> tipoviLjubimcaDb = appDbContext.Sifrarnik.ToList();
+            IEnumerable<SifrBojaLjubimca> bojeLjubimcaDb = appDbContext.Sifrarnik2.ToList();
 
             List<KucniLjubimciDomain> kucniLjubimci = new List<KucniLjubimciDomain>();
             foreach (KucniLjubimci lj in userDb4)
             {
-                kucniLjubimci.Add(new KucniLjubimciDomain(lj.id_ljubimca, lj.id_udomitelja, lj.ime_ljubimca, tipoviLjubimcaDb.FirstOrDefault(tip => tip.id == lj.tip_ljubimca).naziv, lj.opis_ljubimca, lj.udomljen, lj.zahtjev_udomljen, lj.imgUrl, lj.galerijaZivotinja, lj.dob, lj.boja));
+                kucniLjubimci.Add(new KucniLjubimciDomain(lj.id_ljubimca, lj.id_udomitelja, lj.ime_ljubimca, tipoviLjubimcaDb.FirstOrDefault(tip => tip.id == lj.tip_ljubimca).naziv, lj.opis_ljubimca, lj.udomljen, lj.zahtjev_udomljen, lj.imgUrl, lj.galerijaZivotinja, lj.dob, bojeLjubimcaDb.FirstOrDefault(boja => boja.id == lj.boja).naziv));
             }
             return kucniLjubimci;
         }
@@ -331,7 +362,7 @@ namespace Azil.Repository
         }
 
 
-        public async Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(int tipLjubimca, int? minDob, int? maxDob, int? dob, string boja)
+        public async Task<IEnumerable<KucniLjubimci>> GetFilteredAnimalsByAgeRange(int tipLjubimca, int? minDob, int? maxDob, int? dob, int boja)
         {
             var query = appDbContext.KucniLjubimci.AsQueryable();
 
@@ -389,10 +420,20 @@ namespace Azil.Repository
                 query = query.Where(a => a.dob >= 5);
             }
 
-            // Filtriraj po boji
-            if (!string.IsNullOrEmpty(boja) && boja != "Sve")
+            // Filtriraj po boji ljubimca ako boja nije 0 (ili neodređen)
+            if (boja > 0)
             {
-                query = query.Where(a => a.boja == boja);
+                // Poveži tip ljubimca sa nazivom iz šifrarnika
+                var bojaLjubimcaNaziv = await appDbContext.Sifrarnik2
+                                                         .Where(s => s.id == boja)
+                                                         .Select(s => s.naziv)
+                                                         .FirstOrDefaultAsync();
+
+                if (bojaLjubimcaNaziv != null)
+                {
+                    // Ako je tip ljubimca pronađen, filtriraj po njemu
+                    query = query.Where(a => a.boja == boja);
+                }
             }
 
             // Filtriraj da se prikažu samo životinje koje nisu udomljene
@@ -786,6 +827,13 @@ namespace Azil.Repository
             StatistikaDomain statistikaDomain = new StatistikaDomain(raspolozive_zivotinje, udomljene_zivotinje, broj_zivotinja, broj_odbijenih_zahtjeva, broj_zahtjeva);
 
             return statistikaDomain;
+        }
+
+        public async Task<IEnumerable<SifrBojaLjubimcaDomain>> GetSifrarnik2()
+        {
+            IEnumerable<SifrBojaLjubimca> bojaLjubimcaDb = await appDbContext.Sifrarnik2.ToListAsync();
+            IEnumerable<SifrBojaLjubimcaDomain> bojaLjubimca = _mapper.Map<IEnumerable<SifrBojaLjubimcaDomain>>(bojaLjubimcaDb);
+            return bojaLjubimca;
         }
     }
 }

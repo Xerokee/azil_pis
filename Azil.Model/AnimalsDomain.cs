@@ -47,7 +47,7 @@ namespace Azil.Model
         public string ImgUrl { get; set; }
         public List<GalerijaZivotinja> GalerijaZivotinja { get; set; }
         public int Dob { get; set; }
-        public string Boja { get; set; }
+        public int Boja { get; set; }
     }
 }
 

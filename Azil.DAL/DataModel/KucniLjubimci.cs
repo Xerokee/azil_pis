@@ -17,6 +17,6 @@ namespace Azil.DAL.DataModel
         public string imgUrl { get; set; }
         public List<GalerijaZivotinja> galerijaZivotinja { get; set; }
         public int dob { get; set; }
-        public string boja { get; set; }
+        public int boja { get; set; }
     }
 }
