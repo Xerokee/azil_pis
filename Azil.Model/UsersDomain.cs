@@ -22,6 +22,7 @@ namespace Azil.Model
             Lozinka = user.lozinka;
             Admin = user.admin;
             ProfileImg = user.profileImg;
+            Token = user.token;
         }
 
         public int id_korisnika { get; set; }
@@ -43,5 +44,6 @@ namespace Azil.Model
         public string Lozinka { get; set; }
         public bool Admin { get; set; }
         public string ProfileImg { get; set; }
+        public string Token { get; set; }
     }
 }

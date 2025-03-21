@@ -1049,6 +1049,15 @@ namespace Azil.WebAPI.Controllers
                 return Ok(response);
             }
         }
+
+        [HttpGet]
+        [Route("Token/{email}")]
+        public async Task<IActionResult> GetToken(string email)
+        {
+            string result = await _service.GetToken(email);
+
+            return Ok(result);
+        }
         #endregion AdditionalCustomFunctions
     }
 }

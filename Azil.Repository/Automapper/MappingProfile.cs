@@ -16,7 +16,8 @@ namespace Azil.Repository.Automapper
                 .ForMember(dest => dest.email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.lozinka, opt => opt.MapFrom(src => src.Lozinka))
                 .ForMember(dest => dest.admin, opt => opt.MapFrom(src => src.Admin))
-                .ForMember(dest => dest.profileImg, opt => opt.MapFrom(src => src.ProfileImg));
+                .ForMember(dest => dest.profileImg, opt => opt.MapFrom(src => src.ProfileImg))
+                .ForMember(dest => dest.token, opt => opt.MapFrom(src => src.Token));
 
             CreateMap<Korisnici, UsersDomain>()
                 .ForMember(dest => dest.id_korisnika, opt => opt.MapFrom(src => src.id_korisnika))
@@ -26,7 +27,8 @@ namespace Azil.Repository.Automapper
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.email))
                 .ForMember(dest => dest.Lozinka, opt => opt.MapFrom(src => src.lozinka))
                 .ForMember(dest => dest.Admin, opt => opt.MapFrom(src => src.admin))
-                .ForMember(dest => dest.ProfileImg, opt => opt.MapFrom(src => src.profileImg));
+                .ForMember(dest => dest.ProfileImg, opt => opt.MapFrom(src => src.profileImg))
+                .ForMember(dest => dest.Token, opt => opt.MapFrom(src => src.token));
         }
     }
 }

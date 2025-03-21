@@ -835,5 +835,19 @@ namespace Azil.Repository
             IEnumerable<SifrBojaLjubimcaDomain> bojaLjubimca = _mapper.Map<IEnumerable<SifrBojaLjubimcaDomain>>(bojaLjubimcaDb);
             return bojaLjubimca;
         }
+
+        public async Task<string> GetToken(string email)
+        {
+            try
+            {
+                Korisnici korisnik = await appDbContext.Korisnici.FirstOrDefaultAsync(k => k.email == email);
+                string token = korisnik.token;
+                return token;
+            }
+            catch (Exception ex)
+            {
+                return "No token.";
+            }
+        }
     }
 }

@@ -446,6 +446,11 @@ namespace Azil.Service
             return new Tuple<List<ActivityDomain>, List<ErrorMessage>>(aktivnostiDomain, erorMessages);
         }
 
+        public async Task<string> GetToken(string email)
+        {
+            return await _repository.GetToken(email);
+        }
+
         #region AdditionalCustomFunctions
 
         public async Task<bool> IsValidUser(int id)

@@ -66,5 +66,6 @@ namespace Azil.Repository.Common
         List<KucniLjubimciDomain> GetKucniLjubimci();
         StatistikaDomain GetStatistika();
         Task<IEnumerable<SifrBojaLjubimcaDomain>> GetSifrarnik2();
+        Task<string> GetToken(string email);
     }
 }

@@ -68,5 +68,6 @@ namespace Azil.Service.Common
         Task<int?> GetTipLjubimcaId(string tipLjubimca);
         Task<int?> GetBojaLjubimcaId(string bojaLjubimca);
         Tuple<StatistikaDomain, List<ErrorMessage>> GetStatistika();
+        Task<string> GetToken(string email);
     }
 }

@@ -14,5 +14,6 @@ namespace Azil.DAL.DataModel
         public string lozinka { get; set; }
         public bool admin { get; set; }
         public string profileImg { get; set; }
+        public string token { get; set; }
     }
 }

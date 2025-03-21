@@ -107,6 +107,10 @@ namespace Azil.DAL.DataModel
                 entity.Property(e => e.profileImg)
                     .HasColumnName("profileImg")
                     .IsUnicode(false);
+
+                entity.Property(e => e.token)
+                    .HasColumnName("token")
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<KorisnikUloga>(entity =>
