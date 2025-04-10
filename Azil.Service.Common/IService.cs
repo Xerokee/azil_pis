@@ -29,6 +29,8 @@ namespace Azil.Service.Common
         Task<bool> UpdateUserAsync(UsersDomain userDomain);
         Task<bool> DeleteUserAsync(int id);
         Task<IEnumerable<KucniLjubimci>> GetAllAnimals();
+        List<KucniLjubimci> GetDogsAndCats();
+        List<KucniLjubimci> GetAnimalsByType(int type);
         Task<IEnumerable<KucniLjubimci>> GetAnimalsByTypeAndAdoptionStatus(int type);
         Task<IEnumerable<KucniLjubimci>> GetAnimalsByColorAndAdoptionStatus(int color);
         Task<IEnumerable<KucniLjubimci>> GetAdoptedAnimals();

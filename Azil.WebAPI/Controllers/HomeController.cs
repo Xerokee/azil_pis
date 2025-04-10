@@ -356,6 +356,30 @@ namespace Azil.WebAPI.Controllers
             return Ok(galerija);
         }
 
+        // Dohvaćanje životinja prema tipu
+        [HttpGet("animals")]
+        public ActionResult<List<KucniLjubimci>> GetAnimals([FromQuery] int? type)
+        {
+            List<KucniLjubimci> animals;
+
+            if (type == null)
+            {
+                // Ako nema query parametra, vraćamo i pse i mačke
+                animals = _service.GetDogsAndCats();
+            }
+            else
+            {
+                // Ako postoji parametar, dohvaćamo samo taj tip životinje
+                animals = _service.GetAnimalsByType(type.Value);
+            }
+
+            if (animals == null || animals.Count == 0)
+            {
+                return NotFound("Nema pronađenih životinja.");
+            }
+            return Ok(animals);
+        }
+
         [HttpGet]
         [Route("KucniLjubimci/{type}")]
         public async Task<IActionResult> GetAnimalsByType(string type)

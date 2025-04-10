@@ -222,6 +222,22 @@ namespace Azil.Repository
             return await appDbContext.KucniLjubimci.ToListAsync();
         }
 
+        public List<KucniLjubimci> GetDogsAndCats()
+        {
+            return appDbContext.KucniLjubimci
+                .Include(k => k.galerijaZivotinja) // Učitaj galeriju ako je potrebno
+                .Where(k => k.tip_ljubimca == 1 || k.tip_ljubimca == 2) // 1 = Pas, 2 = Mačka (prema šifrarniku)
+                .ToList();
+        }
+
+        public List<KucniLjubimci> GetAnimalsByType(int type)
+        {
+            return appDbContext.KucniLjubimci
+                .Include(k => k.galerijaZivotinja)
+                .Where(k => k.tip_ljubimca == type)
+                .ToList();
+        }
+
         public async Task<IEnumerable<KucniLjubimci>> GetAnimalsByTypeAndAdoptionStatus(int type)
         {
             // Pridruži tabelu `DnevnikUdomljavanja` sa tabelom `KucniLjubimci` kako bi se proverio status udomljavanja

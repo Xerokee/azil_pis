@@ -196,6 +196,16 @@ namespace Azil.Service
             return await _repository.GetAllAnimals();
         }
 
+        public List<KucniLjubimci> GetDogsAndCats()
+        {
+            return _repository.GetDogsAndCats();
+        }
+
+        public List<KucniLjubimci> GetAnimalsByType(int type)
+        {
+            return _repository.GetAnimalsByType(type);
+        }
+
         public async Task<IEnumerable<KucniLjubimci>> GetAnimalsByTypeAndAdoptionStatus(int type)
         {
             // Pozovi repozitorijum da dohvati životinje po tipu i proveri njihov status udomljavanja
