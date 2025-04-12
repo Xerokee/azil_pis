@@ -71,5 +71,7 @@ namespace Azil.Service.Common
         Task<int?> GetBojaLjubimcaId(string bojaLjubimca);
         Tuple<StatistikaDomain, List<ErrorMessage>> GetStatistika();
         Task<string> GetToken(string email);
+        Task<Tuple<List<Meeting>, List<ErrorMessage>>> GetMeetings();
+
     }
 }

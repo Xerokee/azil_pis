@@ -1021,6 +1021,28 @@ namespace Azil.WebAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("Meetings")]
+        public async Task<IActionResult> GetMeetings()
+        {
+            HttpRequestResponse<List<Meeting>> response = new HttpRequestResponse<List<Meeting>>();
+
+            Tuple<List<Meeting>, List<ErrorMessage>> result = await _service.GetMeetings();
+
+            if (result != null)
+            {
+                response.Result = result.Item1;
+                response.ErrorMessages = result.Item2;
+                return Ok(response);
+            }
+            else
+            {
+                response.Result = result.Item1;
+                response.ErrorMessages = result.Item2;
+                return Ok(response);
+            }
+        }
+
         #region AdditionalCustomFunctions
         [HttpGet]
         public async Task<bool> GetLastUserRequestId()

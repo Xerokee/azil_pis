@@ -865,5 +865,24 @@ namespace Azil.Repository
                 return "No token.";
             }
         }
+
+        public async Task<List<Meeting>> GetMeetings()
+        {
+            List<Meeting> meetingsList = new List<Meeting>();
+            IEnumerable<Meeting> meetingsDb = await appDbContext.Meetings.ToListAsync();
+            string imeKorisnika = null;
+            foreach (Meeting m in meetingsDb)
+            {
+                imeKorisnika = null;
+                if (m.idKorisnik != 0)
+                {
+                    Korisnici korisnik = await appDbContext.Korisnici.FindAsync(m.idKorisnik);
+                    imeKorisnika = korisnik.ime;
+                }
+                meetingsList.Add(new Meeting(m.idMeeting, m.datum, m.vrijeme, m.idKorisnik, m.imeKorisnik));
+            }
+            meetingsList = meetingsList.OrderBy(m => DateTime.ParseExact(m.vrijeme, "H:mm", null)).ToList();
+            return meetingsList;
+        }
     }
 }

@@ -461,6 +461,35 @@ namespace Azil.Service
             return await _repository.GetToken(email);
         }
 
+        public async Task<Tuple<List<Meeting>, List<ErrorMessage>>> GetMeetings()
+
+        {
+
+            List<ErrorMessage> erorMessages = new List<ErrorMessage>();
+
+            List<Meeting> meetingsList = await _repository.GetMeetings();
+
+
+            if (meetingsList.Count() == 0)
+
+            {
+
+                erorMessages.Add(new ErrorMessage("Nema dodanih sastanaka!"));
+
+            }
+
+            else
+
+            {
+
+                erorMessages.Add(new ErrorMessage("Dohvaćanje uspješno!"));
+
+            }
+
+            return new Tuple<List<Meeting>, List<ErrorMessage>>(meetingsList, erorMessages);
+
+        }
+
         #region AdditionalCustomFunctions
 
         public async Task<bool> IsValidUser(int id)
