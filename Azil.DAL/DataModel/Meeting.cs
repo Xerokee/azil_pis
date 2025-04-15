@@ -6,6 +6,10 @@ namespace Azil.DAL.DataModel
 {
     public partial class Meeting
     {
+        public Meeting()
+        {
+        }
+
         public Meeting(int idMeeting, DateTime datum, string vrijeme, int idKorisnik, string imeKorisnik)
         {
             this.idMeeting = idMeeting;

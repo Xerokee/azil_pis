@@ -70,5 +70,8 @@ namespace Azil.Repository.Common
         Task<IEnumerable<SifrBojaLjubimcaDomain>> GetSifrarnik2();
         Task<string> GetToken(string email);
         Task<List<Meeting>> GetMeetings();
+        Task<bool> AddMeeting(Meeting newMeeting);
+        Task<bool> DeleteMeeting(int idMeeting);
+        Task<bool> EditMeeting(int idMeeting, int idKorisnik, int type);
     }
 }

@@ -1043,6 +1043,50 @@ namespace Azil.WebAPI.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("Meetings/add")]
+        public async Task<IActionResult> AddMeeting([FromBody] MeetingREST meetingRest)
+        {
+            try
+            {
+                Meeting newMeeting = new Meeting();
+
+                string format = "dd-MM-yyyy";
+
+                DateTime dateTimeDatum = DateTime.ParseExact(meetingRest.datum, format, CultureInfo.InvariantCulture);
+
+                newMeeting.datum = dateTimeDatum;
+
+                newMeeting.vrijeme = meetingRest.vrijeme;
+
+                newMeeting.idKorisnik = 0;
+
+                bool addMeeting = await _service.AddMeeting(newMeeting);
+
+                if (addMeeting)
+                {
+                    _logger.LogInformation("Meeting successfully added.");
+
+                    return Ok("Sastanak dodan!");
+                }
+
+                else
+
+                {
+                    _logger.LogWarning("Failed to add meeting.");
+
+                    return Ok("Sastanak nije dodan!");
+                }
+            }
+
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Exception occurred while adding meeting.");
+
+                return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
+            }
+        }
+
         #region AdditionalCustomFunctions
         [HttpGet]
         public async Task<bool> GetLastUserRequestId()
@@ -1104,6 +1148,60 @@ namespace Azil.WebAPI.Controllers
 
             return Ok(result);
         }
+
+        [HttpDelete]
+        [Route("Meetings/delete/idMeeting/{idMeeting}")]
+        public async Task<IActionResult> DeleteMeeting(int idMeeting)
+        {
+            try
+            {
+                bool deleteMeeting = await _service.DeleteMeeting(idMeeting);
+                if (deleteMeeting)
+                {
+                    _logger.LogInformation("Meeting successfully deleted.");
+                    return Ok("Sastanak obrisan!");
+                }
+                else
+                {
+                    _logger.LogWarning("Failed to delete meeting.");
+                    return Ok("Sastanak nije obrisan!");
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Exception occurred while adding meeting.");
+                return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
+            }
+        }
+
+        [HttpPost]
+        [Route("Meetings/edit/{idMeeting}/{idKorisnik}/{type}")]
+        public async Task<IActionResult> EditMeeting(int idMeeting, int idKorisnik, int type)
+        {
+            try
+            {
+
+                bool editMeeting = await _service.EditMeeting(idMeeting, idKorisnik, type);
+                if (editMeeting)
+                {
+                    _logger.LogInformation("Meeting successfully updated.");
+                    return Ok("Sastanak ažuriran!");
+                }
+                else
+                {
+                    _logger.LogWarning("Failed to update meeting.");
+                    return Ok("Sastanak nije ažuriran!");
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Exception occurred while adding meeting.");
+                return StatusCode(StatusCodes.Status500InternalServerError, e.ToString());
+            }
+        }
+
         #endregion AdditionalCustomFunctions
     }
 }

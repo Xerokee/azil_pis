@@ -72,6 +72,8 @@ namespace Azil.Service.Common
         Tuple<StatistikaDomain, List<ErrorMessage>> GetStatistika();
         Task<string> GetToken(string email);
         Task<Tuple<List<Meeting>, List<ErrorMessage>>> GetMeetings();
-
+        Task<bool> AddMeeting(Meeting newMeeting);
+        Task<bool> DeleteMeeting(int idMeeting);
+        Task<bool> EditMeeting(int idMeeting, int idKorisnik, int type);
     }
 }

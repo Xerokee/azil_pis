@@ -877,12 +877,83 @@ namespace Azil.Repository
                 if (m.idKorisnik != 0)
                 {
                     Korisnici korisnik = await appDbContext.Korisnici.FindAsync(m.idKorisnik);
-                    imeKorisnika = korisnik.ime;
+                    imeKorisnika = korisnik.ime + " " + korisnik.prezime;
                 }
-                meetingsList.Add(new Meeting(m.idMeeting, m.datum, m.vrijeme, m.idKorisnik, m.imeKorisnik));
+                meetingsList.Add(new Meeting(m.idMeeting, m.datum, m.vrijeme, m.idKorisnik, imeKorisnika));
             }
             meetingsList = meetingsList.OrderBy(m => DateTime.ParseExact(m.vrijeme, "H:mm", null)).ToList();
             return meetingsList;
+        }
+
+        public async Task<bool> AddMeeting(Meeting newMeeting)
+        {
+            try
+            {
+                EntityEntry<Meeting> meeting_created = await appDbContext.Meetings.AddAsync(newMeeting);
+                await appDbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while adding meeting.");
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteMeeting(int idMeeting)
+        {
+            try
+            {
+                Meeting meeting = await appDbContext.Meetings.FindAsync(idMeeting);
+                if (meeting != null)
+                {
+                    appDbContext.Meetings.Remove(meeting);
+                    await appDbContext.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while deleting meeting.");
+                return false;
+            }
+        }
+
+        public async Task<bool> EditMeeting(int idMeeting, int idKorisnik, int type)
+        {
+            try
+            {
+                Meeting meeting = await appDbContext.Meetings.FindAsync(idMeeting);
+                if (meeting != null)
+                {
+                    if (type == 1)
+                    {
+                        meeting.idKorisnik = idKorisnik;
+                    }
+                    else
+                    {
+                        meeting.idKorisnik = 0;
+                    }
+                    appDbContext.Meetings.Update(meeting);
+                    await appDbContext.SaveChangesAsync();
+                    return true;
+
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
         }
     }
 }

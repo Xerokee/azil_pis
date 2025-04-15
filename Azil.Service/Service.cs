@@ -490,6 +490,45 @@ namespace Azil.Service
 
         }
 
+        public async Task<bool> AddMeeting(Meeting newMeeting)
+        {
+            try
+            {
+                return await _repository.AddMeeting(newMeeting);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while adding meeting.");
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteMeeting(int idMeeting)
+        {
+            try
+            {
+                return await _repository.DeleteMeeting(idMeeting);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while deleting meeting.");
+                return false;
+            }
+        }
+
+        public async Task<bool> EditMeeting(int idMeeting, int idKorisnik, int type)
+        {
+            try
+            {
+                return await _repository.EditMeeting(idMeeting, idKorisnik, type);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while editing meeting.");
+                return false;
+            }
+        }
+
         #region AdditionalCustomFunctions
 
         public async Task<bool> IsValidUser(int id)
